@@ -23,6 +23,7 @@ import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.utils.KeyboardUtils;
 
 public class ProfileBrowserFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<UserWrapper>, OnUpdate, View.OnClickListener {
     public static final int LOADER_ID = 1;
@@ -58,6 +59,7 @@ public class ProfileBrowserFragment extends BaseFragment implements LoaderManage
             loader.forceLoad();
         }
         setDrawerIndicatorEnabled(getTargetFragment() == null);
+        KeyboardUtils.hideFragmentKeyboard(this);
     }
 
     private void initUI(View view) {
