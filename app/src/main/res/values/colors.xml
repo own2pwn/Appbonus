@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_color">#DB4848</color>
+    <color name="main_color_selected">#ff851616</color>
+    <color name="orange">#E67F22</color>
+    <color name="click_card_color">#FFE6E6E6</color>
+    <color name="main_green">#ff30BF5D</color>
+    <color name="main_green_selected">#ff228E49</color>
+</resources>

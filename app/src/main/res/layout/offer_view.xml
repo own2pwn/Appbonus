@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/offer_view">
+
+    <LinearLayout
+        android:id="@id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/sum"
+        android:background="@drawable/clickable_card_with_left_corners"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@id/avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/banner_fill_info_icon"
+            android:contentDescription="@string/avatar" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@android:id/text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:singleLine="false"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@id/sum"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/content"
+        android:background="@drawable/clickable_green_card_with_right_corners"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+    </FrameLayout>
+
+</RelativeLayout>

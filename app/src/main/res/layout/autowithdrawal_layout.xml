@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_withdrawal"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@id/auto_withdrawal"/>
+    </LinearLayout>
+
+    <com.appbonus.android.component.FloatLabel
+        android:id="@id/qiwi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/qiwi_caption"
+        android:inputType="phone"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <com.appbonus.android.component.FloatLabel
+        android:id="@id/mobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/mobile_caption"
+        android:inputType="phone"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+</LinearLayout>

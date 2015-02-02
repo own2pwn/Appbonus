@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                style="@style/profile_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/main_info" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/phone_was_not_confirmed"
+                android:textColor="@color/orange"
+                android:id="@id/confirm_phone_label"
+                android:visibility="gone"/>
+
+            <com.appbonus.android.component.FloatLabel
+                android:id="@id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phone_caption"
+                android:inputType="phone"
+                android:layout="@layout/not_editable_float_label"/>
+
+            <!--<TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/confirm_phone"
+                android:gravity="center"
+                android:textColor="@color/main_color"
+                android:id="@id/confirm_phone_button"
+                android:visibility="gone"/>-->
+
+            <com.appbonus.android.component.FloatLabel
+                android:id="@id/login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_caption"
+                android:inputType="textEmailAddress"
+                android:layout="@layout/not_editable_float_label"/>
+
+            <TextView
+                style="@style/EditTextStyle"
+                android:focusableInTouchMode="false"
+                android:id="@id/country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/country_caption" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@id/edit"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/edit" />
+        </RelativeLayout>
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:padding="5dp">
+
+            <TextView
+                style="@style/profile_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/password_changing" />
+
+            <com.appbonus.android.component.FloatLabel
+                android:id="@id/new_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_password_caption"
+                android:inputType="textPassword" />
+
+            <com.appbonus.android.component.FloatLabel
+                android:id="@id/confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/confirm_password_caption"
+                android:inputType="textPassword" />
+        </LinearLayout>-->
+    </LinearLayout>
+
+</ScrollView>

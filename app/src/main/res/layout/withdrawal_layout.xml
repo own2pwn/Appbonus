@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <com.appbonus.android.component.FloatLabel
+        android:id="@id/phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/phone_caption"
+        android:inputType="phone"
+        android:layout_marginBottom="5dp"/>
+
+    <com.appbonus.android.component.FloatLabel
+        android:id="@id/amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/amount_caption"
+        android:inputType="phone"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@id/withdrawal_phone"
+        style="@style/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:text="@string/withdrawal_phone"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@id/withdrawal_qiwi"
+        style="@style/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:text="@string/withdrawal_qiwi"
+        android:layout_marginTop="5dp"/>
+</LinearLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="login" type="id"/>
+    <item name="phone" type="id"/>
+    <item name="password" type="id"/>
+    <item name="faq" type="id" />
+    <item name="profile" type="id" />
+    <item name="question" type="id" />
+    <item name="answer" type="id" />
+    <item name="exit" type="id" />
+    <item name="country" type="id" />
+    <item name="new_password" type="id" />
+    <item name="confirm_password" type="id" />
+    <item name="save" type="id" />
+    <item name="change_password" type="id" />
+    <item name="confirm_phone_label" type="id" />
+    <item name="confirm_phone_button" type="id" />
+    <item name="show_push" type="id" />
+    <item name="push_sound" type="id" />
+    <item name="web_cab" type="id" />
+    <item name="license" type="id" />
+    <item name="enter_as" type="id" />
+    <item name="settings" type="id" />
+    <item name="balance" type="id" />
+    <item name="content" type="id" />
+    <item name="sum" type="id" />
+    <item name="input_profile" type="id" />
+    <item name="offers" type="id" />
+    <item name="avatar" type="id" />
+    <item name="cost" type="id" />
+    <item name="description" type="id" />
+    <item name="download" type="id" />
+    <item name="rules_button" type="id" />
+    <item name="share_icon" type="id" />
+    <item name="share_text" type="id" />
+    <item name="share" type="id" />
+    <item name="action_edit" type="id" />
+    <item name="edit" type="id" />
+    <item name="action_question" type="id" />
+    <item name="current_balance" type="id" />
+    <item name="my_profit" type="id" />
+    <item name="friend_profit" type="id" />
+    <item name="withdrawal_sum" type="id" />
+    <item name="withdrawal_money" type="id" />
+    <item name="auto_withdrawal" type="id" />
+    <item name="amount" type="id" />
+    <item name="withdrawal_phone" type="id" />
+    <item name="withdrawal_qiwi" type="id" />
+    <item name="mobile" type="id" />
+    <item name="qiwi" type="id" />
+    <item name="withdrawal_is_not_access_view" type="id" />
+    <item name="second_level" type="id" />
+    <item name="third_level" type="id" />
+    <item name="friends" type="id" />
+    <item name="first_level" type="id" />
+    <item name="referrals_info" type="id" />
+    <item name="action_meet_friends" type="id" />
+    <item name="meet" type="id" />
+    <item name="meet_icon" type="id" />
+    <item name="meet_text" type="id" />
+    <item name="first_level_count" type="id" />
+    <item name="second_level_count" type="id" />
+    <item name="third_level_count" type="id" />
+    <item name="mail" type="id" />
+    <item name="fragments_container" type="id" />
+    <item name="rules_text" type="id" />
+</resources>
