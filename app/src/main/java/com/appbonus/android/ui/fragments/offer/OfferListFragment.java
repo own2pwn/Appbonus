@@ -23,6 +23,7 @@ import com.appbonus.android.model.Meta;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OffersWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.fragments.friends.MeetFriendsFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.activity.fragment.BaseFragment;
@@ -45,6 +46,7 @@ public class OfferListFragment extends BaseFragment
     protected PagingListView offerList;
 
     protected View inputProfile;
+    protected View meetFriends;
     protected ImageView inputProfileAvatar;
     protected TextView inputProfileCost;
     protected TextView inputProfileText;
@@ -93,12 +95,14 @@ public class OfferListFragment extends BaseFragment
         inputProfileAvatar = (ImageView) inputProfile.findViewById(R.id.avatar);
         inputProfileCost = (TextView) inputProfile.findViewById(R.id.cost);
         inputProfileText = (TextView) inputProfile.findViewById(android.R.id.text1);
+        meetFriends = header.findViewById(R.id.action_meet_friends);
 
         changeInputProfileView(getActivity());
         balance.setText(RoubleHelper.convert(SharedPreferencesStorage.getBalance(getActivity())));
         balance.setTypeface(typeFace);
 
         inputProfile.setOnClickListener(this);
+        meetFriends.setOnClickListener(this);
     }
 
     private void changeInputProfileView(Context context) {
@@ -160,7 +164,15 @@ public class OfferListFragment extends BaseFragment
 
     @Override
     public void onClick(View v) {
-        placeProperFragment(ProfileBrowserFragment.class.getName());
+        int id = v.getId();
+        switch (id) {
+            case R.id.input_profile:
+                placeProperFragment(ProfileBrowserFragment.class.getName());
+                break;
+            case R.id.action_meet_friends:
+                placeProperFragment(MeetFriendsFragment.class.getName());
+                break;
+        }
     }
 
     @Override
