@@ -23,6 +23,7 @@ import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.validate.ConfirmValidate;
 
@@ -199,5 +200,12 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
                 }
             }
         }.execute();
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        KeyboardUtils.hideFragmentKeyboard(this);
+        super.onDestroyView();
     }
 }

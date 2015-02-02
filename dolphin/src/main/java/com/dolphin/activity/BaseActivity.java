@@ -172,7 +172,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         WeakReference reference = null;
         for (WeakReference<Fragment> weakReference : fragList) {
             String tag = fragment.getTag();
-            if (tag != null && tag.equals(weakReference.get().getTag())) {
+            if (tag != null && weakReference.get() != null && tag.equals(weakReference.get().getTag())) {
                 reference = weakReference;
                 break;
             }
