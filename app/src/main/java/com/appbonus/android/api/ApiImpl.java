@@ -33,12 +33,19 @@ public class ApiImpl implements Api {
     private static final String API_VERSION = "v1";
 
     protected Context context;
+    protected HttpMethod.ErrorHandler errorHandler;
 
     public ApiImpl(Context context) {
         this.context = context;
+        this.errorHandler = new ApiErrorHandler(this);
     }
 
     public ApiLogger logger = new ApiLogger();
+
+    @Override
+    public String getString(int resourceId) {
+        return context.getString(resourceId);
+    }
 
     @Override
     public LoginWrapper registration(String email, String password, String country, String phone, String deviceId) throws Throwable {
@@ -53,7 +60,7 @@ public class ApiImpl implements Api {
         object.put("user", info);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "signup");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -71,7 +78,7 @@ public class ApiImpl implements Api {
         object.put("user", info);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "signin");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -88,7 +95,7 @@ public class ApiImpl implements Api {
         object.put("user", info);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "reset_password");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -101,7 +108,7 @@ public class ApiImpl implements Api {
         HashMap<String, String> params = new HashMap<>();
         params.put("auth_token", authToken);
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -115,7 +122,7 @@ public class ApiImpl implements Api {
         params.put("auth_token", authToken);
         params.put("page", String.valueOf(page));
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "history");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -129,7 +136,7 @@ public class ApiImpl implements Api {
         params.put("auth_token", authToken);
         params.put("page", String.valueOf(page));
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "referrals_history");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -142,7 +149,7 @@ public class ApiImpl implements Api {
         HashMap<String, String> params = new HashMap<>();
         params.put("auth_token", authToken);
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "balance");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -157,7 +164,7 @@ public class ApiImpl implements Api {
         object.put("device_token", deviceToken);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "register_device");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -172,7 +179,7 @@ public class ApiImpl implements Api {
         object.put("device_token", deviceToken);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "unregister_device");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -191,7 +198,7 @@ public class ApiImpl implements Api {
         object.put("withdrawal_request", withdrawal);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "withdrawal");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -211,7 +218,7 @@ public class ApiImpl implements Api {
         object.put("auth_token", authToken);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -225,7 +232,7 @@ public class ApiImpl implements Api {
         object.put("auth_token", SharedPreferencesStorage.getToken(context));
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "confirm_phone");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -243,7 +250,7 @@ public class ApiImpl implements Api {
         object.put("user", info);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "vk_auth");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         logger.start();
         String answer = method.perform(context);
@@ -261,7 +268,7 @@ public class ApiImpl implements Api {
     @Override
     public SimpleResult vkExit(Context context) throws Throwable {
         HttpMethod method = new MethodDelete(HOST_URI, null, API_SUFX, API_VERSION, "vk_auth");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -275,7 +282,7 @@ public class ApiImpl implements Api {
         params.put("auth_token", authToken);
         params.put("page", String.valueOf(page));
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "offers");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -288,7 +295,7 @@ public class ApiImpl implements Api {
         HashMap<String, String> params = new HashMap<>();
         params.put("auth_token", authToken);
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "offers", String.valueOf(offer.getId()));
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -301,7 +308,7 @@ public class ApiImpl implements Api {
         HashMap<String, String> params = new HashMap<>();
         params.put("auth_token", authToken);
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "faq");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         String answer = method.perform(context);
 
@@ -314,7 +321,7 @@ public class ApiImpl implements Api {
         HashMap<String, String> params = new HashMap<>();
         params.put("auth_token", authToken);
         HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "referrals_details");
-        addDefaultAndroidHeader(method);
+        preparation(method);
 
         logger.start();
         String answer = method.perform(context);
@@ -324,8 +331,17 @@ public class ApiImpl implements Api {
         return jsonHandler.fromJsonString(answer);
     }
 
-    private HttpMethod addDefaultAndroidHeader(HttpMethod httpMethod) {
-        httpMethod.addHeader("User-Agent", "Appbonus Android App");
+    private HttpMethod preparation(HttpMethod httpMethod) {
+        addDefaultHeader(httpMethod);
+        addDefaultErrorHandler(httpMethod);
         return httpMethod;
+    }
+
+    private void addDefaultErrorHandler(HttpMethod httpMethod) {
+        httpMethod.setErrorHandler(errorHandler);
+    }
+
+    private void addDefaultHeader(HttpMethod httpMethod) {
+        httpMethod.addHeader("User-Agent", "Appbonus Android App");
     }
 }

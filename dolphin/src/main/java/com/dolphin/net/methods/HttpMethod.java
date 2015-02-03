@@ -38,4 +38,10 @@ public interface HttpMethod {
     void setHeaders(Map<String, String> headers);
 
     void addHeader(String key, String value);
+
+    static interface ErrorHandler {
+        String handle(String error);
+    }
+
+    public void setErrorHandler(ErrorHandler errorHandler);
 }

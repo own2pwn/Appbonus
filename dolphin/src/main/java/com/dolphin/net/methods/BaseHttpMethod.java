@@ -50,7 +50,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
     protected int responseCode;
     protected String responseEntity;
     protected String contentType = "application/json";
-
+    protected ErrorHandler errorHandler;
 
     BaseHttpMethod(String hostUri, String json, String... apiPath) {
 
@@ -185,19 +185,28 @@ public abstract class BaseHttpMethod implements HttpMethod {
     }
 
     private String getResponse() throws Throwable {
-
         try {
             this.responseCode = this.connection.getResponseCode();
             Log.d(TAG, "Status code: " + responseCode);
 
             if (responseCode == SUCCESS_CODE)
                 return readResponse(connection);
-            else throw new Throwable(String.valueOf(responseCode));
+            else throw new Throwable();
+        } catch (Throwable e) {
+            return throwError();
         } finally {
             if (this.connection != null) {
                 this.connection.disconnect();
             }
         }
+    }
+
+    private String throwError() throws Throwable {
+        String detailMessage = readError(this.connection);
+        if (errorHandler != null) {
+            throw new Throwable(errorHandler.handle(detailMessage));
+        }
+        throw new Throwable(detailMessage);
     }
 
     @Override
@@ -218,5 +227,10 @@ public abstract class BaseHttpMethod implements HttpMethod {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    @Override
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
     }
 }

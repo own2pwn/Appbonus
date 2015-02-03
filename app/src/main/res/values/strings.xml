@@ -118,5 +118,7 @@
     <string name="balance_withdrawal_money">Вывод денег</string>
     <string name="balance_profit">Бонус за %s</string>
     <string name="in_progress">В процессе</string>
+    <string name="failed">Не выполнено</string>
+    <string name="success">ыполнено успешно</string>
 
 </resources>

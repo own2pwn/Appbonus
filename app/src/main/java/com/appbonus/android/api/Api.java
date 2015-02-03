@@ -3,6 +3,7 @@ package com.appbonus.android.api;
 import android.content.Context;
 import android.util.Log;
 
+import com.appbonus.android.R;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.WithdrawalRequest;
@@ -17,8 +18,13 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
+import com.dolphin.net.methods.HttpMethod;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 public interface Api extends Serializable {
     class ApiLogger {
@@ -43,6 +49,43 @@ public interface Api extends Serializable {
             Log.i(tag, String.valueOf(time / (1000 * 1000)) + "ms.");
         }
     }
+
+    class ApiErrorHandler implements HttpMethod.ErrorHandler {
+        private static final String ERROR_PARAMETER = "error";
+        private static final String ERRORS_PARAMETER = "errors";
+        private static final String SUCCESS_PARAMETER = "success";
+
+        protected Api api;
+
+        public ApiErrorHandler(Api api) {
+            this.api = api;
+        }
+
+        @Override
+        public String handle(String error) {
+            try {
+                JSONObject object = new JSONObject(error);
+                if (object.has(ERROR_PARAMETER)) {
+                    return object.getString(ERROR_PARAMETER);
+                } else if (object.has(ERRORS_PARAMETER)) {
+                    JSONObject errors = object.getJSONObject(ERRORS_PARAMETER);
+                    Iterator<String> keys = errors.keys();
+                    if (keys.hasNext()) {
+                        return errors.optString(keys.next());
+                    }
+                } else if (object.has(SUCCESS_PARAMETER)) {
+                    boolean aBoolean = object.getBoolean(SUCCESS_PARAMETER);
+                    if (!aBoolean) {
+                        return api.getString(R.string.failed);
+                    } else return api.getString(R.string.success);
+                }
+            } catch (JSONException ignored) {
+            }
+            return error;
+        }
+    }
+
+    String getString(int resourceId);
     /*
      *  POST /api/v1/signup
         AUTH no
