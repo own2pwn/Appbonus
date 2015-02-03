@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
@@ -203,7 +204,7 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.confirmPhone(context, SharedPreferencesStorage.getToken(context));
+                return api.confirmPhone(new SimpleRequest(SharedPreferencesStorage.getToken(context)));
             }
 
             @Override

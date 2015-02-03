@@ -89,16 +89,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public BalanceWrapper readBalance(Context context, String authToken) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "balance");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<BalanceWrapper> jsonHandler = new JsonHandler<>(BalanceWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public BalanceWrapper readBalance(SimpleRequest request) throws Throwable {
+        return doGet(request, SimpleRequest.class, BalanceWrapper.class, SUFX_MY, SUFX_BALANCE);
     }
 
     @Override
@@ -156,17 +148,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public DataWrapper confirmPhone(Context context, String authToken) throws Throwable {
-        JSONObject object = new JSONObject();
-        object.put("auth_token", authToken);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "confirm_phone");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<DataWrapper> jsonHandler = new JsonHandler<>(DataWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public DataWrapper confirmPhone(SimpleRequest request) throws Throwable {
+        return doPost(request, SimpleRequest.class, DataWrapper.class, SUFX_MY, SUFX_CONFIRM_PHONE);
     }
 
     @Override
@@ -233,16 +216,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public QuestionsWrapper getFaq(Context context, String authToken) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "faq");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<QuestionsWrapper> jsonHandler = new JsonHandler<>(QuestionsWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public QuestionsWrapper getFaq(SimpleRequest request) throws Throwable {
+        return doGet(request, SimpleRequest.class, QuestionsWrapper.class, SUFX_FAQ);
     }
 
     @Override

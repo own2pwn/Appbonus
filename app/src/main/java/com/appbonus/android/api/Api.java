@@ -31,7 +31,12 @@ public interface Api extends Serializable {
     static final String SUFX_SIGNIN = "signin";
     static final String SUFX_SIGNUP = "signup";
     static final String SUFX_RESET_PASSWORD = "reset_password";
+
     static final String SUFX_MY = "my";
+    static final String SUFX_BALANCE = "balance";
+    static final String SUFX_CONFIRM_PHONE = "confirm_phone";
+
+    static final String SUFX_FAQ = "faq";
 
     /*
      *  POST /api/v1/signup
@@ -178,7 +183,7 @@ public interface Api extends Serializable {
             }
           }
      */
-    BalanceWrapper readBalance(Context context, String authToken) throws Throwable;
+    BalanceWrapper readBalance(SimpleRequest request) throws Throwable;
 
     /*
      *  POST /api/v1/my/register_device
@@ -228,7 +233,7 @@ public interface Api extends Serializable {
             info: errors if fails
           }
      */
-    DataWrapper confirmPhone(Context context, String authToken) throws Throwable;
+    DataWrapper confirmPhone(SimpleRequest request) throws Throwable;
 
     /*
      *  PATCH /api/v1/my
@@ -338,7 +343,7 @@ public interface Api extends Serializable {
             ]
           }
      */
-    QuestionsWrapper getFaq(Context context, String authToken) throws Throwable;
+    QuestionsWrapper getFaq(SimpleRequest request) throws Throwable;
 
     /*
      *  GET /api/v1/my/referrals_details
