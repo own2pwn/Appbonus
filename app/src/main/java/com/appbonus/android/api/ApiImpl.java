@@ -2,6 +2,7 @@ package com.appbonus.android.api;
 
 import android.content.Context;
 
+import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.WithdrawalRequest;
@@ -68,21 +69,8 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public LoginWrapper login(String email, String password) throws Throwable {
-        JSONObject info = new JSONObject();
-        info.put("email", email);
-        info.put("password", password);
-
-        JSONObject object = new JSONObject();
-        object.put("user", info);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "signin");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<LoginWrapper> jsonHandler = new JsonHandler<>(LoginWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public LoginWrapper login(LoginRequest loginRequest) throws Throwable {
+        return doPost(loginRequest, LoginRequest.class, LoginWrapper.class, SUFX_SIGNIN);
     }
 
     @Override

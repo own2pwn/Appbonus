@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.appbonus.android.R;
+import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.WithdrawalRequest;
@@ -29,6 +30,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 public interface Api extends Serializable {
+    static final String SUFX_SIGNIN = "signin";
     class ApiLogger {
         private long start;
         private long end;
@@ -114,7 +116,7 @@ public interface Api extends Serializable {
             "user": user.as_json, "auth_token": "xxxxxxxxxxxxxxxxxxxx"
           }
      */
-    LoginWrapper login(String email, String password) throws Throwable;
+    LoginWrapper login(LoginRequest loginRequest) throws Throwable;
 
     /*
      *  POST /api/v1/reset_password

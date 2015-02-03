@@ -10,6 +10,7 @@ import android.view.View;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
@@ -68,14 +69,15 @@ public class LoginActivity extends FragmentActivity {
 
     public void enterHandler(View view) {
         if (form.validate()) {
-            final String mailStr = mail.getText();
-            final String passwordStr = password.getText();
+            String mailStr = mail.getText();
+            String passwordStr = password.getText();
+            final LoginRequest loginRequest = new LoginRequest(mailStr, passwordStr);
 
             new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
 
                 @Override
                 protected LoginWrapper background(Void... params) throws Throwable {
-                    return api.login(mailStr, passwordStr);
+                    return api.login(loginRequest);
                 }
 
                 @Override
@@ -145,8 +147,6 @@ public class LoginActivity extends FragmentActivity {
                                 saveLoginInformation(loginWrapper);
                                 startActivity(IntentHelper.openMain(context));
                                 finish();
-                            } else {
-                                //вк-аккаунт не зарегистрирован
                             }
                         }
 

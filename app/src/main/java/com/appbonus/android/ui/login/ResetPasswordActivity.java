@@ -9,6 +9,7 @@ import android.view.View;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
@@ -31,12 +32,13 @@ public class ResetPasswordActivity extends FragmentActivity {
     }
 
     public void resetPasswordHandler(View view) {
-        final String passwordStr = password.getText();
+        String passwordStr = password.getText();
+        final LoginRequest loginRequest = new LoginRequest(mail, passwordStr);
         new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
 
             @Override
             protected LoginWrapper background(Void... params) throws Throwable {
-                return api.login(mail, passwordStr);
+                return api.login(loginRequest);
             }
 
             @Override
