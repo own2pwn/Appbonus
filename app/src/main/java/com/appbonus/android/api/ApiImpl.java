@@ -16,7 +16,6 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.json.JsonHandler;
 import com.dolphin.net.methods.HttpMethod;
 import com.dolphin.net.methods.MethodDelete;
@@ -227,9 +226,9 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public DataWrapper confirmPhone(Context context) throws Throwable {
+    public DataWrapper confirmPhone(Context context, String authToken) throws Throwable {
         JSONObject object = new JSONObject();
-        object.put("auth_token", SharedPreferencesStorage.getToken(context));
+        object.put("auth_token", authToken);
 
         HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "confirm_phone");
         preparation(method);
@@ -343,5 +342,28 @@ public class ApiImpl implements Api {
 
     private void addDefaultHeader(HttpMethod httpMethod) {
         httpMethod.addHeader("User-Agent", "Appbonus Android App");
+    }
+
+    private <T, K> T doPost(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
+        String[] array = null;
+        if (path != null) {
+            array = new String[path.length + 2];
+            array[0] = API_SUFX;
+            array[1] = API_VERSION;
+            System.arraycopy(path, 0, array, 2, path.length);
+        }
+        HttpMethod method = new MethodPost(HOST_URI, toJson(request, requestType), array);
+        String answer = method.perform(context);
+        return toObject(answer, responseType);
+    }
+
+    private <T> JSONObject toJson(T obj, Class<T> tClass) throws Throwable {
+        JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
+        return jsonHandler.toJsonObject(obj);
+    }
+
+    private <T> T toObject(String string, Class<T> tClass) {
+        JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
+        return jsonHandler.fromJsonString(string);
     }
 }

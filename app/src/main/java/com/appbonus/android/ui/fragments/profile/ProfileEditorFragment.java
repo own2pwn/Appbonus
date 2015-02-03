@@ -201,7 +201,7 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.confirmPhone(context);
+                return api.confirmPhone(context, SharedPreferencesStorage.getToken(context));
             }
 
             @Override

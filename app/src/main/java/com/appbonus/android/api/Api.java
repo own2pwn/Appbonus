@@ -287,7 +287,7 @@ public interface Api extends Serializable {
             info: errors if fails
           }
      */
-    DataWrapper confirmPhone(Context context) throws Throwable;
+    DataWrapper confirmPhone(Context context, String authToken) throws Throwable;
 
     /*
      *  PATCH /api/v1/my
