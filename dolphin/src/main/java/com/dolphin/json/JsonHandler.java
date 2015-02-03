@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,11 @@ public class JsonHandler<T> {
         JsonElement element = gsonParser.toJsonTree(list, new TypeToken<List<T>>() {}.getType());
 
         return element.getAsJsonArray().toString();
+    }
+
+    public Map<String, String> toMap(T object) {
+        String s = toJsonString(object);
+        return gsonParser.fromJson(s, new TypeToken<HashMap<String, Object>>() {}.getType());
     }
 
     private static class DateSerializer implements JsonDeserializer<Date> {

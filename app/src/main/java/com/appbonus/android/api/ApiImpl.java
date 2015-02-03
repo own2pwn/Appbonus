@@ -5,8 +5,9 @@ import android.content.Context;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
+import com.appbonus.android.api.model.SimpleRequest;
+import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.model.Offer;
-import com.appbonus.android.model.User;
 import com.appbonus.android.model.WithdrawalRequest;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.DataWrapper;
@@ -29,25 +30,15 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ApiImpl implements Api {
-    private static final String HOST_URI = "http://appbonus-staging.herokuapp.com/";
-    private static final String API_SUFX = "api";
-    private static final String API_VERSION = "v1";
-
-    protected Context context;
+public class ApiImpl extends CommonApi implements Api {
     protected HttpMethod.ErrorHandler errorHandler;
 
     public ApiImpl(Context context) {
-        this.context = context;
+        super(context);
         this.errorHandler = new ApiErrorHandler(this);
     }
 
     public ApiLogger logger = new ApiLogger();
-
-    @Override
-    public String getString(int resourceId) {
-        return context.getString(resourceId);
-    }
 
     @Override
     public LoginWrapper registration(RegisterRequest request) throws Throwable {
@@ -65,16 +56,8 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public UserWrapper readProfile(Context context, String authToken) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<UserWrapper> jsonHandler = new JsonHandler<>(UserWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public UserWrapper readProfile(SimpleRequest request) throws Throwable {
+        return doGet(request, SimpleRequest.class, UserWrapper.class, SUFX_MY);
     }
 
     @Override
@@ -168,23 +151,8 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public UserWrapper writeProfile(Context context, String authToken, User user) throws Throwable {
-        JSONObject userObj = new JSONObject();
-        userObj.put("email", user.getEmail());
-        userObj.put("phone", user.getPhone());
-        userObj.put("country", user.getCountry());
-
-        JSONObject object = new JSONObject();
-        object.put("user", userObj);
-        object.put("auth_token", authToken);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<UserWrapper> jsonHandler = new JsonHandler<>(UserWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public UserWrapper writeProfile(UserRequest request) throws Throwable {
+        return doPost(request, UserRequest.class, UserWrapper.class, SUFX_MY);
     }
 
     @Override
@@ -306,26 +274,13 @@ public class ApiImpl implements Api {
         httpMethod.addHeader("User-Agent", "Appbonus Android App");
     }
 
-    private <T, K> T doPost(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
-        String[] array = null;
-        if (path != null) {
-            array = new String[path.length + 2];
-            array[0] = API_SUFX;
-            array[1] = API_VERSION;
-            System.arraycopy(path, 0, array, 2, path.length);
-        }
-        HttpMethod method = new MethodPost(HOST_URI, toJson(request, requestType), array);
-        String answer = method.perform(context);
-        return toObject(answer, responseType);
+    @Override
+    public String host() {
+        return HOST_URI;
     }
 
-    private <T> JSONObject toJson(T obj, Class<T> tClass) throws Throwable {
-        JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
-        return jsonHandler.toJsonObject(obj);
-    }
-
-    private <T> T toObject(String string, Class<T> tClass) {
-        JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
-        return jsonHandler.fromJsonString(string);
+    @Override
+    public String[] apiParameters() {
+        return new String[] {API_SUFX, API_VERSION};
     }
 }

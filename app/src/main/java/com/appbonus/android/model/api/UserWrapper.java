@@ -7,6 +7,10 @@ import java.io.Serializable;
 public class UserWrapper implements Serializable {
     protected User user;
 
+    public UserWrapper(User user) {
+        this.user = user;
+    }
+
     public User getUser() {
         return user;
     }

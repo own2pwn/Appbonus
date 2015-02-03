@@ -122,5 +122,6 @@
     <string name="in_progress">В процессе</string>
     <string name="failed">Не выполнено</string>
     <string name="success">Выполнено успешно</string>
+    <string name="re_enter">Произошла непредвиденная ошибка - перезайдите в свой профиль</string>
 
 </resources>

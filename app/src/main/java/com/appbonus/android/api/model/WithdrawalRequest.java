@@ -3,6 +3,11 @@ package com.appbonus.android.api.model;
 public class WithdrawalRequest extends SimpleRequest {
     protected com.appbonus.android.model.WithdrawalRequest withdrawalRequest;
 
+    public WithdrawalRequest(String authToken, com.appbonus.android.model.WithdrawalRequest withdrawalRequest) {
+        super(authToken);
+        this.withdrawalRequest = withdrawalRequest;
+    }
+
     public com.appbonus.android.model.WithdrawalRequest getWithdrawalRequest() {
         return withdrawalRequest;
     }

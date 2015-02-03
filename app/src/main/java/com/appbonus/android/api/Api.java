@@ -1,14 +1,13 @@
 package com.appbonus.android.api;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.appbonus.android.R;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
+import com.appbonus.android.api.model.SimpleRequest;
+import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.model.Offer;
-import com.appbonus.android.model.User;
 import com.appbonus.android.model.WithdrawalRequest;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.DataWrapper;
@@ -21,84 +20,19 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
-import com.dolphin.net.methods.HttpMethod;
-
-import org.apache.commons.lang3.text.WordUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.Iterator;
 
 public interface Api extends Serializable {
+    static final String HOST_URI = "http://appbonus-staging.herokuapp.com/";
+    static final String API_SUFX = "api";
+    static final String API_VERSION = "v1";
+
     static final String SUFX_SIGNIN = "signin";
     static final String SUFX_SIGNUP = "signup";
     static final String SUFX_RESET_PASSWORD = "reset_password";
+    static final String SUFX_MY = "my";
 
-    class ApiLogger {
-        private long start;
-        private long end;
-
-        public void start() {
-            start = System.nanoTime();
-        }
-
-        public void end() {
-            end = System.nanoTime();
-        }
-
-        public void end(String tag) {
-            end();
-            logTime(tag);
-        }
-
-        public void logTime(String tag) {
-            long time = end - start;
-            Log.i(tag, String.valueOf(time / (1000 * 1000)) + "ms.");
-        }
-    }
-
-    class ApiErrorHandler implements HttpMethod.ErrorHandler {
-        private static final String ERROR_PARAMETER = "error";
-        private static final String ERRORS_PARAMETER = "errors";
-        private static final String SUCCESS_PARAMETER = "success";
-
-        protected Api api;
-
-        public ApiErrorHandler(Api api) {
-            this.api = api;
-        }
-
-        @Override
-        public String handle(String error) {
-            try {
-                JSONObject object = new JSONObject(error);
-                if (object.has(ERROR_PARAMETER)) {
-                    return object.getString(ERROR_PARAMETER);
-                } else if (object.has(ERRORS_PARAMETER)) {
-                    JSONObject errors = object.getJSONObject(ERRORS_PARAMETER);
-                    Iterator<String> keys = errors.keys();
-                    if (keys.hasNext()) {
-                        String next = keys.next();
-                        Object o = errors.get(next);
-                        if (o instanceof JSONArray) {
-                            return WordUtils.capitalize(next) + " " + ((JSONArray) o).get(0);
-                        } else return WordUtils.capitalize(errors.optString(next));
-                    }
-                } else if (object.has(SUCCESS_PARAMETER)) {
-                    boolean aBoolean = object.getBoolean(SUCCESS_PARAMETER);
-                    if (!aBoolean) {
-                        return api.getString(R.string.failed);
-                    } else return api.getString(R.string.success);
-                }
-            } catch (JSONException ignored) {
-            }
-            return error;
-        }
-    }
-
-    String getString(int resourceId);
     /*
      *  POST /api/v1/signup
         AUTH no
@@ -164,7 +98,7 @@ public interface Api extends Serializable {
             }
           }
      */
-    UserWrapper readProfile(Context context, String authToken) throws Throwable;
+    UserWrapper readProfile(SimpleRequest request) throws Throwable;
 
     /*
      *  GET /api/v1/my/history
@@ -306,7 +240,7 @@ public interface Api extends Serializable {
             "user": user.as_json
           }
      */
-    UserWrapper writeProfile(Context context, String authToken, User user) throws Throwable;
+    UserWrapper writeProfile(UserRequest request) throws Throwable;
 
     /*
      *  POST /api/v1/vk_auth

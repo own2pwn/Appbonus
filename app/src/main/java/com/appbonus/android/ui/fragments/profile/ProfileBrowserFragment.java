@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
@@ -46,7 +47,6 @@ public class ProfileBrowserFragment extends BaseFragment implements LoaderManage
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_browse, null);
         initUI(view);
-        setData(SharedPreferencesStorage.getUser(getActivity()));
         return view;
     }
 
@@ -128,13 +128,16 @@ public class ProfileBrowserFragment extends BaseFragment implements LoaderManage
 
     @Override
     public void updateUser(User user) {
-        getLoaderManager().getLoader(LOADER_ID).deliverResult(user);
+        SharedPreferencesStorage.saveUser(getActivity(), user);
+        getLoaderManager().getLoader(LOADER_ID).deliverResult(new UserWrapper(user));
     }
 
     @Override
     public void onClick(View v) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
-        placeProperFragment(ProfileEditorFragment.class.getName(), bundle, true, this);
+        if (user != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            placeProperFragment(ProfileEditorFragment.class.getName(), bundle, true, this);
+        } else Toast.makeText(getActivity(), R.string.re_enter, Toast.LENGTH_LONG).show();
     }
 }

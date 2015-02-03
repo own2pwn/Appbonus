@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
@@ -62,7 +63,7 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Bundle bundle = getArguments();
+        Bundle bundle = takeArguments();
         user = (User) bundle.getSerializable("user");
         setData(user);
         setDrawerIndicatorEnabled(false);
@@ -103,10 +104,11 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
 
     public void save() {
         if (mailForm.validate()) {
+            final UserRequest request = new UserRequest(SharedPreferencesStorage.getToken(getActivity()), getResult());
             new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
                 @Override
                 protected UserWrapper background(Void... params) throws Throwable {
-                    return api.writeProfile(getActivity(), SharedPreferencesStorage.getToken(context), getResult());
+                    return api.writeProfile(request);
                 }
 
                 @Override

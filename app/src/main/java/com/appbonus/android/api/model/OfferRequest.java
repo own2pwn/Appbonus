@@ -5,6 +5,11 @@ import com.appbonus.android.model.Offer;
 public class OfferRequest extends SimpleRequest {
     protected Offer offer;
 
+    public OfferRequest(String authToken, Offer offer) {
+        super(authToken);
+        this.offer = offer;
+    }
+
     public Offer getOffer() {
         return offer;
     }
