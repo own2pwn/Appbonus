@@ -10,6 +10,7 @@ import android.view.View;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
@@ -71,15 +72,17 @@ public class RegistrationActivity extends FragmentActivity {
     public void registerHandler(View view) {
         closeErrors();
         if (form.validate()) {
-            final String mailStr = mail.getText();
-            final String phoneStr = phone.getText();
-            final String passwordStr = password.getText();
+            String mailStr = mail.getText();
+            String phoneStr = phone.getText();
+            String passwordStr = password.getText();
+            final RegisterRequest request = new RegisterRequest(mailStr, passwordStr, getCountry(),
+                    phoneStr, DeviceUtils.getUniqueCode(this));
 
             new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
 
                 @Override
                 protected LoginWrapper background(Void... params) throws Throwable {
-                    return api.registration(mailStr, passwordStr, getCountry(), phoneStr, DeviceUtils.getUniqueCode(context));
+                    return api.registration(request);
                 }
 
                 @Override

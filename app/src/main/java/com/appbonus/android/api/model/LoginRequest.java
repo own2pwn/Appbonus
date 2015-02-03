@@ -11,8 +11,12 @@ public class LoginRequest {
         this.user = user;
     }
 
-    public LoginRequest(String email, String password) {
+    public LoginRequest() {
         user = new User();
+    }
+
+    public LoginRequest(String email, String password) {
+        this();
         user.setEmail(email);
         user.setPassword(password);
     }

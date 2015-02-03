@@ -11,6 +11,7 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.LoginRequest;
+import com.appbonus.android.api.model.ResetPasswordRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
@@ -169,10 +170,11 @@ public class LoginActivity extends FragmentActivity {
     public void resetPasswordHandler(View view) {
         if (mailForm.validate()) {
             final String mailStr = mail.getText();
+            final ResetPasswordRequest request = new ResetPasswordRequest(mailStr);
             new DialogExceptionalAsyncTask<Void, Void, SimpleResult>(this) {
                 @Override
                 protected SimpleResult background(Void... params) throws Throwable {
-                    return api.resetPassword(context, mailStr);
+                    return api.resetPassword(request);
                 }
 
                 @Override

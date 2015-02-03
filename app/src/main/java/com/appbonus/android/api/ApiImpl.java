@@ -3,6 +3,8 @@ package com.appbonus.android.api;
 import android.content.Context;
 
 import com.appbonus.android.api.model.LoginRequest;
+import com.appbonus.android.api.model.RegisterRequest;
+import com.appbonus.android.api.model.ResetPasswordRequest;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.WithdrawalRequest;
@@ -48,24 +50,8 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public LoginWrapper registration(String email, String password, String country, String phone, String deviceId) throws Throwable {
-        JSONObject info = new JSONObject();
-        info.put("email", email);
-        info.put("password", password);
-        info.put("country", country);
-        info.put("phone", phone);
-        info.put("device_id", deviceId);
-
-        JSONObject object = new JSONObject();
-        object.put("user", info);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "signup");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<LoginWrapper> jsonHandler = new JsonHandler<>(LoginWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public LoginWrapper registration(RegisterRequest request) throws Throwable {
+        return doPost(request, RegisterRequest.class, LoginWrapper.class, SUFX_SIGNUP);
     }
 
     @Override
@@ -74,20 +60,8 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public SimpleResult resetPassword(Context context, String mail) throws Throwable {
-        JSONObject info = new JSONObject();
-        info.put("email", mail);
-
-        JSONObject object = new JSONObject();
-        object.put("user", info);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "reset_password");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<SimpleResult> jsonHandler = new JsonHandler<>(SimpleResult.class);
-        return jsonHandler.fromJsonString(answer);
+    public SimpleResult resetPassword(ResetPasswordRequest request) throws Throwable {
+        return doPost(request, ResetPasswordRequest.class, SimpleResult.class, SUFX_RESET_PASSWORD);
     }
 
     @Override

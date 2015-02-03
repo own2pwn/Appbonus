@@ -1,49 +1,62 @@
 package com.appbonus.android.api.model;
 
 public class RegisterRequest {
-    protected String login;
-    protected String password;
-    protected String country;
-    protected String phone;
-    protected String deviceId;
+    protected User user;
 
-    public String getLogin() {
-        return login;
+    public RegisterRequest(String email, String password, String country, String phone, String deviceId) {
+        user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setCountry(country);
+        user.setPhone(phone);
+        user.setDeviceId(deviceId);
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+    static class User {
+        protected String email;
+        protected String password;
+        protected String country;
+        protected String phone;
+        protected String deviceId;
 
-    public String getPassword() {
-        return password;
-    }
+        public String getEmail() {
+            return email;
+        }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+        public void setEmail(String email) {
+            this.email = email;
+        }
 
-    public String getCountry() {
-        return country;
-    }
+        public String getPassword() {
+            return password;
+        }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+        public void setPassword(String password) {
+            this.password = password;
+        }
 
-    public String getPhone() {
-        return phone;
-    }
+        public String getCountry() {
+            return country;
+        }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+        public void setCountry(String country) {
+            this.country = country;
+        }
 
-    public String getDeviceId() {
-        return deviceId;
-    }
+        public String getPhone() {
+            return phone;
+        }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public String getDeviceId() {
+            return deviceId;
+        }
+
+        public void setDeviceId(String deviceId) {
+            this.deviceId = deviceId;
+        }
     }
 }
