@@ -20,6 +20,8 @@ import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 import com.dolphin.net.methods.HttpMethod;
 
+import org.apache.commons.lang3.text.WordUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,7 +73,11 @@ public interface Api extends Serializable {
                     JSONObject errors = object.getJSONObject(ERRORS_PARAMETER);
                     Iterator<String> keys = errors.keys();
                     if (keys.hasNext()) {
-                        return errors.optString(keys.next());
+                        String next = keys.next();
+                        Object o = errors.get(next);
+                        if (o instanceof JSONArray) {
+                            return WordUtils.capitalize(next) + " " + ((JSONArray) o).get(0);
+                        } else return WordUtils.capitalize(errors.optString(next));
                     }
                 } else if (object.has(SUCCESS_PARAMETER)) {
                     boolean aBoolean = object.getBoolean(SUCCESS_PARAMETER);

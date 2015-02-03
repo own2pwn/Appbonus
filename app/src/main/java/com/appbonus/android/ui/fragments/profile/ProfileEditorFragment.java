@@ -25,7 +25,9 @@ import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.activity.fragment.BaseFragment;
 import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
+import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validate.ConfirmValidate;
+import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 
 public class ProfileEditorFragment extends BaseFragment implements View.OnClickListener {
     protected FloatLabel mail;
@@ -44,6 +46,7 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
     protected Api api;
     protected User user;
     protected Form passwordForm;
+    protected Form mailForm;
 
     protected Fragment parentFragment;
 
@@ -51,33 +54,15 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_editor, null);
         initUI(view);
+        parentFragment = getTargetFragment();
+        api = new ApiImpl(getActivity());
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        parentFragment = getTargetFragment();
-        api = new ApiImpl(getActivity());
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save();
-            }
-        });
-        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changePassword();
-            }
-        });
-        country.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeCountry();
-            }
-        });
-        Bundle bundle = takeArguments();
+        Bundle bundle = getArguments();
         user = (User) bundle.getSerializable("user");
         setData(user);
         setDrawerIndicatorEnabled(false);
@@ -117,27 +102,29 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
     }
 
     public void save() {
-        new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
-            @Override
-            protected UserWrapper background(Void... params) throws Throwable {
-                return api.writeProfile(getActivity(), SharedPreferencesStorage.getToken(context), getResult());
-            }
+        if (mailForm.validate()) {
+            new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
+                @Override
+                protected UserWrapper background(Void... params) throws Throwable {
+                    return api.writeProfile(getActivity(), SharedPreferencesStorage.getToken(context), getResult());
+                }
 
-            @Override
-            protected void onPostExecute(UserWrapper userWrapper) {
-                super.onPostExecute(userWrapper);
-                if (isSuccess()) {
-                    if (parentFragment instanceof OnUpdate)
-                        ((OnUpdate) parentFragment).updateUser(userWrapper.getUser());
-                    closeCurrentFragment();
-                } else showError(throwable.getMessage());
-            }
+                @Override
+                protected void onPostExecute(UserWrapper userWrapper) {
+                    super.onPostExecute(userWrapper);
+                    if (isSuccess()) {
+                        if (parentFragment instanceof OnUpdate)
+                            ((OnUpdate) parentFragment).updateUser(userWrapper.getUser());
+                        closeCurrentFragment();
+                    } else showError(throwable.getMessage());
+                }
 
-            @Override
-            protected FragmentManager getFragmentManager() {
-                return getActivity().getSupportFragmentManager();
-            }
-        }.execute();
+                @Override
+                protected FragmentManager getFragmentManager() {
+                    return getActivity().getSupportFragmentManager();
+                }
+            }.execute();
+        }
     }
 
     private User getResult() {
@@ -156,6 +143,9 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
         confirmPassword = (FloatLabel) view.findViewById(R.id.confirm_password);
         saveBtn = (Button) view.findViewById(R.id.save);
         changePasswordBtn = (Button) view.findViewById(R.id.change_password);
+        saveBtn.setOnClickListener(this);
+        changePasswordBtn.setOnClickListener(this);
+        country.setOnClickListener(this);
 
         confirmPhoneLabel = view.findViewById(R.id.confirm_phone_label);
         confirmPhoneButton = view.findViewById(R.id.confirm_phone_button);
@@ -165,6 +155,11 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
         ConfirmValidate confirmValidate = new ConfirmValidate(newPassword.getEditText(),
                 confirmPassword.getEditText(), R.string.password_are_not_confirmed);
         passwordForm.addValidates(confirmValidate);
+
+        mailForm = new Form();
+        Validate mailValidate = new Validate(mail.getEditText());
+        mailValidate.addValidator(new EmailValidator(getActivity(), R.string.wrong_mail));
+        mailForm.addValidates(mailValidate);
     }
 
     private void setData(User user) {
@@ -180,6 +175,24 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.save:
+                save();
+                break;
+            case R.id.change_password:
+                changePassword();
+                break;
+            case R.id.confirm_phone_button:
+                confirmPhone();
+                break;
+            case R.id.country:
+                changeCountry();
+                break;
+        }
+    }
+
+    private void confirmPhone() {
         new DialogExceptionalAsyncTask<Void, Void, DataWrapper>(getActivity()) {
             @Override
             protected FragmentManager getFragmentManager() {
