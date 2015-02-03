@@ -13,6 +13,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
+import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.storage.SharedPreferencesStorage;
@@ -27,7 +28,6 @@ public class GoogleCloudMessagingUtils {
     public final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String PROPERTY_REG_ID = "registration_id";
     public static final String PROPERTY_APP_VERSION = "appVersion";
-    public static final String PROJECT_NUMBER = "329875651575";
 
     private static GoogleCloudMessaging gcm;
     private static String regId;
@@ -36,7 +36,6 @@ public class GoogleCloudMessagingUtils {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                //do not show message
                 GooglePlayServicesUtil.getErrorDialog(resultCode, context,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             }
@@ -91,8 +90,6 @@ public class GoogleCloudMessagingUtils {
      * @return Application's {@code SharedPreferences}.
      */
     private static SharedPreferences getGCMPreferences(Context context) {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the regID in your app is up to you.
         return SharedPreferencesStorage.getPreferences(context);
     }
 
@@ -119,23 +116,19 @@ public class GoogleCloudMessagingUtils {
         new AsyncTask<Void, String, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String msg = "";
+                String msg;
                 try {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
-                    regId = gcm.register(PROJECT_NUMBER);
+                    regId = gcm.register(context.getString(R.string.project_number));
                     msg = "Device registered, registration ID=" + regId;
-
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(context, regId);
 
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
-                    // If there is an error, don't just keep trying to register.
-                    // Require the user to click a button again, or perform
-                    // exponential back-off.
                 }
                 return msg;
             }

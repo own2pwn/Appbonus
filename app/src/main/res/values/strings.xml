@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="project_number">329875651575</string>
+
     <string name="vk_id">4739637</string>
     <string name="vk_secret">BDMI2dCGJltlLmOYTBMD</string>
     <string name="referrer_app_link">http://appbonus.ru/?referrer_id=%s</string>

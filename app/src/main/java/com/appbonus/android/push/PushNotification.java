@@ -8,29 +8,14 @@ import android.os.Parcelable;
  * @version $Id$
  */
 public class PushNotification implements Parcelable {
-    private String message;
-    private int badge;
-    private int postId;
-    private String type;
+    protected String message;
 
     public String getMessage() {
         return message;
     }
 
-    public int getBadge() {
-        return badge;
-    }
-
-    public int getPostId() {
-        return postId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public boolean isBest() {
-        return "best".equals(type);
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
@@ -40,20 +25,14 @@ public class PushNotification implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.message);
-        dest.writeInt(this.badge);
-        dest.writeInt(this.postId);
-        dest.writeString(this.type);
+        dest.writeString(message);
     }
 
     public PushNotification() {
     }
 
     private PushNotification(Parcel in) {
-        this.message = in.readString();
-        this.badge = in.readInt();
-        this.postId = in.readInt();
-        this.type = in.readString();
+        message = in.readString();
     }
 
     public static Creator<PushNotification> CREATOR = new Creator<PushNotification>() {
@@ -65,11 +44,4 @@ public class PushNotification implements Parcelable {
             return new PushNotification[size];
         }
     };
-
-    public PushNotification(String message, int badge, int postId, String type) {
-        this.message = message;
-        this.badge = badge;
-        this.postId = postId;
-        this.type = type;
-    }
 }
