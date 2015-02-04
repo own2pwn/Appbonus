@@ -110,7 +110,8 @@
     <Button
         android:id="@id/auto_withdrawal"
         style="@style/button_setting"
-        android:text="@string/auto_withdrawal" />
+        android:text="@string/auto_withdrawal"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
