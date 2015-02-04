@@ -89,13 +89,7 @@ public abstract class CommonApi {
     }
 
     protected <T, K> T doPost(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
-        String[] array = null;
-        if (path != null) {
-            String[] parameters = apiParameters();
-            array = new String[path.length + parameters.length];
-            System.arraycopy(parameters, 0, array, 0, parameters.length);
-            System.arraycopy(path, 0, array, 2, path.length);
-        }
+        String[] array = collectParameters(path);
         HttpMethod method = new MethodPost(host(), toJson(request, requestType), array);
         preparation(method);
         String answer = method.perform(context);
@@ -103,13 +97,7 @@ public abstract class CommonApi {
     }
 
     protected <T, K> T doGet(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
-        String[] array = null;
-        if (path != null) {
-            String[] parameters = apiParameters();
-            array = new String[path.length + parameters.length];
-            System.arraycopy(parameters, 0, array, 0, parameters.length);
-            System.arraycopy(path, 0, array, 2, path.length);
-        }
+        String[] array = collectParameters(path);
         HttpMethod method = new MethodGet(host(), toMap(request, requestType), array);
         preparation(method);
         String answer = method.perform(context);
@@ -117,13 +105,7 @@ public abstract class CommonApi {
     }
 
     protected <T, K> T doDelete(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
-        String[] array = null;
-        if (path != null) {
-            String[] parameters = apiParameters();
-            array = new String[path.length + parameters.length];
-            System.arraycopy(parameters, 0, array, 0, parameters.length);
-            System.arraycopy(path, 0, array, 2, path.length);
-        }
+        String[] array = collectParameters(path);
         HttpMethod method = new MethodDelete(host(), toMap(request, requestType), array);
         preparation(method);
         String answer = method.perform(context);
@@ -144,6 +126,17 @@ public abstract class CommonApi {
     protected  <T> T toObject(String string, Class<T> tClass) {
         JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
         return jsonHandler.fromJsonString(string);
+    }
+
+    private String[] collectParameters(String[] path) {
+        String[] array = null;
+        if (path != null) {
+            String[] parameters = apiParameters();
+            array = new String[path.length + parameters.length];
+            System.arraycopy(parameters, 0, array, 0, parameters.length);
+            System.arraycopy(path, 0, array, parameters.length, path.length);
+        }
+        return array;
     }
 
     public abstract String host();
