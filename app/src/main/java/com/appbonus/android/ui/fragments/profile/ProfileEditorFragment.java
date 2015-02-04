@@ -194,10 +194,18 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
         phone.setText(user.getPhone());
         country.setText(getString(getResources().getIdentifier(user.getCountry(), "string", getActivity().getPackageName())));
 
+        setPhoneSetting(user);
+    }
+
+    private void setPhoneSetting(User user) {
         if (!user.isPhoneConfirmed()) {
             confirmPhoneLabel.setVisibility(View.VISIBLE);
             confirmPhoneButton.setVisibility(View.VISIBLE);
-        } else phone.lock();
+        } else {
+            confirmPhoneLabel.setVisibility(View.GONE);
+            confirmPhoneButton.setVisibility(View.GONE);
+            phone.lock();
+        }
     }
 
     @Override
@@ -235,8 +243,11 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
             protected void onPostExecute(DataWrapper dataWrapper) {
                 super.onPostExecute(dataWrapper);
                 if (isSuccess()) {
-                    if (dataWrapper.isSuccess())
-                        Toast.makeText(context, dataWrapper.toString(), Toast.LENGTH_LONG).show();
+                    if (dataWrapper.isSuccess()) {
+                        user.setPhoneConfirmed(true);
+                        setPhoneSetting(user);
+                    }
+                    Toast.makeText(context, dataWrapper.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
