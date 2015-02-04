@@ -6,6 +6,7 @@ import android.util.Log;
 import com.appbonus.android.R;
 import com.dolphin.json.JsonHandler;
 import com.dolphin.net.methods.HttpMethod;
+import com.dolphin.net.methods.MethodDelete;
 import com.dolphin.net.methods.MethodGet;
 import com.dolphin.net.methods.MethodPost;
 
@@ -14,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -95,6 +97,7 @@ public abstract class CommonApi {
             System.arraycopy(path, 0, array, 2, path.length);
         }
         HttpMethod method = new MethodPost(host(), toJson(request, requestType), array);
+        preparation(method);
         String answer = method.perform(context);
         return toObject(answer, responseType);
     }
@@ -108,11 +111,27 @@ public abstract class CommonApi {
             System.arraycopy(path, 0, array, 2, path.length);
         }
         HttpMethod method = new MethodGet(host(), toMap(request, requestType), array);
+        preparation(method);
+        String answer = method.perform(context);
+        return toObject(answer, responseType);
+    }
+
+    protected <T, K> T doDelete(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
+        String[] array = null;
+        if (path != null) {
+            String[] parameters = apiParameters();
+            array = new String[path.length + parameters.length];
+            System.arraycopy(parameters, 0, array, 0, parameters.length);
+            System.arraycopy(path, 0, array, 2, path.length);
+        }
+        HttpMethod method = new MethodDelete(host(), toMap(request, requestType), array);
+        preparation(method);
         String answer = method.perform(context);
         return toObject(answer, responseType);
     }
 
     private <K> Map<String, String> toMap(K request, Class<K> tClass) throws IllegalAccessException {
+        if (request == null) return new HashMap<>();
         JsonHandler<K> jsonHandler = new JsonHandler<>(tClass);
         return jsonHandler.toMap(request);
     }
@@ -130,6 +149,8 @@ public abstract class CommonApi {
     public abstract String host();
 
     public abstract String[] apiParameters();
+
+    protected abstract void preparation(HttpMethod method);
 
     public String getString(int resourceId) {
         return context.getString(resourceId);

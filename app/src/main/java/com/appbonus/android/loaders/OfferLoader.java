@@ -3,6 +3,7 @@ package com.appbonus.android.loaders;
 import android.content.Context;
 
 import com.appbonus.android.api.Api;
+import com.appbonus.android.api.model.OfferRequest;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OfferWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
@@ -20,6 +21,6 @@ public class OfferLoader extends AbstractLoader<OfferWrapper> {
 
     @Override
     protected OfferWrapper backgroundLoading() throws Throwable {
-        return api.showOffer(getContext(), SharedPreferencesStorage.getToken(getContext()), offer);
+        return api.showOffer(new OfferRequest(SharedPreferencesStorage.getToken(getContext()), offer));
     }
 }

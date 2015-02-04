@@ -83,7 +83,7 @@ public class JsonHandler<T> {
 
     public Map<String, String> toMap(T object) {
         String s = toJsonString(object);
-        return gsonParser.fromJson(s, new TypeToken<HashMap<String, Object>>() {}.getType());
+        return gsonParser.fromJson(s, new TypeToken<HashMap<String, String>>() {}.getType());
     }
 
     private static class DateSerializer implements JsonDeserializer<Date> {

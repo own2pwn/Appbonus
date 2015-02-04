@@ -17,4 +17,8 @@ public class OfferRequest extends SimpleRequest {
     public void setOffer(Offer offer) {
         this.offer = offer;
     }
+
+    public Long getId() {
+        return offer.getId();
+    }
 }

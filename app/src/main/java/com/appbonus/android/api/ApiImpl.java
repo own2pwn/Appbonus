@@ -2,13 +2,16 @@ package com.appbonus.android.api;
 
 import android.content.Context;
 
+import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
+import com.appbonus.android.api.model.OfferRequest;
+import com.appbonus.android.api.model.PagingRequest;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
 import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.api.model.UserRequest;
-import com.appbonus.android.model.Offer;
-import com.appbonus.android.model.WithdrawalRequest;
+import com.appbonus.android.api.model.VkLoginRequest;
+import com.appbonus.android.api.model.WithdrawalRequest;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
@@ -20,15 +23,7 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
-import com.dolphin.json.JsonHandler;
 import com.dolphin.net.methods.HttpMethod;
-import com.dolphin.net.methods.MethodDelete;
-import com.dolphin.net.methods.MethodGet;
-import com.dolphin.net.methods.MethodPost;
-
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 public class ApiImpl extends CommonApi implements Api {
     protected HttpMethod.ErrorHandler errorHandler;
@@ -37,8 +32,6 @@ public class ApiImpl extends CommonApi implements Api {
         super(context);
         this.errorHandler = new ApiErrorHandler(this);
     }
-
-    public ApiLogger logger = new ApiLogger();
 
     @Override
     public LoginWrapper registration(RegisterRequest request) throws Throwable {
@@ -61,31 +54,13 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public HistoryWrapper readHistory(Context context, String authToken, Long page) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        params.put("page", String.valueOf(page));
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "history");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<HistoryWrapper> jsonHandler = new JsonHandler<>(HistoryWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public HistoryWrapper readHistory(PagingRequest request) throws Throwable {
+        return doGet(request, PagingRequest.class, HistoryWrapper.class, SUFX_MY, SUFX_HISTORY);
     }
 
     @Override
-    public ReferralsHistoryWrapper readReferralsHistory(Context context, String authToken, Long page) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        params.put("page", String.valueOf(page));
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "referrals_history");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<ReferralsHistoryWrapper> jsonHandler = new JsonHandler<>(ReferralsHistoryWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public ReferralsHistoryWrapper readReferralsHistory(PagingRequest request) throws Throwable {
+        return doGet(request, PagingRequest.class, ReferralsHistoryWrapper.class, SUFX_MY, SUFX_REFERRALS_HISTORY);
     }
 
     @Override
@@ -94,52 +69,18 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public DataWrapper registerDevice(Context context, String authToken, String deviceToken) throws Throwable {
-        JSONObject object = new JSONObject();
-        object.put("auth_token", authToken);
-        object.put("device_token", deviceToken);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "register_device");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<DataWrapper> jsonHandler = new JsonHandler<>(DataWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public DataWrapper registerDevice(DeviceRequest request) throws Throwable {
+        return doPost(request, DeviceRequest.class, DataWrapper.class, SUFX_MY, SUFX_REGISTER_DEVICE);
     }
 
     @Override
-    public DataWrapper unregisterDevice(Context context, String authToken, String deviceToken) throws Throwable {
-        JSONObject object = new JSONObject();
-        object.put("auth_token", authToken);
-        object.put("device_token", deviceToken);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "unregister_device");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<DataWrapper> jsonHandler = new JsonHandler<>(DataWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public DataWrapper unregisterDevice(DeviceRequest request) throws Throwable {
+        return doPost(request, DeviceRequest.class, DataWrapper.class, SUFX_MY, SUFX_UNREGISTER_DEVICE);
     }
 
     @Override
-    public DataWrapper makeWithdrawal(Context context, String authToken, WithdrawalRequest request) throws Throwable {
-        JSONObject withdrawal = new JSONObject();
-        withdrawal.put("request_type", request.getRequestType());
-        withdrawal.put("amount", request.getAmount());
-
-        JSONObject object = new JSONObject();
-        object.put("auth_token", authToken);
-        object.put("withdrawal_request", withdrawal);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "my", "withdrawal");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<DataWrapper> jsonHandler = new JsonHandler<>(DataWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public DataWrapper makeWithdrawal(WithdrawalRequest request) throws Throwable {
+        return doPost(request, WithdrawalRequest.class, DataWrapper.class, SUFX_MY, SUFX_WITHDRAWAL);
     }
 
     @Override
@@ -153,66 +94,28 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public LoginWrapper vkRegister(Context context, String mail, String vkToken) throws Throwable {
-        JSONObject info = new JSONObject();
-        info.put("email", mail);
-        info.put("vk_token", vkToken);
-
-        JSONObject object = new JSONObject();
-        object.put("user", info);
-
-        HttpMethod method = new MethodPost(HOST_URI, object, API_SUFX, API_VERSION, "vk_auth");
-        preparation(method);
-
-        logger.start();
-        String answer = method.perform(context);
-        logger.end("vkRegister");
-
-        JsonHandler<LoginWrapper> jsonHandler = new JsonHandler<>(LoginWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public LoginWrapper vkRegister(VkLoginRequest request) throws Throwable {
+        return doPost(request, VkLoginRequest.class, LoginWrapper.class, SUFX_VK_AUTH);
     }
 
     @Override
-    public LoginWrapper vkLogin(Context context, String vkToken) throws Throwable {
-        return vkRegister(context, null, vkToken);
+    public LoginWrapper vkLogin(VkLoginRequest request) throws Throwable {
+        return vkRegister(request);
     }
 
     @Override
-    public SimpleResult vkExit(Context context) throws Throwable {
-        HttpMethod method = new MethodDelete(HOST_URI, null, API_SUFX, API_VERSION, "vk_auth");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<SimpleResult> jsonHandler = new JsonHandler<>(SimpleResult.class);
-        return jsonHandler.fromJsonString(answer);
+    public SimpleResult vkExit(SimpleRequest request) throws Throwable {
+        return doDelete(request, SimpleRequest.class, SimpleResult.class, SUFX_VK_AUTH);
     }
 
     @Override
-    public OffersWrapper getOffers(Context context, String authToken, Long page) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        params.put("page", String.valueOf(page));
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "offers");
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<OffersWrapper> jsonHandler = new JsonHandler<>(OffersWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public OffersWrapper getOffers(PagingRequest request) throws Throwable {
+        return doGet(request, PagingRequest.class, OffersWrapper.class, SUFX_OFFERS);
     }
 
     @Override
-    public OfferWrapper showOffer(Context context, String authToken, Offer offer) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "offers", String.valueOf(offer.getId()));
-        preparation(method);
-
-        String answer = method.perform(context);
-
-        JsonHandler<OfferWrapper> jsonHandler = new JsonHandler<>(OfferWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public OfferWrapper showOffer(OfferRequest request) throws Throwable {
+        return doGet(request, OfferRequest.class, OfferWrapper.class, SUFX_OFFERS, String.valueOf(request.getId()));
     }
 
     @Override
@@ -221,24 +124,13 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public ReferralsDetailsWrapper readReferralsDetails(Context context, String authToken) throws Throwable {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("auth_token", authToken);
-        HttpMethod method = new MethodGet(HOST_URI, params, API_SUFX, API_VERSION, "my", "referrals_details");
-        preparation(method);
-
-        logger.start();
-        String answer = method.perform(context);
-        logger.end("readReferralsDetails");
-
-        JsonHandler<ReferralsDetailsWrapper> jsonHandler = new JsonHandler<>(ReferralsDetailsWrapper.class);
-        return jsonHandler.fromJsonString(answer);
+    public ReferralsDetailsWrapper readReferralsDetails(SimpleRequest request) throws Throwable {
+        return doGet(request, SimpleRequest.class, ReferralsDetailsWrapper.class, SUFX_MY, SUFX_REFERRALS_DETAILS);
     }
 
-    private HttpMethod preparation(HttpMethod httpMethod) {
+    protected void preparation(HttpMethod httpMethod) {
         addDefaultHeader(httpMethod);
         addDefaultErrorHandler(httpMethod);
-        return httpMethod;
     }
 
     private void addDefaultErrorHandler(HttpMethod httpMethod) {

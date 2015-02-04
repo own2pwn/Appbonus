@@ -3,6 +3,7 @@ package com.appbonus.android.loaders;
 import android.content.Context;
 
 import com.appbonus.android.api.Api;
+import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.loader.AbstractLoader;
@@ -17,6 +18,6 @@ public class ReferralsDetailsLoader extends AbstractLoader<ReferralsDetailsWrapp
 
     @Override
     protected ReferralsDetailsWrapper backgroundLoading() throws Throwable {
-        return api.readReferralsDetails(getContext(), SharedPreferencesStorage.getToken(getContext()));
+        return api.readReferralsDetails(new SimpleRequest(SharedPreferencesStorage.getToken(getContext())));
     }
 }

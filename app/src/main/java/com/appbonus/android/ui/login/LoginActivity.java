@@ -12,6 +12,7 @@ import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
+import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
@@ -138,7 +139,7 @@ public class LoginActivity extends FragmentActivity {
                     new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
                         @Override
                         protected LoginWrapper background(Void... params) throws Throwable {
-                            return api.vkLogin(context, token);
+                            return api.vkLogin(new VkLoginRequest(token));
                         }
 
                         @Override

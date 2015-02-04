@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.push.GoogleCloudMessagingUtils;
@@ -112,8 +113,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawer.Navig
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.unregisterDevice(context, SharedPreferencesStorage.getToken(context),
-                        GoogleCloudMessagingUtils.getRegistrationId(context));
+                return api.unregisterDevice(new DeviceRequest(SharedPreferencesStorage.getToken(context),
+                        GoogleCloudMessagingUtils.getRegistrationId(context)));
             }
 
             @Override

@@ -3,6 +3,7 @@ package com.appbonus.android.loaders;
 import android.content.Context;
 
 import com.appbonus.android.api.Api;
+import com.appbonus.android.api.model.PagingRequest;
 import com.appbonus.android.model.api.HistoryWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.loader.AbstractLoader;
@@ -19,6 +20,6 @@ public class HistoryLoader extends AbstractLoader<HistoryWrapper> {
 
     @Override
     protected HistoryWrapper backgroundLoading() throws Throwable {
-        return api.readHistory(getContext(), SharedPreferencesStorage.getToken(getContext()), page);
+        return api.readHistory(new PagingRequest(SharedPreferencesStorage.getToken(getContext()), page));
     }
 }

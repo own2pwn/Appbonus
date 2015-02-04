@@ -1,14 +1,15 @@
 package com.appbonus.android.api;
 
-import android.content.Context;
-
+import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
+import com.appbonus.android.api.model.OfferRequest;
+import com.appbonus.android.api.model.PagingRequest;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
 import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.api.model.UserRequest;
-import com.appbonus.android.model.Offer;
-import com.appbonus.android.model.WithdrawalRequest;
+import com.appbonus.android.api.model.VkLoginRequest;
+import com.appbonus.android.api.model.WithdrawalRequest;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
@@ -24,19 +25,28 @@ import com.appbonus.android.model.api.UserWrapper;
 import java.io.Serializable;
 
 public interface Api extends Serializable {
-    static final String HOST_URI = "http://appbonus-staging.herokuapp.com/";
-    static final String API_SUFX = "api";
-    static final String API_VERSION = "v1";
+    String HOST_URI = "http://appbonus-staging.herokuapp.com/";
+    String API_SUFX = "api";
+    String API_VERSION = "v1";
 
-    static final String SUFX_SIGNIN = "signin";
-    static final String SUFX_SIGNUP = "signup";
-    static final String SUFX_RESET_PASSWORD = "reset_password";
+    String SUFX_SIGNIN = "signin";
+    String SUFX_SIGNUP = "signup";
+    String SUFX_RESET_PASSWORD = "reset_password";
+    String SUFX_VK_AUTH = "vk_auth";
 
-    static final String SUFX_MY = "my";
-    static final String SUFX_BALANCE = "balance";
-    static final String SUFX_CONFIRM_PHONE = "confirm_phone";
+    String SUFX_MY = "my";
+    String SUFX_BALANCE = "balance";
+    String SUFX_CONFIRM_PHONE = "confirm_phone";
+    String SUFX_HISTORY = "history";
+    String SUFX_REFERRALS_HISTORY = "referrals_history";
+    String SUFX_REFERRALS_DETAILS = "referrals_details";
+    String SUFX_REGISTER_DEVICE = "register_device";
+    String SUFX_UNREGISTER_DEVICE = "unregister_device";
+    String SUFX_WITHDRAWAL = "withdrawal";
 
-    static final String SUFX_FAQ = "faq";
+    String SUFX_OFFERS = "offers";
+
+    String SUFX_FAQ = "faq";
 
     /*
      *  POST /api/v1/signup
@@ -131,7 +141,7 @@ public interface Api extends Serializable {
               }, {...}
               ...]
      */
-    HistoryWrapper readHistory(Context context, String authToken, Long page) throws Throwable;
+    HistoryWrapper readHistory(PagingRequest request) throws Throwable;
 
     /*
      *  GET /api/v1/my/referrals_history
@@ -164,7 +174,7 @@ public interface Api extends Serializable {
                 ...
               ]
      */
-    ReferralsHistoryWrapper readReferralsHistory(Context context, String authToken, Long page) throws Throwable;
+    ReferralsHistoryWrapper readReferralsHistory(PagingRequest request) throws Throwable;
 
     /*
      *  GET /api/v1/my/balance
@@ -195,7 +205,7 @@ public interface Api extends Serializable {
             data: "ok"
           }
      */
-    DataWrapper registerDevice(Context context, String authToken, String deviceToken) throws Throwable;
+    DataWrapper registerDevice(DeviceRequest request) throws Throwable;
 
     /*
      *  POST /api/v1/my/unregister_device
@@ -207,7 +217,7 @@ public interface Api extends Serializable {
             data: "ok"
           }
      */
-    DataWrapper unregisterDevice(Context context, String authToken, String deviceToken) throws Throwable;
+    DataWrapper unregisterDevice(DeviceRequest request) throws Throwable;
 
     /*
      *  POST /api/v1/my/withdrawal
@@ -220,7 +230,7 @@ public interface Api extends Serializable {
             info: errors if fails
           }
      */
-    DataWrapper makeWithdrawal(Context context, String authToken, WithdrawalRequest request) throws Throwable;
+    DataWrapper makeWithdrawal(WithdrawalRequest request) throws Throwable;
 
     /*
      *  PATCH /api/v1/my/confirm_phone
@@ -257,9 +267,9 @@ public interface Api extends Serializable {
             "user": user.as_json, "auth_token": "xxxxxxxxxxxxxxxxxxxx"
           }
      */
-    LoginWrapper vkRegister(Context context, String mail, String vkToken) throws Throwable;
+    LoginWrapper vkRegister(VkLoginRequest request) throws Throwable;
 
-    LoginWrapper vkLogin(Context context, String vkToken) throws Throwable;
+    LoginWrapper vkLogin(VkLoginRequest request) throws Throwable;
 
     /*
      *  DELETE /api/v1/vk_auth
@@ -271,7 +281,7 @@ public interface Api extends Serializable {
             success: true
           }
      */
-    SimpleResult vkExit(Context context) throws Throwable;
+    SimpleResult vkExit(SimpleRequest request) throws Throwable;
 
     /*
      *  GET /api/v1/offers
@@ -300,7 +310,7 @@ public interface Api extends Serializable {
             ]
           }
      */
-    OffersWrapper getOffers(Context context, String authToken, Long page) throws Throwable;
+    OffersWrapper getOffers(PagingRequest request) throws Throwable;
 
     /*
      *  GET /api/v1/offers/:id
@@ -325,7 +335,7 @@ public interface Api extends Serializable {
             }
           }
      */
-    OfferWrapper showOffer(Context context, String authToken, Offer offer) throws Throwable;
+    OfferWrapper showOffer(OfferRequest request) throws Throwable;
 
 
     /*
@@ -372,5 +382,5 @@ public interface Api extends Serializable {
             }
           }
      */
-    ReferralsDetailsWrapper readReferralsDetails(Context context, String authToken) throws Throwable;
+    ReferralsDetailsWrapper readReferralsDetails(SimpleRequest request) throws Throwable;
 }

@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.utils.Log;
 import com.google.android.gms.common.ConnectionResult;
@@ -144,7 +145,7 @@ public class GoogleCloudMessagingUtils {
      */
     private static void sendRegistrationIdToBackend(Context context) throws Throwable {
         Api api = new ApiImpl(context);
-        api.registerDevice(context, SharedPreferencesStorage.getToken(context), regId);
+        api.registerDevice(new DeviceRequest(SharedPreferencesStorage.getToken(context), regId));
     }
 
     /**

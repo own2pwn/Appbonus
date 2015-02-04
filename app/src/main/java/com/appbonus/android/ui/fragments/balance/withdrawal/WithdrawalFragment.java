@@ -96,7 +96,8 @@ public class WithdrawalFragment extends BaseFragment implements View.OnClickList
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.makeWithdrawal(context, SharedPreferencesStorage.getToken(context), withdrawalRequest);
+                return api.makeWithdrawal(new com.appbonus.android.api.model.WithdrawalRequest(
+                        SharedPreferencesStorage.getToken(context), withdrawalRequest));
             }
 
             @Override
