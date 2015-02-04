@@ -18,6 +18,7 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.push.GoogleCloudMessagingUtils;
+import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.throrinstudio.android.common.libs.validator.Form;
@@ -72,7 +73,7 @@ public class LoginActivity extends FragmentActivity {
     public void enterHandler(View view) {
         if (form.validate()) {
             String mailStr = mail.getText();
-            String passwordStr = password.getText();
+            final String passwordStr = password.getText();
             final LoginRequest loginRequest = new LoginRequest(mailStr, passwordStr);
 
             new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
@@ -86,7 +87,7 @@ public class LoginActivity extends FragmentActivity {
                 protected void onPostExecute(LoginWrapper loginWrapper) {
                     super.onPostExecute(loginWrapper);
                     if (isSuccess()) {
-                        saveLoginInformation(loginWrapper);
+                        saveLoginInformation(loginWrapper, passwordStr);
                         startActivity(IntentHelper.openMain(context));
                         finish();
                     } else showError(throwable);
@@ -162,7 +163,14 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void saveLoginInformation(LoginWrapper loginObj) {
+        saveLoginInformation(loginObj, null);
+    }
+
+    private void saveLoginInformation(LoginWrapper loginObj, String password) {
         DataHelper.saveInfo(this, loginObj);
+        if (password != null) {
+            SharedPreferencesStorage.savePassword(this, password);
+        }
         if (GoogleCloudMessagingUtils.checkPlayServices(this)) {
             GoogleCloudMessagingUtils.register(this);
         }

@@ -52,4 +52,9 @@ public class FloatLabel extends com.iangclifton.android.floatlabel.FloatLabel {
     public boolean isLocked() {
         return locked;
     }
+
+    public void clear() {
+        EditText editText = getEditText();
+        editText.setText("");
+    }
 }

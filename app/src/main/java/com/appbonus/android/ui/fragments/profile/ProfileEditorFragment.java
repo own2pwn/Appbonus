@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.ChangePasswordRequest;
 import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
@@ -99,7 +100,30 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
 
     public void changePassword() {
         if (passwordForm.validate()) {
+            String password = newPassword.getText();
+            final ChangePasswordRequest request = new ChangePasswordRequest(SharedPreferencesStorage.getToken(getActivity()),
+                    SharedPreferencesStorage.getPassword(getActivity()), password);
+            new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
+                @Override
+                protected FragmentManager getFragmentManager() {
+                    return getActivity().getSupportFragmentManager();
+                }
 
+                @Override
+                protected UserWrapper background(Void... params) throws Throwable {
+                    return api.changePassword(request);
+                }
+
+                @Override
+                protected void onPostExecute(UserWrapper userWrapper) {
+                    super.onPostExecute(userWrapper);
+                    if (isSuccess()) {
+                        newPassword.clear();
+                        confirmPassword.clear();
+                        Toast.makeText(context, R.string.password_was_changed, Toast.LENGTH_LONG).show();
+                    } else showError(throwable.getMessage());
+                }
+            }.execute();
         }
     }
 

@@ -1,5 +1,6 @@
 package com.appbonus.android.api;
 
+import com.appbonus.android.api.model.ChangePasswordRequest;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.OfferRequest;
@@ -256,6 +257,8 @@ public interface Api extends Serializable {
           }
      */
     UserWrapper writeProfile(UserRequest request) throws Throwable;
+
+    UserWrapper changePassword(ChangePasswordRequest request) throws Throwable;
 
     /*
      *  POST /api/v1/vk_auth

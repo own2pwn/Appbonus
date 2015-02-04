@@ -2,6 +2,7 @@ package com.appbonus.android.api;
 
 import android.content.Context;
 
+import com.appbonus.android.api.model.ChangePasswordRequest;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.OfferRequest;
@@ -86,6 +87,11 @@ public class ApiImpl extends CommonApi implements Api {
     @Override
     public UserWrapper writeProfile(UserRequest request) throws Throwable {
         return doPost(request, UserRequest.class, UserWrapper.class, SUFX_MY);
+    }
+
+    @Override
+    public UserWrapper changePassword(ChangePasswordRequest request) throws Throwable {
+        return doPost(request, ChangePasswordRequest.class, UserWrapper.class, SUFX_MY);
     }
 
     @Override

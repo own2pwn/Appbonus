@@ -15,6 +15,7 @@ import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
+import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.utils.DeviceUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
@@ -75,7 +76,7 @@ public class RegistrationActivity extends FragmentActivity {
         if (form.validate()) {
             String mailStr = mail.getText();
             String phoneStr = phone.getText();
-            String passwordStr = password.getText();
+            final String passwordStr = password.getText();
             final RegisterRequest request = new RegisterRequest(mailStr, passwordStr, getCountry(),
                     phoneStr, DeviceUtils.getUniqueCode(this));
 
@@ -90,6 +91,7 @@ public class RegistrationActivity extends FragmentActivity {
                 protected void onPostExecute(LoginWrapper loginWrapper) {
                     super.onPostExecute(loginWrapper);
                     if (isSuccess()) {
+                        savePassword(passwordStr);
                         setResult(RESULT_OK, new Intent().putExtra("login_info", loginWrapper));
                         finish();
                     } else showError(throwable);
@@ -101,6 +103,10 @@ public class RegistrationActivity extends FragmentActivity {
                 }
             }.execute();
         }
+    }
+
+    private void savePassword(String passwordStr) {
+        SharedPreferencesStorage.savePassword(this, passwordStr);
     }
 
     private String getCountry() {

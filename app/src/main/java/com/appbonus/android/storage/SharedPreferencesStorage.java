@@ -20,6 +20,7 @@ public class SharedPreferencesStorage extends PreferencesHelper {
     private static final String QIWI_PARAMETER = "qiwi_parameter";
     private static final String MOBILE_PARAMETER = "mobile_parameter";
     private static final String USER_PARAMETER = "user";
+    private static final String PASSWORD_PARAMETER = "password";
 
     protected SharedPreferencesStorage(Context context) {
         super(context);
@@ -133,6 +134,16 @@ public class SharedPreferencesStorage extends PreferencesHelper {
     public static String getQiwi(Context context) {
         SharedPreferencesStorage storage = getStorage(context);
         return storage.get(QIWI_PARAMETER, "");
+    }
+
+    public static void savePassword(Context context, String password) {
+        SharedPreferencesStorage storage = getStorage(context);
+        storage.set(PASSWORD_PARAMETER, password);
+    }
+
+    public static String getPassword(Context context) {
+        SharedPreferencesStorage storage = getStorage(context);
+        return storage.get(PASSWORD_PARAMETER, "");
     }
 
     public static void saveUser(Context context, User user) {
