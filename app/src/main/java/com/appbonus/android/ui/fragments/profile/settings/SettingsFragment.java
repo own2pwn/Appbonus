@@ -100,11 +100,16 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 placeProperFragment(FaqListFragment.class.getName());
                 break;
             case R.id.license:
+                openLicense();
                 break;
             case R.id.exit:
                 exit();
                 break;
         }
+    }
+
+    private void openLicense() {
+        placeProperFragment(LicenseFragment.class.getName());
     }
 
     private void exit() {

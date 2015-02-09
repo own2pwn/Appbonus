@@ -74,7 +74,7 @@
     <string name="second_install_step">В процессе скачивания не должно быть разрывов связи и смены 3G/Wi-Fi</string>
     <string name="third_install_step">Бонус зачислится от 5 минут до нескольких часов</string>
     <string name="rules"><![CDATA[Подробные правила]]></string>
-    <string name="bonus_info">Получите бонусы, когда кто-то\nустановит приложение по вашей ссылке</string>
+    <string name="bonus_info">Получите бонусы, когда кто-то\nустановит приложение по Вашей ссылке</string>
     <string name="share">Поделиться ссылкой</string>
     <string name="referrer_link_was_copied">Ссылка скопирована</string>
     <string name="edit">Изменить</string>
@@ -97,7 +97,7 @@
     <string name="mobile_caption">Мобильный</string>
     <string name="withdrawal_is_not_access_info">Пока телефон не подтвержден, вы\nне сможете выводить деньги</string>
     <string name="meet_friends">Пригласить друзей</string>
-    <string name="get_percent">И получить проценты</string>
+    <string name="get_percent">И заработать больше</string>
     <string name="first_level">1 уровень</string>
     <string name="second_level">2 уровень</string>
     <string name="third_level">3 уровень</string>
