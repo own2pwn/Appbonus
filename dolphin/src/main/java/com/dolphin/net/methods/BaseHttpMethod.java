@@ -6,36 +6,21 @@ import android.net.Uri;
 import android.util.LruCache;
 
 import com.dolphin.utils.ConnectionUtilsInsecure;
-import com.dolphin.utils.Log;
 import com.dolphin.utils.NetUtils;
 
 import org.apache.http.HttpStatus;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
-/**
- * Created at 04.12.13 19:43
- *
- * @author Altero
- */
 public abstract class BaseHttpMethod implements HttpMethod {
 
-    @SuppressWarnings("unused")
-    private static final String TAG = Log.getNormalizedTag(BaseHttpMethod.class);
     private static final String E_TAG = "ETag";
 
     private static final int TIMEOUT_MILLIS = 20000;
@@ -53,105 +38,83 @@ public abstract class BaseHttpMethod implements HttpMethod {
     protected String requestMethod;
     protected HttpURLConnection connection;
 
-    protected int responseCode;
-    protected String responseEntity;
     protected String contentType = "application/json";
     protected ErrorHandler errorHandler;
 
-    static LruCache<String, String> requestCache = new LruCache<>(REQUEST_CACHE_SIZE);
-    static LruCache<String, String> responseCache = new LruCache<>(RESPONSE_CACHE_SIZE);
+    static final LruCache<String, String> requestCache = new LruCache<>(REQUEST_CACHE_SIZE);
+    static final LruCache<String, String> responseCache = new LruCache<>(RESPONSE_CACHE_SIZE);
 
-    BaseHttpMethod(String hostUri, String json, String... apiPath) {
+    protected BaseHttpMethod(String hostUri, String json, String... apiPath) {
+        this(hostUri, json, null, apiPath);
+    }
 
+    protected BaseHttpMethod(String hostUri, Map<String, String> params, String... apiPath) {
+        this(hostUri, null, params, apiPath);
+    }
+
+    private BaseHttpMethod(String hostUri, String json, Map<String, String> params, String... apiPath) {
         this.hostUri = hostUri;
+        this.params = params;
         this.entity = json;
-        this.params = null;
         this.apiPaths = apiPath;
         this.uriBuilder = new Uri.Builder();
         this.requestMethod = "";
     }
 
-    BaseHttpMethod(String hostUri, Map<String, String> params, String... apiPath) {
-
-        this.hostUri = hostUri;
-        this.params = params;
-        this.entity = null;
-        this.apiPaths = apiPath;
-        this.uriBuilder = new Uri.Builder();
-    }
-
     public String perform(Context context) throws Throwable {
-        assert context != null;
-
         if (!NetUtils.isNetworkAvailable(context))
             throw new Throwable(NET_PROBLEM_ERROR_CODE);
 
-        try {
-            URL url = assembleUrl(this.apiPaths);
-            configureConnection(url);
-
-            this.connection.connect();
-            writeToOpenedConnection(this.entity);
-
-            this.responseEntity = getResponse();
-            return this.responseEntity;
-        } catch (IOException e) {
-            throw new InvocationTargetException(e, e.getMessage());
-        }
+        configureConnection(assembleUrl(apiPaths));
+        connect();
+        writeToOpenedConnection(entity);
+        return getResponse();
     }
 
-    @Override
-    public int getResponseCode() {
-
-        return this.responseCode;
-    }
-
-    @Override
-    public String getResponseEntity() {
-
-        return this.responseEntity;
+    private void connect() throws IOException {
+        connection.connect();
     }
 
     private URL assembleUrl(String... apiPath) throws Throwable {
-
         ConnectionUtilsInsecure.init(hostUri);
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(ConnectionUtilsInsecure.getHttpScheme());
         builder.encodedAuthority(ConnectionUtilsInsecure.getHostUrl());
 
-        if (apiPath != null)
-            for (String pathSegment : apiPath)
+        if (apiPath != null) {
+            for (String pathSegment : apiPath) {
                 builder.appendPath(pathSegment);
-
-        if (params != null)
-            for (Map.Entry<String, String> query : params.entrySet())
-                builder.appendQueryParameter(query.getKey(), query.getValue());
-
-        try {
-            Uri uri = builder.build();
-            return new URL(uri != null ? uri.toString() : "");
-        } catch (MalformedURLException e) {
-            throw new Throwable(WTF_ERROR_CODE, e);
+            }
         }
 
+        if (params != null) {
+            for (Map.Entry<String, String> query : params.entrySet()) {
+                builder.appendQueryParameter(query.getKey(), query.getValue());
+            }
+        }
+
+        Uri uri = builder.build();
+        return new URL(uri != null ? uri.toString() : "");
     }
 
     protected void configureConnection(URL postUrl) throws IOException {
+        connection = (HttpURLConnection) postUrl.openConnection();
+        connection.setConnectTimeout(TIMEOUT_MILLIS);
+        connection.setRequestMethod(requestMethod);
 
-        this.connection = (HttpURLConnection) postUrl.openConnection();
-        this.connection.setConnectTimeout(TIMEOUT_MILLIS);
-        this.connection.setRequestMethod(this.requestMethod);
+        addETagHeaderIfExists(postUrl);
+        addHeaders(connection);
+    }
 
+    private void addETagHeaderIfExists(URL postUrl) {
         String tag = getRequestTag(postUrl.toString());
         if (tag != null) {
             addHeader(E_TAG, tag);
         }
-        addHeaders(this.connection);
     }
 
     public void addHeaders(HttpURLConnection connection) {
-
         if (headers != null) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 connection.addRequestProperty(entry.getKey(), entry.getValue());
@@ -160,37 +123,24 @@ public abstract class BaseHttpMethod implements HttpMethod {
     }
 
     private String readResponse(HttpURLConnection connection) throws IOException {
-
-        return readFromStream(connection.getInputStream());
+        return readStream(connection.getInputStream());
     }
 
     private String readError(HttpURLConnection connection) throws IOException {
-
-        return readFromStream(connection.getErrorStream());
+        return readStream(connection.getErrorStream());
     }
 
-    private String readFromStream(InputStream inputStream) throws IOException {
-
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-        String line;
-        StringBuilder builder = new StringBuilder();
-
-        while ((line = bufferedReader.readLine()) != null) {
-            builder.append(line);
-        }
-
-        bufferedReader.close();
-        return builder.toString();
+    private String readStream(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     protected void writeToOpenedConnection(String json) throws IOException {
-
         if (json == null)
             return;
 
         BufferedWriter outputStream = new BufferedWriter(
-                new OutputStreamWriter(this.connection.getOutputStream())
+                new OutputStreamWriter(connection.getOutputStream())
         );
         outputStream.write(json);
         outputStream.flush();
@@ -198,55 +148,43 @@ public abstract class BaseHttpMethod implements HttpMethod {
     }
 
     private String getResponse() throws Throwable {
+        int responseCode;
         try {
-            this.responseCode = this.connection.getResponseCode();
-            Log.d(TAG, "Status code: " + responseCode);
+            responseCode = connection.getResponseCode();
+        } catch (IOException e) {
+            //http://stackoverflow.com/questions/17121213/java-io-ioexception-no-authentication-challenges-found
+            responseCode = HttpStatus.SC_UNAUTHORIZED;
+        }
+        try {
 
-            String etag = connection.getHeaderField(E_TAG);
-            if (responseCode == SUCCESS_CODE) {
-                saveRequest(etag, connection.getURL().toString());
+            String eTag = connection.getHeaderField(E_TAG);
+            if (responseCode == HttpStatus.SC_OK) {
+                saveRequest(eTag, connection.getURL().toString());
                 String response = readResponse(connection);
-                saveResponse(etag, response);
+                saveResponse(eTag, response);
                 return response;
             } else if (responseCode == HttpStatus.SC_NOT_MODIFIED) {
-                return getResponse(etag);
+                return getResponse(eTag);
             }
-            else throw new Throwable();
-        } catch (Throwable e) {
-            return throwError();
+            else return throwError();
         } finally {
-            if (this.connection != null) {
-                this.connection.disconnect();
-            }
+            disconnectQuietly();
         }
     }
 
     private String throwError() throws Throwable {
-        String detailMessage = readError(this.connection);
+        String detailMessage = readError(connection);
         if (errorHandler != null) {
             throw new Throwable(errorHandler.handle(detailMessage));
         }
         throw new Throwable(detailMessage);
     }
 
-    @Override
-    public List<String> getAuthErrors() {
-        return new ArrayList<String>();
-    }
-
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
-
     public void addHeader(String key, String value) {
         if (headers == null) {
-            headers = new HashMap<String, String>();
+            headers = new HashMap<>();
         }
         headers.put(key, value);
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     @Override
@@ -275,6 +213,12 @@ public abstract class BaseHttpMethod implements HttpMethod {
     public void saveRequest(String url, String tag) {
         synchronized (requestCache) {
             requestCache.put(url, tag);
+        }
+    }
+
+    private void disconnectQuietly() {
+        if (connection != null) {
+            connection.disconnect();
         }
     }
 }
