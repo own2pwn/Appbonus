@@ -115,7 +115,10 @@ public abstract class CommonApi {
         String[] array = collectParameters(path);
         HttpMethod method = new MethodDelete(host(), toMap(request, requestType), array);
         preparation(method);
+        ApiLogger logger = new ApiLogger();
+        logger.start();
         String answer = method.perform(context);
+        logger.end(Arrays.toString(path));
         return toObject(answer, responseType);
     }
 
