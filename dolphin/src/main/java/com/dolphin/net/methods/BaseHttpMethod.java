@@ -145,7 +145,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
 
         String tag = getRequestTag(postUrl.toString());
         if (tag != null) {
-            headers.put(E_TAG, tag);
+            addHeader(E_TAG, tag);
         }
         addHeaders(this.connection);
     }
