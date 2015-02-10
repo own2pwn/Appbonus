@@ -6,7 +6,7 @@ public class Offer implements Serializable {
     protected String description;
     protected String icon;
     protected Long id;
-    protected Long reward;
+    protected Double reward;
     protected String title;
     protected boolean done;
     protected String downloadLink;
@@ -35,11 +35,11 @@ public class Offer implements Serializable {
         this.id = id;
     }
 
-    public Long getReward() {
+    public Double getReward() {
         return reward;
     }
 
-    public void setReward(Long reward) {
+    public void setReward(Double reward) {
         this.reward = reward;
     }
 

@@ -19,7 +19,6 @@ import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.loaders.FaqLoader;
 import com.appbonus.android.model.Question;
-import com.appbonus.android.model.api.QuestionsWrapper;
 import com.dolphin.activity.fragment.BaseFragment;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.loader.AbstractLoader;
@@ -30,13 +29,13 @@ import java.util.List;
 import java.util.Map;
 
 public class FaqListFragment extends BaseFragment
-        implements LoaderManager.LoaderCallbacks<QuestionsWrapper>, AdapterView.OnItemClickListener, View.OnClickListener {
+        implements LoaderManager.LoaderCallbacks<List<Question>>, AdapterView.OnItemClickListener, View.OnClickListener {
     public static final int LOADER_ID = 1;
     public static final String QUESTION_PARAMETER = "question";
 
     protected Api api;
     protected ListView listView;
-    protected QuestionsWrapper questionsWrapper;
+    protected List<Question> questions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,29 +58,29 @@ public class FaqListFragment extends BaseFragment
         setTitle(R.string.faq);
         setDrawerIndicatorEnabled(false);
         if (getLoaderManager().getLoader(LOADER_ID) == null) {
-            Loader<QuestionsWrapper> loader = getLoaderManager().initLoader(LOADER_ID, null, this);
+            Loader loader = getLoaderManager().initLoader(LOADER_ID, null, this);
             loader.forceLoad();
         }
     }
 
     @Override
-    public Loader<QuestionsWrapper> onCreateLoader(int id, Bundle args) {
-        return new FaqLoader(getActivity(), api);
+    public Loader<List<Question>> onCreateLoader(int id, Bundle args) {
+        return new FaqLoader(getActivity());
     }
 
     @Override
-    public void onLoadFinished(Loader<QuestionsWrapper> loader, QuestionsWrapper data) {
+    public void onLoadFinished(Loader<List<Question>> loader, List<Question> data) {
         if (((AbstractLoader) loader).isSuccess()) {
-            questionsWrapper = data;
+            questions = data;
             listView.setAdapter(new SimpleAdapter(getActivity(), processData(data), R.layout.faq_question_item,
                     new String[]{QUESTION_PARAMETER}, new int[]{android.R.id.text1}));
             listView.setOnItemClickListener(this);
         }
     }
 
-    private List<? extends Map<String, ?>> processData(QuestionsWrapper data) {
-        List<Map<String, String>> list = new ArrayList<>(data.getQuestions().size());
-        for (Question question : data.getQuestions()) {
+    private List<? extends Map<String, ?>> processData(List<Question> data) {
+        List<Map<String, String>> list = new ArrayList<>(data.size());
+        for (Question question : data) {
             Map<String, String> map = new HashMap<>();
             map.put(QUESTION_PARAMETER, question.getText().trim());
             list.add(map);
@@ -90,13 +89,13 @@ public class FaqListFragment extends BaseFragment
     }
 
     @Override
-    public void onLoaderReset(Loader<QuestionsWrapper> loader) {
+    public void onLoaderReset(Loader<List<Question>> loader) {
 
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Question question = questionsWrapper.getQuestions().get(position);
+        Question question = questions.get(position);
         Bundle args = new Bundle();
         args.putSerializable(QUESTION_PARAMETER, question);
         placeProperFragment(FaqAnswerFragment.class.getName(), args);

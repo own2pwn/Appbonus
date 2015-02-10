@@ -300,7 +300,6 @@ public class BalanceBrowserFragment extends BaseFragment implements View.OnClick
                     case OPERATION_TYPE_PROFIT:
                         convertView = inflateView(R.layout.balance_profit);
                         viewHolder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
-                        amountSign = "+";
                         break;
                     case OPERATION_TYPE_IN_PROGRESS:
                         convertView = inflateView(R.layout.balance_withdrawal_in_progress);
@@ -311,10 +310,12 @@ public class BalanceBrowserFragment extends BaseFragment implements View.OnClick
                 convertView.setTag(viewHolder);
             } else viewHolder = (ViewHolder) convertView.getTag();
 
+            if (itemViewType == OPERATION_TYPE_PROFIT) {
+                viewHolder.description.setText(createDescription(item));
+                amountSign = "+";
+            }
             viewHolder.amount.setTypeface(typeface);
             viewHolder.amount.setText(amountSign + createRouble(item.getAmount()));
-            if (itemViewType == OPERATION_TYPE_PROFIT)
-                viewHolder.description.setText(createDescription(item));
             if (viewHolder.avatar != null) {
                 ImageLoader.getInstance().displayImage(item.getOfferIcon(), viewHolder.avatar, options);
             }

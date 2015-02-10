@@ -356,7 +356,7 @@ public interface Api extends Serializable {
             ]
           }
      */
-    QuestionsWrapper getFaq(SimpleRequest request) throws Throwable;
+    QuestionsWrapper getFaq() throws Throwable;
 
     /*
      *  GET /api/v1/my/referrals_details

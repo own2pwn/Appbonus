@@ -1,38 +1,42 @@
 package com.appbonus.android.model;
 
+import android.provider.BaseColumns;
+
+import com.activeandroid.sebbia.Model;
+import com.activeandroid.sebbia.annotation.Column;
+import com.activeandroid.sebbia.annotation.Table;
+
 import java.io.Serializable;
 
-public class Question implements Serializable {
-    protected Long id;
-    protected String text;
-    protected String answer;
+@Table(name = Question.TABLE_NAME, id = BaseColumns._ID)
+public class Question extends Model implements Serializable {
+    public static final String TABLE_NAME = "question";
 
-    public Long getId() {
-        return id;
-    }
+    public static final String ID = "id";
+    @Column(name = ID)
+    public Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public static final String TEXT = "_text";
+    @Column(name = TEXT)
+    public String text;
+
+    public static final String ANSWER = "answer";
+    @Column(name = ANSWER)
+    public String answer;
+
+    public static final String ABOUT_REFERRALS = "about_referrals";
+    @Column(name = ABOUT_REFERRALS)
+    public Boolean aboutReferrals;
 
     public String getText() {
         return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    @Override
-    public String toString() {
-        return answer;
+    public Boolean getAboutReferrals() {
+        return aboutReferrals;
     }
 }

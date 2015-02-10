@@ -64,4 +64,5 @@
     <item name="mail" type="id" />
     <item name="fragments_container" type="id" />
     <item name="rules_text" type="id" />
+    <item name="action_settings" type="id" />
 </resources>

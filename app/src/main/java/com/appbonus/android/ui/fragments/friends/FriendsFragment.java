@@ -24,7 +24,7 @@ import com.appbonus.android.model.ReferralsDetails;
 import com.appbonus.android.model.ReferralsHistory;
 import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
-import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
+import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.activity.fragment.BaseFragment;
 import com.dolphin.loader.AbstractLoader;
@@ -142,7 +142,7 @@ public class FriendsFragment extends BaseFragment implements View.OnClickListene
         }
         switch (id) {
             case R.id.referrals_info:
-                placeProperFragment(FaqListFragment.class.getName());
+                placeProperFragment(ReferralsInfoFragment.class.getName());
                 break;
             case R.id.action_meet_friends:
                 placeProperFragment(MeetFriendsFragment.class.getName());

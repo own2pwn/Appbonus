@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.appbonus.android.R;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
+import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.dolphin.activity.fragment.BaseFragment;
 
 public class MeetFriendsFragment extends BaseFragment implements View.OnClickListener {
@@ -45,7 +45,7 @@ public class MeetFriendsFragment extends BaseFragment implements View.OnClickLis
         int id = v.getId();
         switch (id) {
             case R.id.referrals_info:
-                placeProperFragment(FaqListFragment.class.getName());
+                placeProperFragment(ReferralsInfoFragment.class.getName());
                 break;
             case R.id.meet:
                 makeMeeting();

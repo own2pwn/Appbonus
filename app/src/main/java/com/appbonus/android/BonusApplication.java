@@ -1,7 +1,7 @@
 package com.appbonus.android;
 
-import android.app.Application;
-
+import com.activeandroid.sebbia.ActiveAndroid;
+import com.activeandroid.sebbia.app.Application;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -13,6 +13,7 @@ public class BonusApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ActiveAndroid.initialize(this);
         CookieManager.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
         initImageLoader();
     }

@@ -8,14 +8,13 @@
     <string name="referrer_link">http://appbonus.ru/?referrer_id=%s</string>
     <string name="my_web_cab_link">http://appbonus.ru/my</string>
 
+    <string name="name_db">app_bonus.db</string>
+    <integer name="version_db">1</integer>
+    <string name="models">
+        com.appbonus.android.model.Question
+    </string>
+
     <string name="app_name">AppBonus</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="action_settings">Settings</string>
 
     <string name="login_caption">Ваш email</string>
     <string name="phone_caption">Ваш номер телефона</string>

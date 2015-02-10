@@ -125,8 +125,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public QuestionsWrapper getFaq(SimpleRequest request) throws Throwable {
-        return doGet(request, SimpleRequest.class, QuestionsWrapper.class, SUFX_FAQ);
+    public QuestionsWrapper getFaq() throws Throwable {
+        return doGet(null, null, QuestionsWrapper.class, SUFX_FAQ);
     }
 
     @Override

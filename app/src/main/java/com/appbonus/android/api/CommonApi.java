@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -45,7 +46,7 @@ public abstract class CommonApi {
 
         public void logTime(String tag) {
             long time = end - start;
-            Log.i(tag, String.valueOf(time / (1000 * 1000)) + "ms.");
+            Log.i("Log path - " + tag, String.valueOf(time / (1000 * 1000)) + "ms.");
         }
     }
 
@@ -92,7 +93,10 @@ public abstract class CommonApi {
         String[] array = collectParameters(path);
         HttpMethod method = new MethodPost(host(), toJson(request, requestType), array);
         preparation(method);
+        ApiLogger logger = new ApiLogger();
+        logger.start();
         String answer = method.perform(context);
+        logger.end(Arrays.toString(path));
         return toObject(answer, responseType);
     }
 
@@ -100,7 +104,10 @@ public abstract class CommonApi {
         String[] array = collectParameters(path);
         HttpMethod method = new MethodGet(host(), toMap(request, requestType), array);
         preparation(method);
+        ApiLogger logger = new ApiLogger();
+        logger.start();
         String answer = method.perform(context);
+        logger.end(Arrays.toString(path));
         return toObject(answer, responseType);
     }
 

@@ -28,7 +28,7 @@ public class JsonHandler<T> {
 
     private static Gson gsonParser = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+//            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
             .registerTypeAdapter(Date.class, new DateSerializer())
             .create();
 
@@ -92,7 +92,7 @@ public class JsonHandler<T> {
             String date = json.getAsString();
             if (StringUtils.isNoneBlank(date)) {
                 try {
-                    return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+                    return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(date);
                 } catch (ParseException e) {
                     return null;
                 }
