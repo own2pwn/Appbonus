@@ -2,6 +2,7 @@ package com.appbonus.android.api;
 
 import android.content.Context;
 
+import com.appbonus.android.R;
 import com.appbonus.android.api.model.ChangePasswordRequest;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
@@ -26,6 +27,13 @@ import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 import com.dolphin.net.methods.HttpMethod;
 import com.dynamixsoftware.ErrorAgent;
+
+import org.apache.commons.lang3.text.WordUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
 
 public class ApiImpl extends CommonApi implements Api {
     protected HttpMethod.ErrorHandler errorHandler;
@@ -145,21 +153,60 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     private void addDefaultHeader(HttpMethod httpMethod) {
-        httpMethod.addHeader("User-Agent", "Appbonus Android App");
+        httpMethod.addHeader(HEADER_USER_AGENT_KEY, HEADER_USER_AGENT_VALUE);
     }
 
     @Override
-    public String host() {
+    protected String host() {
         return HOST_URI;
     }
 
     @Override
-    public String[] apiParameters() {
+    protected String[] apiParameters() {
         return new String[] {API_SUFX, API_VERSION};
     }
 
     @Override
     protected void report(String tag, String message) {
         ErrorAgent.reportError(new Throwable(message), tag);
+    }
+
+    class ApiErrorHandler implements HttpMethod.ErrorHandler {
+        private static final String ERROR_PARAMETER = "error";
+        private static final String ERRORS_PARAMETER = "errors";
+        private static final String SUCCESS_PARAMETER = "success";
+
+        protected CommonApi api;
+
+        public ApiErrorHandler(CommonApi api) {
+            this.api = api;
+        }
+
+        @Override
+        public String handle(String error) {
+            try {
+                JSONObject object = new JSONObject(error);
+                if (object.has(ERROR_PARAMETER)) {
+                    return object.getString(ERROR_PARAMETER);
+                } else if (object.has(ERRORS_PARAMETER)) {
+                    JSONObject errors = object.getJSONObject(ERRORS_PARAMETER);
+                    Iterator<String> keys = errors.keys();
+                    if (keys.hasNext()) {
+                        String next = keys.next();
+                        Object o = errors.get(next);
+                        if (o instanceof JSONArray) {
+                            return WordUtils.capitalize(next) + " " + ((JSONArray) o).get(0);
+                        } else return WordUtils.capitalize(errors.optString(next));
+                    }
+                } else if (object.has(SUCCESS_PARAMETER)) {
+                    boolean aBoolean = object.getBoolean(SUCCESS_PARAMETER);
+                    if (!aBoolean) {
+                        return api.getString(R.string.failed);
+                    } else return api.getString(R.string.success);
+                }
+            } catch (JSONException ignored) {
+            }
+            return error;
+        }
     }
 }

@@ -30,6 +30,9 @@ public interface Api extends Serializable {
     String API_SUFX = "api";
     String API_VERSION = "v1";
 
+    String HEADER_USER_AGENT_KEY = "User-Agent";
+    String HEADER_USER_AGENT_VALUE = "Appbonus Android App";
+
     String SUFX_SIGNIN = "signin";
     String SUFX_SIGNUP = "signup";
     String SUFX_RESET_PASSWORD = "reset_password";
@@ -264,7 +267,7 @@ public interface Api extends Serializable {
      *  POST /api/v1/vk_auth
         AUTH no
         ROLE no-user
-        PARAMS user: {email: "email@email.com",vk_token: "TOKEN"}
+        PARAMS user: {email: "email@email.com", phone: "xxxxxxxxx", vk_token: "TOKEN"}
         RESPONSE
           {
             "user": user.as_json, "auth_token": "xxxxxxxxxxxxxxxxxxxx"

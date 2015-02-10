@@ -3,24 +3,23 @@ package com.appbonus.android.api;
 import android.content.Context;
 import android.util.Log;
 
-import com.appbonus.android.R;
 import com.dolphin.json.JsonHandler;
 import com.dolphin.net.methods.HttpMethod;
 import com.dolphin.net.methods.MethodDelete;
 import com.dolphin.net.methods.MethodGet;
 import com.dolphin.net.methods.MethodPost;
 
-import org.apache.commons.lang3.text.WordUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public abstract class CommonApi {
+    private static final int NANO_PER_MILLS = 1000 * 1000;
+    private static final String MILLS = "ms.";
+    private static final String LOG_TAG = "Log path - %s";
+
     protected Context context;
 
     protected CommonApi(Context context) {
@@ -46,49 +45,10 @@ public abstract class CommonApi {
 
         public void logTime(String tag) {
             long time = end - start;
-            tag = "Log path - " + tag;
-            String duration = String.valueOf(time / (1000 * 1000)) + "ms.";
+            tag = String.format(LOG_TAG, tag);
+            String duration = String.valueOf(time / (NANO_PER_MILLS)) + MILLS;
             Log.i(tag, duration);
             report(tag, duration);
-        }
-    }
-
-    class ApiErrorHandler implements HttpMethod.ErrorHandler {
-        private static final String ERROR_PARAMETER = "error";
-        private static final String ERRORS_PARAMETER = "errors";
-        private static final String SUCCESS_PARAMETER = "success";
-
-        protected CommonApi api;
-
-        public ApiErrorHandler(CommonApi api) {
-            this.api = api;
-        }
-
-        @Override
-        public String handle(String error) {
-            try {
-                JSONObject object = new JSONObject(error);
-                if (object.has(ERROR_PARAMETER)) {
-                    return object.getString(ERROR_PARAMETER);
-                } else if (object.has(ERRORS_PARAMETER)) {
-                    JSONObject errors = object.getJSONObject(ERRORS_PARAMETER);
-                    Iterator<String> keys = errors.keys();
-                    if (keys.hasNext()) {
-                        String next = keys.next();
-                        Object o = errors.get(next);
-                        if (o instanceof JSONArray) {
-                            return WordUtils.capitalize(next) + " " + ((JSONArray) o).get(0);
-                        } else return WordUtils.capitalize(errors.optString(next));
-                    }
-                } else if (object.has(SUCCESS_PARAMETER)) {
-                    boolean aBoolean = object.getBoolean(SUCCESS_PARAMETER);
-                    if (!aBoolean) {
-                        return api.getString(R.string.failed);
-                    } else return api.getString(R.string.success);
-                }
-            } catch (JSONException ignored) {
-            }
-            return error;
         }
     }
 
@@ -152,15 +112,15 @@ public abstract class CommonApi {
         return array;
     }
 
-    public abstract String host();
-
-    public abstract String[] apiParameters();
-
-    protected abstract void preparation(HttpMethod method);
-
-    public String getString(int resourceId) {
+    protected String getString(int resourceId) {
         return context.getString(resourceId);
     }
 
-    protected void report(String tag, String message) {}
+    protected abstract String host();
+
+    protected abstract String[] apiParameters();
+
+    protected abstract void preparation(HttpMethod method);
+
+    protected abstract void report(String tag, String message);
 }
