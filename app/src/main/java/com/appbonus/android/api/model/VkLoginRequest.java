@@ -7,9 +7,10 @@ public class VkLoginRequest {
         user = new User();
     }
 
-    public VkLoginRequest(String vkToken, String email) {
+    public VkLoginRequest(String vkToken, String email, String phone) {
         this(vkToken);
         user.setEmail(email);
+        user.setPhone(phone);
     }
 
     public VkLoginRequest(String vkToken) {
@@ -20,6 +21,7 @@ public class VkLoginRequest {
     static class User {
         protected String vkToken;
         protected String email;
+        protected String phone;
 
         public String getVkToken() {
             return vkToken;
@@ -35,6 +37,14 @@ public class VkLoginRequest {
 
         public void setEmail(String email) {
             this.email = email;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
         }
     }
 }

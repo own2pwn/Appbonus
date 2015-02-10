@@ -33,7 +33,7 @@ public class RegistrationActivity extends FragmentActivity {
     protected FloatLabel password;
 
     protected Form form;
-    protected Form mailForm;
+    protected Form vkForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class RegistrationActivity extends FragmentActivity {
 
     public void initValidators() {
         form = new Form();
-        mailForm = new Form();
+        vkForm = new Form();
 
         Validate mailValidate = new Validate(mail.getEditText());
         mailValidate.addValidator(new EmailValidator(this, R.string.wrong_mail));
@@ -54,6 +54,7 @@ public class RegistrationActivity extends FragmentActivity {
 
         Validate phoneValidate = new Validate(phone.getEditText());
         phoneValidate.addValidator(new PhoneValidator(this, R.string.wrong_phone));
+        phoneValidate.addValidator(new NotEmptyValidator(this, R.string.input_phone));
 
         Validate passwordValidate = new Validate(password.getEditText());
         passwordValidate.addValidator(new NotEmptyValidator(this, R.string.input_password));
@@ -62,7 +63,8 @@ public class RegistrationActivity extends FragmentActivity {
         form.addValidates(phoneValidate);
         form.addValidates(passwordValidate);
 
-        mailForm.addValidates(mailValidate);
+        vkForm.addValidates(mailValidate);
+        vkForm.addValidates(phoneValidate);
     }
 
     public void initUI() {
@@ -124,7 +126,7 @@ public class RegistrationActivity extends FragmentActivity {
 
     public void registerVkHandler(View view) {
         closeErrors();
-        if (mailForm.validate()) {
+        if (vkForm.validate()) {
             startActivityForResult(new Intent(this, LoginVkActivity.class), LOGIN_VK_CODE);
         }
     }
@@ -137,10 +139,11 @@ public class RegistrationActivity extends FragmentActivity {
                 if (resultCode == RESULT_OK) {
                     final String token = data.getStringExtra("token");
                     final String mailStr = mail.getText();
+                    final String phoneStr = phone.getText();
                     new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
                         @Override
                         protected LoginWrapper background(Void... params) throws Throwable {
-                            return api.vkRegister(new VkLoginRequest(mailStr, token));
+                            return api.vkRegister(new VkLoginRequest(token, mailStr, phoneStr));
                         }
 
                         @Override
@@ -164,6 +167,6 @@ public class RegistrationActivity extends FragmentActivity {
 
     public void closeErrors() {
         form.closeAllErrors();
-        mailForm.closeAllErrors();
+        vkForm.closeAllErrors();
     }
 }

@@ -123,5 +123,6 @@
     <string name="success">Выполнено успешно</string>
     <string name="re_enter">Произошла непредвиденная ошибка - перезайдите в свой профиль</string>
     <string name="password_was_changed">Пароль успешно изменен</string>
+    <string name="input_phone">Введите номер телефона</string>
 
 </resources>
