@@ -140,8 +140,8 @@ public class ProfileEditorFragment extends BaseFragment implements View.OnClickL
                 protected void onPostExecute(UserWrapper userWrapper) {
                     super.onPostExecute(userWrapper);
                     if (isSuccess()) {
-                        if (parentFragment instanceof OnUpdate)
-                            ((OnUpdate) parentFragment).updateUser(userWrapper.getUser());
+                        if (parentFragment instanceof OnUserUpdateListener)
+                            ((OnUserUpdateListener) parentFragment).onUpdate(userWrapper.getUser());
                         closeCurrentFragment();
                     } else showError(throwable.getMessage());
                 }

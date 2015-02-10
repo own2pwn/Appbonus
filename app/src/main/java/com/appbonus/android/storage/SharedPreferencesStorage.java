@@ -10,9 +10,6 @@ public class SharedPreferencesStorage extends PreferencesHelper {
     private static SharedPreferencesStorage storage;
 
     private static final String TOKEN_PARAMETER = "token";
-    private static final String MAIL_PARAMETER = "mail";
-    private static final String PUSH_SOUND_PARAMETER = "push_sound";
-    private static final String SHOWING_PUSH_PARAMETER = "showing_push";
     private static final String PHONE_CONFIRMED = "phone_confirmed";
     private static final String BALANCE_PARAMETER = "balance";
     private static final String USER_ID = "user_id";
@@ -41,39 +38,9 @@ public class SharedPreferencesStorage extends PreferencesHelper {
         storage.clear(TOKEN_PARAMETER);
     }
 
-    public static void saveMail(Context context, String mail) {
-        SharedPreferencesStorage storage = getStorage(context);
-        storage.set(MAIL_PARAMETER, mail);
-    }
-
-    public static String getMail(Context context) {
-        SharedPreferencesStorage storage = getStorage(context);
-        return storage.get(MAIL_PARAMETER, "");
-    }
-
-    public static void deleteMail(Context context) {
-        SharedPreferencesStorage storage = getStorage(context);
-        storage.clear(MAIL_PARAMETER);
-    }
-
-    public static void savePushSound(Context context, boolean pushSound) {
-        SharedPreferencesStorage storage = getStorage(context);
-        storage.set(PUSH_SOUND_PARAMETER, pushSound);
-    }
-
-    public static boolean getPushSound(Context context) {
-        SharedPreferencesStorage storage = getStorage(context);
-        return storage.get(PUSH_SOUND_PARAMETER, false);
-    }
-
-    public static void savePushShowing(Context context, boolean showingPush) {
-        SharedPreferencesStorage storage = getStorage(context);
-        storage.set(SHOWING_PUSH_PARAMETER, showingPush);
-    }
-
     public static boolean getPushShowing(Context context) {
-        SharedPreferencesStorage storage = getStorage(context);
-        return storage.get(SHOWING_PUSH_PARAMETER, true);
+        User user = getUser(context);
+        return user.isNotify();
     }
 
     public static void confirmPhone(Context context, boolean confirmPhone) {
@@ -146,6 +113,7 @@ public class SharedPreferencesStorage extends PreferencesHelper {
         return storage.get(PASSWORD_PARAMETER, "");
     }
 
+    @SuppressWarnings("unchecked")
     public static void saveUser(Context context, User user) {
         SharedPreferencesStorage storage = getStorage(context);
         storage.save(USER_PARAMETER, user, (Class<User>) user.getClass());

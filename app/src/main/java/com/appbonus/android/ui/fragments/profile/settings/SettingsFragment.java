@@ -1,6 +1,5 @@
 package com.appbonus.android.ui.fragments.profile.settings;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,10 +16,13 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.DeviceRequest;
+import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.component.DialogExceptionalAsyncTask;
+import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.push.GoogleCloudMessagingUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.fragments.profile.OnUserUpdateListener;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.activity.fragment.BaseFragment;
@@ -38,11 +40,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     protected TextView enterAs;
 
     protected Api api;
+    protected User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         api = new ApiImpl(getActivity());
+        user = (User) getArguments().getSerializable("user");
     }
 
     @Override
@@ -56,15 +60,15 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setTitle(R.string.settings);
-        setData(getActivity());
+        setData();
         setDrawerIndicatorEnabled(false);
     }
 
-    private void setData(Context context) {
-        showPush.setChecked(SharedPreferencesStorage.getPushShowing(context));
-        pushSound.setChecked(SharedPreferencesStorage.getPushSound(context));
+    private void setData() {
+        showPush.setChecked(user.isNotify());
+        pushSound.setChecked(user.isNotifySound());
 
-        enterAs.setText(SharedPreferencesStorage.getMail(context));
+        enterAs.setText(user.getEmail());
 
         showPush.setOnCheckedChangeListener(this);
         pushSound.setOnCheckedChangeListener(this);
@@ -140,11 +144,26 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         int id = buttonView.getId();
         switch (id) {
             case R.id.show_push:
-                SharedPreferencesStorage.savePushShowing(getActivity(), isChecked);
+                user.setNotify(isChecked);
                 break;
             case R.id.push_sound:
-                SharedPreferencesStorage.savePushSound(getActivity(), isChecked);
+                user.setNotifySound(isChecked);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    api.writeProfile(new UserRequest(SharedPreferencesStorage.getToken(getActivity()), user));
+                } catch (Throwable ignored) {
+                }
+            }
+        }).start();
+        ((OnUserUpdateListener) getTargetFragment()).onUpdate(user);
+        super.onDestroyView();
     }
 }

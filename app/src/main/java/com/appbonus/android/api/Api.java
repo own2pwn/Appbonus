@@ -106,7 +106,7 @@ public interface Api extends Serializable {
               android: true,
               referrer_id: null,
               notify: true|false,
-              notify_sound: '',
+              notify_sound: true|false,
               phone_confirmed: true|false,
               auth_services: [{
                 id: 15,

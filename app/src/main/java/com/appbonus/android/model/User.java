@@ -30,7 +30,7 @@ public class User implements Serializable {
     //device_ids
     //device_tokens
     protected String postbackLink;
-    protected String notifySound;
+    protected boolean notifySound;
     protected boolean phoneConfirmed;
     protected Date phoneConfirmedAt;
     protected List<AuthService> authServices;
@@ -187,11 +187,11 @@ public class User implements Serializable {
         this.postbackLink = postbackLink;
     }
 
-    public String getNotifySound() {
+    public boolean isNotifySound() {
         return notifySound;
     }
 
-    public void setNotifySound(String notifySound) {
+    public void setNotifySound(boolean notifySound) {
         this.notifySound = notifySound;
     }
 

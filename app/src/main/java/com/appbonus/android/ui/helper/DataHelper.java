@@ -12,7 +12,6 @@ public class DataHelper {
         User user = loginWrapper.getUser();
         if (user != null) {
             SharedPreferencesStorage.saveUser(context, user);
-            SharedPreferencesStorage.saveMail(context, user.getEmail());
             SharedPreferencesStorage.confirmPhone(context, user.isPhoneConfirmed());
             SharedPreferencesStorage.saveUserId(context, user.getId());
             if (user.getBalance() != null)

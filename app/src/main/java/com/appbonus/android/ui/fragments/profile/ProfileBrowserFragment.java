@@ -26,7 +26,8 @@ import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.dolphin.activity.fragment.BaseFragment;
 import com.dolphin.utils.KeyboardUtils;
 
-public class ProfileBrowserFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<UserWrapper>, OnUpdate, View.OnClickListener {
+public class ProfileBrowserFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<UserWrapper>,
+        OnUserUpdateListener, View.OnClickListener {
     public static final int LOADER_ID = 1;
 
     protected FloatLabel mail;
@@ -115,7 +116,7 @@ public class ProfileBrowserFragment extends BaseFragment implements LoaderManage
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_settings:
-                placeProperFragment(SettingsFragment.class.getName());
+                placeProperFragment(SettingsFragment.class.getName(), getUserBundle());
                 return true;
             case android.R.id.home:
                 if (getTargetFragment() == null) {
@@ -127,7 +128,7 @@ public class ProfileBrowserFragment extends BaseFragment implements LoaderManage
     }
 
     @Override
-    public void updateUser(User user) {
+    public void onUpdate(User user) {
         SharedPreferencesStorage.saveUser(getActivity(), user);
         getLoaderManager().getLoader(LOADER_ID).deliverResult(new UserWrapper(user));
     }
@@ -135,9 +136,13 @@ public class ProfileBrowserFragment extends BaseFragment implements LoaderManage
     @Override
     public void onClick(View v) {
         if (user != null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("user", user);
-            placeProperFragment(ProfileEditorFragment.class.getName(), bundle, true, this);
+            placeProperFragment(ProfileEditorFragment.class.getName(), getUserBundle());
         } else Toast.makeText(getActivity(), R.string.re_enter, Toast.LENGTH_LONG).show();
+    }
+
+    private Bundle getUserBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", user);
+        return bundle;
     }
 }
