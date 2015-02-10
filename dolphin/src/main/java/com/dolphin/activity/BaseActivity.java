@@ -90,7 +90,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected List<String> getExcluded() {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
@@ -169,7 +169,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @Override
     public void onAttachFragment(Fragment fragment) {
-        fragList.add(new WeakReference(fragment));
+        fragList.add(new WeakReference<>(fragment));
     }
 
     public void onDestroyFragment(Fragment fragment) {
@@ -187,7 +187,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     public List<Fragment> getActiveFragments() {
-        ArrayList<Fragment> ret = new ArrayList<Fragment>();
+        ArrayList<Fragment> ret = new ArrayList<>();
         for (WeakReference<Fragment> ref : fragList) {
             Fragment f = ref.get();
             if (f != null) {
@@ -208,10 +208,6 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     public void unlockNavigationDrawer() {
-
-    }
-
-    public void onBackStackChanged(boolean closeIfZero) {
 
     }
 

@@ -27,8 +27,8 @@ import java.util.Map;
 
 
 public class BaseFragment extends Fragment implements StandardFragment {
-    private Map<String, AlertDialog.Builder> alertDialogs = new HashMap<String, AlertDialog.Builder>();
-    private Map<String, Boolean> alertDialogsVisibility = new HashMap<String, Boolean>();
+    private Map<String, AlertDialog.Builder> alertDialogs = new HashMap<>();
+    private Map<String, Boolean> alertDialogsVisibility = new HashMap<>();
 
     protected Toolbar toolbar;
 
