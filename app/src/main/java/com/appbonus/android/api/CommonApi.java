@@ -46,7 +46,10 @@ public abstract class CommonApi {
 
         public void logTime(String tag) {
             long time = end - start;
-            Log.i("Log path - " + tag, String.valueOf(time / (1000 * 1000)) + "ms.");
+            tag = "Log path - " + tag;
+            String duration = String.valueOf(time / (1000 * 1000)) + "ms.";
+            Log.i(tag, duration);
+            report(tag, duration);
         }
     }
 
@@ -158,4 +161,6 @@ public abstract class CommonApi {
     public String getString(int resourceId) {
         return context.getString(resourceId);
     }
+
+    protected void report(String tag, String message) {}
 }

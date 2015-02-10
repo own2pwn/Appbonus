@@ -25,6 +25,7 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 import com.dolphin.net.methods.HttpMethod;
+import com.dynamixsoftware.ErrorAgent;
 
 public class ApiImpl extends CommonApi implements Api {
     protected HttpMethod.ErrorHandler errorHandler;
@@ -155,5 +156,10 @@ public class ApiImpl extends CommonApi implements Api {
     @Override
     public String[] apiParameters() {
         return new String[] {API_SUFX, API_VERSION};
+    }
+
+    @Override
+    protected void report(String tag, String message) {
+        ErrorAgent.reportError(new Throwable(message), tag);
     }
 }

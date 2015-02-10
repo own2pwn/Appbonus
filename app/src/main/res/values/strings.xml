@@ -9,7 +9,6 @@
     <string name="my_web_cab_link">http://appbonus.ru/my</string>
 
     <string name="name_db">app_bonus.db</string>
-    <integer name="version_db">1</integer>
     <string name="models">
         com.appbonus.android.model.Question
     </string>
