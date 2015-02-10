@@ -30,7 +30,7 @@ import com.appbonus.android.ui.fragments.balance.autowithdrawal.AutowithdrawalFr
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.activity.fragment.MainFragment;
 import com.dolphin.loader.AbstractLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -40,7 +40,7 @@ import com.paging.listview.PagingListView;
 
 import java.util.List;
 
-public class BalanceBrowserFragment extends BaseFragment implements View.OnClickListener {
+public class BalanceBrowserFragment extends MainFragment implements View.OnClickListener {
     public static final int BALANCE_LOADER_ID = 1;
     public static final int HISTORY_LOADER_ID = 2;
 

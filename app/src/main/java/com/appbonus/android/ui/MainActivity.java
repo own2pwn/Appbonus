@@ -158,14 +158,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawer.Navig
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (fragList.size() == 1) {
-            finish();
-        }
-    }
-
-    @Override
     public void toggleDrawer() {
         mNavigationDrawerFragment.toggle();
     }

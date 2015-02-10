@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.dolphin.R;
 import com.dolphin.activity.fragment.BaseFragment;
 import com.dolphin.activity.fragment.NavigationDrawer;
+import com.dolphin.activity.fragment.RootFragment;
 import com.dolphin.utils.Log;
 
 import java.lang.ref.WeakReference;
@@ -141,6 +142,9 @@ public abstract class BaseActivity extends ActionBarActivity {
         for (Fragment fragment : fragments) {
             if (fragment instanceof NavigationDrawer) continue;
 
+            if (fragment instanceof RootFragment) {
+                ((RootFragment) fragment).notMortalClose();
+            }
             transaction.remove(fragment);
             fragmentManager.popBackStack();
         }

@@ -23,10 +23,10 @@ import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.activity.fragment.MainFragment;
 import com.dolphin.utils.KeyboardUtils;
 
-public class ProfileBrowserFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<UserWrapper>,
+public class ProfileBrowserFragment extends MainFragment implements LoaderManager.LoaderCallbacks<UserWrapper>,
         OnUserUpdateListener, View.OnClickListener {
     public static final int LOADER_ID = 1;
 

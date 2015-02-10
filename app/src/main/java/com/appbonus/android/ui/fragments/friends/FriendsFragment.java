@@ -26,14 +26,14 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.activity.fragment.MainFragment;
 import com.dolphin.loader.AbstractLoader;
 import com.paging.listview.PagingBaseAdapter;
 import com.paging.listview.PagingListView;
 
 import java.util.List;
 
-public class FriendsFragment extends BaseFragment implements View.OnClickListener {
+public class FriendsFragment extends MainFragment implements View.OnClickListener {
     public static final int REFERRALS_DETAILS_LOADER_ID = 1;
     public static final int REFERRALS_HISTORY_LOADER_ID = 2;
 
