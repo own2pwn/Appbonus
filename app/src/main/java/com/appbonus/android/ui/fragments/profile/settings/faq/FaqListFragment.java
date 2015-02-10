@@ -19,7 +19,7 @@ import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.loaders.FaqLoader;
 import com.appbonus.android.model.Question;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.activity.fragment.BaseListFragment;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.loader.AbstractLoader;
 
@@ -28,13 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FaqListFragment extends BaseFragment
+public class FaqListFragment extends BaseListFragment<ListView, SimpleAdapter>
         implements LoaderManager.LoaderCallbacks<List<Question>>, AdapterView.OnItemClickListener, View.OnClickListener {
     public static final int LOADER_ID = 1;
     public static final String QUESTION_PARAMETER = "question";
 
     protected Api api;
-    protected ListView listView;
     protected List<Question> questions;
 
     @Override
@@ -45,11 +44,16 @@ public class FaqListFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        listView = (ListView) inflater.inflate(R.layout.faq_list_layout, null);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         View footer = inflater.inflate(R.layout.faq_list_footer, null);
         footer.setOnClickListener(this);
         listView.addFooterView(footer);
-        return listView;
+        return view;
+    }
+
+    @Override
+    protected int layout() {
+        return R.layout.faq_list_layout;
     }
 
     @Override
@@ -72,9 +76,8 @@ public class FaqListFragment extends BaseFragment
     public void onLoadFinished(Loader<List<Question>> loader, List<Question> data) {
         if (((AbstractLoader) loader).isSuccess()) {
             questions = data;
-            listView.setAdapter(new SimpleAdapter(getActivity(), processData(data), R.layout.faq_question_item,
+            setListAdapter(new SimpleAdapter(getActivity(), processData(data), R.layout.faq_question_item,
                     new String[]{QUESTION_PARAMETER}, new int[]{android.R.id.text1}));
-            listView.setOnItemClickListener(this);
         }
     }
 
@@ -90,7 +93,6 @@ public class FaqListFragment extends BaseFragment
 
     @Override
     public void onLoaderReset(Loader<List<Question>> loader) {
-
     }
 
     @Override

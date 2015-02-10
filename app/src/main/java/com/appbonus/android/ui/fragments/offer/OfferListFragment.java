@@ -26,7 +26,7 @@ import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.friends.MeetFriendsFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.MainFragment;
+import com.dolphin.activity.fragment.root.RootBaseFragment;
 import com.dolphin.loader.AbstractLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,7 +36,7 @@ import com.paging.listview.PagingListView;
 
 import java.util.List;
 
-public class OfferListFragment extends MainFragment
+public class OfferListFragment extends RootBaseFragment
         implements LoaderManager.LoaderCallbacks<OffersWrapper>, View.OnClickListener {
     public static final int LOADER_ID = 1;
 

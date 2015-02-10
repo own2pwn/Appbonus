@@ -1,11 +1,13 @@
-package com.dolphin.activity.fragment;
+package com.dolphin.activity.fragment.root;
 
-public class MainFragment extends BaseFragment implements RootFragment {
+import com.dolphin.activity.fragment.BaseFragment;
+
+public class RootBaseFragment extends BaseFragment implements RootFragment {
     protected boolean closeActivityAfterDestroy = true;
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         if (closeActivityAfterDestroy) {
             getActivity().finish();
         }
