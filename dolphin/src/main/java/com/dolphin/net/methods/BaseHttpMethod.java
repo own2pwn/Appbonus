@@ -3,10 +3,13 @@ package com.dolphin.net.methods;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.LruCache;
 
 import com.dolphin.utils.ConnectionUtilsInsecure;
 import com.dolphin.utils.Log;
 import com.dolphin.utils.NetUtils;
+
+import org.apache.http.HttpStatus;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -33,8 +36,11 @@ public abstract class BaseHttpMethod implements HttpMethod {
 
     @SuppressWarnings("unused")
     private static final String TAG = Log.getNormalizedTag(BaseHttpMethod.class);
+    private static final String E_TAG = "ETag";
 
     private static final int TIMEOUT_MILLIS = 20000;
+    private static final int REQUEST_CACHE_SIZE = 1 * 1024 * 1024;
+    private static final int RESPONSE_CACHE_SIZE = 1 * 1024 * 1024;
 
     private String hostUri;
 
@@ -51,6 +57,9 @@ public abstract class BaseHttpMethod implements HttpMethod {
     protected String responseEntity;
     protected String contentType = "application/json";
     protected ErrorHandler errorHandler;
+
+    static LruCache<String, String> requestCache = new LruCache<>(REQUEST_CACHE_SIZE);
+    static LruCache<String, String> responseCache = new LruCache<>(RESPONSE_CACHE_SIZE);
 
     BaseHttpMethod(String hostUri, String json, String... apiPath) {
 
@@ -134,6 +143,10 @@ public abstract class BaseHttpMethod implements HttpMethod {
         this.connection.setConnectTimeout(TIMEOUT_MILLIS);
         this.connection.setRequestMethod(this.requestMethod);
 
+        String tag = getRequestTag(postUrl.toString());
+        if (tag != null) {
+            headers.put(E_TAG, tag);
+        }
         addHeaders(this.connection);
     }
 
@@ -189,8 +202,15 @@ public abstract class BaseHttpMethod implements HttpMethod {
             this.responseCode = this.connection.getResponseCode();
             Log.d(TAG, "Status code: " + responseCode);
 
-            if (responseCode == SUCCESS_CODE)
-                return readResponse(connection);
+            String etag = connection.getHeaderField(E_TAG);
+            if (responseCode == SUCCESS_CODE) {
+                saveRequest(etag, connection.getURL().toString());
+                String response = readResponse(connection);
+                saveResponse(etag, response);
+                return response;
+            } else if (responseCode == HttpStatus.SC_NOT_MODIFIED) {
+                return getResponse(etag);
+            }
             else throw new Throwable();
         } catch (Throwable e) {
             return throwError();
@@ -232,5 +252,29 @@ public abstract class BaseHttpMethod implements HttpMethod {
     @Override
     public void setErrorHandler(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
+    }
+
+    public String getResponse(String tag) {
+        synchronized (responseCache) {
+            return responseCache.get(tag);
+        }
+    }
+
+    public void saveResponse(String tag, String response) {
+        synchronized (responseCache) {
+            responseCache.put(tag, response);
+        }
+    }
+
+    public String getRequestTag(String url) {
+        synchronized (requestCache) {
+            return requestCache.get(url);
+        }
+    }
+
+    public void saveRequest(String url, String tag) {
+        synchronized (requestCache) {
+            requestCache.put(url, tag);
+        }
     }
 }
