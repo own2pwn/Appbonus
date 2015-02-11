@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Dolphin</string>
-
     <string name="exception">Ошибка</string>
     <string name="ok">Хорошо</string>
 </resources>
