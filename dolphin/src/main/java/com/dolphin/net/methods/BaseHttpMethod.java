@@ -22,6 +22,7 @@ import java.util.Map;
 public abstract class BaseHttpMethod implements HttpMethod {
 
     private static final String E_TAG = "ETag";
+    private static final String IF_NONE_MATCH_HEADER = "if-none-match";
 
     private static final int TIMEOUT_MILLIS = 20000;
     private static final int REQUEST_CACHE_SIZE = 1 * 1024 * 1024;
@@ -110,7 +111,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
     private void addETagHeaderIfExists() {
         String tag = getRequestTag(connectionHash());
         if (tag != null) {
-            addHeader(E_TAG, tag);
+            addHeader(IF_NONE_MATCH_HEADER, tag);
         }
     }
 
