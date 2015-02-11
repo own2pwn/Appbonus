@@ -1,8 +1,6 @@
 package com.appbonus.android.ui.fragments.balance;
 
-import android.annotation.TargetApi;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -30,7 +28,7 @@ import com.appbonus.android.ui.fragments.balance.autowithdrawal.AutowithdrawalFr
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.root.RootBaseFragment;
+import com.dolphin.activity.fragment.root.RootListFragment;
 import com.dolphin.loader.AbstractLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -40,7 +38,7 @@ import com.paging.listview.PagingListView;
 
 import java.util.List;
 
-public class BalanceBrowserFragment extends RootBaseFragment implements View.OnClickListener {
+public class BalanceBrowserFragment extends RootListFragment<PagingListView, BalanceBrowserFragment.HistoryAdapter> implements View.OnClickListener {
     public static final int BALANCE_LOADER_ID = 1;
     public static final int HISTORY_LOADER_ID = 2;
 
@@ -59,15 +57,10 @@ public class BalanceBrowserFragment extends RootBaseFragment implements View.OnC
     protected Button autowithdrawal;
     protected View withdrawalIsNotAccessView;
 
-    protected PagingListView listView;
     protected View footer;
     protected View emptyFooter;
     protected Meta meta;
-
     protected long currentPage = -1L;
-    protected int selectionItem;
-    protected int top;
-    protected HistoryAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,11 +73,11 @@ public class BalanceBrowserFragment extends RootBaseFragment implements View.OnC
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.balance_layout, null);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         View header = inflater.inflate(R.layout.balance_header, null);
         footer = inflater.inflate(R.layout.more_footer, null);
         emptyFooter = inflater.inflate(R.layout.empty_footer, null);
-        initUI(view, header);
+        initUI(header);
         return view;
     }
 
@@ -104,7 +97,7 @@ public class BalanceBrowserFragment extends RootBaseFragment implements View.OnC
         setWithdrawalVisibility();
     }
 
-    private void initUI(View view, View header) {
+    private void initUI(View header) {
         currentBalance = (TextView) header.findViewById(R.id.current_balance);
         currentBalance.setTypeface(typeface);
         myProfit = (TextView) header.findViewById(R.id.my_profit);
@@ -122,7 +115,6 @@ public class BalanceBrowserFragment extends RootBaseFragment implements View.OnC
         autowithdrawal.setOnClickListener(this);
         withdrawalIsNotAccessView.setOnClickListener(this);
 
-        listView = (PagingListView) view.findViewById(android.R.id.list);
         listView.addHeaderView(header);
         listView.addFooterView(footer);
 
@@ -151,11 +143,11 @@ public class BalanceBrowserFragment extends RootBaseFragment implements View.OnC
     private void setHistory(HistoryWrapper data) {
         if (adapter == null) {
             adapter = new HistoryAdapter(data.getHistory());
-            listView.setAdapter(adapter);
+            setListAdapter(adapter);
             setListSettings();
         } else {
             if (currentPage == meta.getCurrentPage()) {
-                listView.setAdapter(adapter);
+                setListAdapter(adapter);
                 setListSettings();
             } else listView.onFinishLoading(false, data.getHistory());
         }
@@ -256,18 +248,8 @@ public class BalanceBrowserFragment extends RootBaseFragment implements View.OnC
     }
 
     @Override
-    public void onPause() {
-        selectionItem = listView.getFirstVisiblePosition();
-        View v = listView.getChildAt(0);
-        top = (v == null) ? 0 : v.getTop();
-        super.onPause();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onResume() {
-        super.onResume();
-        listView.setSelectionFromTop(selectionItem, top);
+    protected int layout() {
+        return R.layout.balance_layout;
     }
 
     public class HistoryAdapter extends PagingBaseAdapter<History> {
@@ -305,9 +287,11 @@ public class BalanceBrowserFragment extends RootBaseFragment implements View.OnC
                         convertView = inflateView(R.layout.balance_withdrawal_in_progress);
                         break;
                 }
-                viewHolder.amount = (TextView) convertView.findViewById(R.id.amount);
-                viewHolder.description = (TextView) convertView.findViewById(android.R.id.text1);
-                convertView.setTag(viewHolder);
+                if (convertView != null) {
+                    viewHolder.amount = (TextView) convertView.findViewById(R.id.amount);
+                    viewHolder.description = (TextView) convertView.findViewById(android.R.id.text1);
+                    convertView.setTag(viewHolder);
+                }
             } else viewHolder = (ViewHolder) convertView.getTag();
 
             if (itemViewType == OPERATION_TYPE_PROFIT) {

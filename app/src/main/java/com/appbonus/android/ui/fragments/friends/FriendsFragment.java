@@ -1,8 +1,6 @@
 package com.appbonus.android.ui.fragments.friends;
 
-import android.annotation.TargetApi;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -26,28 +24,24 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.root.RootBaseFragment;
+import com.dolphin.activity.fragment.root.RootListFragment;
 import com.dolphin.loader.AbstractLoader;
 import com.paging.listview.PagingBaseAdapter;
 import com.paging.listview.PagingListView;
 
 import java.util.List;
 
-public class FriendsFragment extends RootBaseFragment implements View.OnClickListener {
+public class FriendsFragment extends RootListFragment<PagingListView, FriendsFragment.ReferralsHistoryAdapter> implements View.OnClickListener {
     public static final int REFERRALS_DETAILS_LOADER_ID = 1;
     public static final int REFERRALS_HISTORY_LOADER_ID = 2;
 
     protected Api api;
 
-    protected PagingListView listView;
     protected View footer;
     protected View emptyFooter;
-    protected ReferralsHistoryAdapter adapter;
     protected Meta meta;
 
     protected long currentPage = -1L;
-    protected int top;
-    protected int selectionItem;
 
     protected TextView friendsProfit;
 
@@ -78,11 +72,11 @@ public class FriendsFragment extends RootBaseFragment implements View.OnClickLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.friends_layout, null);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         View header = inflater.inflate(R.layout.friends_header, null);
         footer = inflater.inflate(R.layout.more_footer, null);
         emptyFooter = inflater.inflate(R.layout.empty_footer, null);
-        initUI(view, header);
+        initUI(header);
         return view;
     }
 
@@ -103,9 +97,7 @@ public class FriendsFragment extends RootBaseFragment implements View.OnClickLis
         setDrawerIndicatorEnabled(true);
     }
 
-    private void initUI(View view, View header) {
-        listView = (PagingListView) view.findViewById(android.R.id.list);
-
+    private void initUI(View header) {
         friendsProfit = (TextView) header.findViewById(R.id.friend_profit);
         friendsProfit.setTypeface(typeface);
 
@@ -201,11 +193,11 @@ public class FriendsFragment extends RootBaseFragment implements View.OnClickLis
     private void setReferralsHistory(ReferralsHistoryWrapper data) {
         if (adapter == null) {
             adapter = new ReferralsHistoryAdapter(data.getReferralsHistory());
-            listView.setAdapter(adapter);
+            setListAdapter(adapter);
             setListSettings();
         } else {
             if (currentPage == meta.getCurrentPage()) {
-                listView.setAdapter(adapter);
+                setListAdapter(adapter);
                 setListSettings();
             } else listView.onFinishLoading(false, data.getReferralsHistory());
         }
@@ -258,18 +250,8 @@ public class FriendsFragment extends RootBaseFragment implements View.OnClickLis
     }
 
     @Override
-    public void onPause() {
-        selectionItem = listView.getFirstVisiblePosition();
-        View v = listView.getChildAt(0);
-        top = (v == null) ? 0 : v.getTop();
-        super.onPause();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onResume() {
-        super.onResume();
-        listView.setSelectionFromTop(selectionItem, top);
+    protected int layout() {
+        return R.layout.friends_layout;
     }
 
     public class ReferralsHistoryAdapter extends PagingBaseAdapter<ReferralsHistory> {
