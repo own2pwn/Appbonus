@@ -1,4 +1,4 @@
-package com.appbonus.android.api;
+package com.dolphin.api;
 
 import android.content.Context;
 import android.util.Log;
@@ -112,7 +112,7 @@ public abstract class CommonApi {
         return array;
     }
 
-    protected String getString(int resourceId) {
+    public String getString(int resourceId) {
         return context.getString(resourceId);
     }
 

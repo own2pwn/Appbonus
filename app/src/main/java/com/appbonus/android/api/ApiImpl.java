@@ -25,6 +25,7 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
+import com.dolphin.api.CommonApi;
 import com.dolphin.net.methods.HttpMethod;
 import com.dynamixsoftware.ErrorAgent;
 

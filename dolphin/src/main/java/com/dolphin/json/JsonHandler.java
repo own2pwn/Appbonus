@@ -26,15 +26,16 @@ import java.util.Map;
 public class JsonHandler<T> {
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
-    private static Gson gsonParser = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(Date.class, new DateSerializer())
-            .create();
+    private Gson gsonParser;
 
     private Class<T> mClass;
 
     public JsonHandler(Class<T> aClass) {
         mClass = aClass;
+        gsonParser = new GsonBuilder()
+                .setFieldNamingPolicy(fieldNamingPolicy())
+                .registerTypeAdapter(Date.class, new DateSerializer())
+                .create();
     }
 
     public JSONObject toJsonObject(T object) throws Throwable {
@@ -89,5 +90,9 @@ public class JsonHandler<T> {
             }
             return null;
         }
+    }
+
+    protected FieldNamingPolicy fieldNamingPolicy() {
+        return FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
     }
 }
