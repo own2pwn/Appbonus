@@ -1,4 +1,4 @@
-package com.dolphin.activity.fragment;
+package com.dolphin.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -18,7 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.dolphin.activity.BaseActivity;
+import com.dolphin.ui.BaseActivity;
 
 import org.apache.commons.lang3.BooleanUtils;
 

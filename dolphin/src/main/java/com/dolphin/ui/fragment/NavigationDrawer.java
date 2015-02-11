@@ -1,4 +1,4 @@
-package com.dolphin.activity.fragment;
+package com.dolphin.ui.fragment;
 
 import android.support.v4.widget.DrawerLayout;
 

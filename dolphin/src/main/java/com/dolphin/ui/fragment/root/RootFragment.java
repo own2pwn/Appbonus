@@ -1,4 +1,4 @@
-package com.dolphin.activity.fragment.root;
+package com.dolphin.ui.fragment.root;
 
 public interface RootFragment {
     void notMortalClose();

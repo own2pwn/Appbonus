@@ -18,8 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.appbonus.android.R;
-import com.dolphin.activity.fragment.BaseFragment;
-import com.dolphin.activity.fragment.NavigationDrawer;
+import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.NavigationDrawer;
 import com.dolphin.utils.Log;
 
 import java.util.ArrayList;

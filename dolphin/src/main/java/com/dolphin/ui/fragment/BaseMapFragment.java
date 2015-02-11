@@ -1,10 +1,10 @@
-package com.dolphin.activity.fragment;
+package com.dolphin.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 
-import com.dolphin.activity.BaseActivity;
+import com.dolphin.ui.BaseActivity;
 import com.google.android.gms.maps.SupportMapFragment;
 
 public class BaseMapFragment extends SupportMapFragment implements StandardFragment {

@@ -1,4 +1,4 @@
-package com.dolphin.activity;
+package com.dolphin.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,9 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.dolphin.R;
-import com.dolphin.activity.fragment.BaseFragment;
-import com.dolphin.activity.fragment.NavigationDrawer;
-import com.dolphin.activity.fragment.root.RootFragment;
+import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.NavigationDrawer;
+import com.dolphin.ui.fragment.root.RootFragment;
 import com.dolphin.utils.Log;
 
 import java.lang.ref.WeakReference;

@@ -1,4 +1,4 @@
-package com.dolphin.activity.fragment;
+package com.dolphin.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.os.Build;

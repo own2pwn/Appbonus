@@ -28,8 +28,8 @@ import com.appbonus.android.ui.fragments.balance.autowithdrawal.AutowithdrawalFr
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.root.RootListFragment;
 import com.dolphin.loader.AbstractLoader;
+import com.dolphin.ui.fragment.root.RootListFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;

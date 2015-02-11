@@ -19,9 +19,9 @@ import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.loaders.FaqLoader;
 import com.appbonus.android.model.Question;
-import com.dolphin.activity.fragment.BaseListFragment;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.loader.AbstractLoader;
+import com.dolphin.ui.fragment.BaseListFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;

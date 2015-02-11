@@ -1,6 +1,6 @@
-package com.dolphin.activity.fragment.root;
+package com.dolphin.ui.fragment.root;
 
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.ui.fragment.BaseFragment;
 
 public class RootBaseFragment extends BaseFragment implements RootFragment {
     protected boolean closeActivityAfterDestroy = true;

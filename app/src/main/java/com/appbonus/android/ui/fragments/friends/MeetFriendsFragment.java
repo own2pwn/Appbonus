@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.appbonus.android.R;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.ui.fragment.BaseFragment;
 
 public class MeetFriendsFragment extends BaseFragment implements View.OnClickListener {
     protected View referralsInfo;

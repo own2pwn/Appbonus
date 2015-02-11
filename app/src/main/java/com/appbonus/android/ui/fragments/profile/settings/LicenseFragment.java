@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appbonus.android.R;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.ui.fragment.BaseFragment;
 
 import java.io.IOException;
 import java.io.InputStream;

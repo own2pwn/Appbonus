@@ -1,9 +1,9 @@
-package com.dolphin.activity.fragment.root;
+package com.dolphin.ui.fragment.root;
 
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.dolphin.activity.fragment.BaseListFragment;
+import com.dolphin.ui.fragment.BaseListFragment;
 
 public abstract class RootListFragment<T extends ListView, A extends ListAdapter>
         extends BaseListFragment<T, A> implements RootFragment {

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.activeandroid.sebbia.query.Select;
 import com.appbonus.android.R;
 import com.appbonus.android.model.Question;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.ui.fragment.BaseFragment;
 
 public class ReferralsInfoFragment extends BaseFragment {
     protected TextView question;

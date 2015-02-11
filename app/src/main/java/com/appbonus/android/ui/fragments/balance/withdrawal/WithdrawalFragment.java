@@ -16,7 +16,7 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.WithdrawalRequest;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.ui.fragment.BaseFragment;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;

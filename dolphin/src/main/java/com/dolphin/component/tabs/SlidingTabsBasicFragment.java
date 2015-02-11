@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dolphin.R;
-import com.dolphin.activity.fragment.BaseFragment;
+import com.dolphin.ui.fragment.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;

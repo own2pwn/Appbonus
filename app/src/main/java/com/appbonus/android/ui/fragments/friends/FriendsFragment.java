@@ -24,8 +24,8 @@ import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.root.RootListFragment;
 import com.dolphin.loader.AbstractLoader;
+import com.dolphin.ui.fragment.root.RootListFragment;
 import com.paging.listview.PagingBaseAdapter;
 import com.paging.listview.PagingListView;
 

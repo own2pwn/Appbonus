@@ -25,8 +25,8 @@ import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.OnUserUpdateListener;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
 import com.appbonus.android.ui.login.LoginActivity;
-import com.dolphin.activity.fragment.BaseFragment;
 import com.dolphin.helper.IntentHelper;
+import com.dolphin.ui.fragment.BaseFragment;
 
 public class SettingsFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     protected CheckBox showPush;
