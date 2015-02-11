@@ -7,11 +7,6 @@ import java.io.IOException;
 import java.net.URL;
 
 
-/**
- * Created at 04.12.13 19:45
- *
- * @author Altero
- */
 public class MethodPost extends BaseHttpMethod {
 
     private static final String REQUEST_METHOD = "POST";

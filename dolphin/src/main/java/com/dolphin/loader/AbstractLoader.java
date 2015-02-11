@@ -2,6 +2,7 @@ package com.dolphin.loader;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
 
 public abstract class AbstractLoader<T> extends AsyncTaskLoader<T> {
@@ -21,6 +22,7 @@ public abstract class AbstractLoader<T> extends AsyncTaskLoader<T> {
             return backgroundLoading();
         } catch (Throwable throwable) {
             this.throwable = throwable;
+            Log.e("Loader", throwable.getMessage(), throwable);
             return null;
         }
     }

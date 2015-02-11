@@ -41,7 +41,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
     protected String contentType = "application/json";
     protected ErrorHandler errorHandler;
 
-    static final LruCache<String, String> requestCache = new LruCache<>(REQUEST_CACHE_SIZE);
+    static final LruCache<Integer, String> requestCache = new LruCache<>(REQUEST_CACHE_SIZE);
     static final LruCache<String, String> responseCache = new LruCache<>(RESPONSE_CACHE_SIZE);
 
     protected BaseHttpMethod(String hostUri, String json, String... apiPath) {
@@ -103,12 +103,12 @@ public abstract class BaseHttpMethod implements HttpMethod {
         connection.setConnectTimeout(TIMEOUT_MILLIS);
         connection.setRequestMethod(requestMethod);
 
-        addETagHeaderIfExists(postUrl);
+        addETagHeaderIfExists();
         addHeaders(connection);
     }
 
-    private void addETagHeaderIfExists(URL postUrl) {
-        String tag = getRequestTag(postUrl.toString());
+    private void addETagHeaderIfExists() {
+        String tag = getRequestTag(connectionHash());
         if (tag != null) {
             addHeader(E_TAG, tag);
         }
@@ -159,7 +159,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
 
             String eTag = connection.getHeaderField(E_TAG);
             if (responseCode == HttpStatus.SC_OK) {
-                saveRequest(eTag, connection.getURL().toString());
+                saveRequest(connectionHash(), eTag);
                 String response = readResponse(connection);
                 saveResponse(eTag, response);
                 return response;
@@ -170,6 +170,11 @@ public abstract class BaseHttpMethod implements HttpMethod {
         } finally {
             disconnectQuietly();
         }
+    }
+
+    private int connectionHash() {
+        String url = connection.getURL().toString();
+        return url.hashCode() + (entity != null ? entity.hashCode() : 0);
     }
 
     private String throwError() throws Throwable {
@@ -199,20 +204,22 @@ public abstract class BaseHttpMethod implements HttpMethod {
     }
 
     public void saveResponse(String tag, String response) {
+        if (tag == null || response == null) return;
         synchronized (responseCache) {
             responseCache.put(tag, response);
         }
     }
 
-    public String getRequestTag(String url) {
+    public String getRequestTag(int hash) {
         synchronized (requestCache) {
-            return requestCache.get(url);
+            return requestCache.get(hash);
         }
     }
 
-    public void saveRequest(String url, String tag) {
+    public void saveRequest(int hash, String tag) {
+        if (tag == null) return;
         synchronized (requestCache) {
-            requestCache.put(url, tag);
+            requestCache.put(hash, tag);
         }
     }
 
