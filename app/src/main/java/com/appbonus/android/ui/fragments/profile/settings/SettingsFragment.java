@@ -47,6 +47,9 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         api = new ApiImpl(getActivity());
         user = (User) getArguments().getSerializable("user");
+        if (user == null) {
+            user = SharedPreferencesStorage.getUser(getActivity());
+        }
     }
 
     @Override

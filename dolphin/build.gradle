@@ -41,7 +41,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'commons-collections:commons-collections:3.2.1'
 
-    compile 'com.google.code.gson:gson:1.7.1'
+    compile 'com.google.code.gson:gson:2.3'
 
     compile 'com.google.android.gms:play-services:6.5.87'
 
@@ -49,4 +49,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourceJar
 }
