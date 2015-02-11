@@ -76,22 +76,24 @@ public abstract class SimpleActivity extends ActionBarActivity {
         showError(getString(message));
     }
 
-    public void placeProperFragment(String fragmentTag, boolean addToBackStackCustom) {
-
-        placeProperFragment(fragmentTag, null, addToBackStackCustom, null);
+    public Fragment placeProperFragment(String fragmentTag, boolean addToBackStackCustom) {
+        return placeProperFragment(fragmentTag, null, addToBackStackCustom, null);
     }
 
-    public void placeProperFragment(String fragmentTag) {
+    public Fragment placeProperFragment(String fragmentTag) {
+        return placeProperFragment(fragmentTag, true);
+    }
 
-        placeProperFragment(fragmentTag, true);
+    public Fragment placeProperFragment(String fragmentTag, Bundle args) {
+        return placeProperFragment(fragmentTag, args, true, null);
     }
 
     protected List<String> getExcluded() {
         return new ArrayList<>();
     }
 
-    public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
-        if (targetFragment != null && fragmentTag.equals(targetFragment.getTag())) return;
+    public Fragment placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
+        if (targetFragment != null && fragmentTag.equals(targetFragment.getTag())) return null;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -113,6 +115,7 @@ public abstract class SimpleActivity extends ActionBarActivity {
         transaction.addToBackStack(addToBackStack ? fragmentTag : null);
 
         transaction.commit();
+        return fragment;
     }
 
     public void closeCurrentFragment(Fragment fragment) {

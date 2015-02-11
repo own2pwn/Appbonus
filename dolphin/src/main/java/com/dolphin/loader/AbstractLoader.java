@@ -28,4 +28,8 @@ public abstract class AbstractLoader<T> extends AsyncTaskLoader<T> {
     }
 
     protected abstract T backgroundLoading() throws Throwable;
+
+    public String getError() {
+        return throwable != null ? throwable.getMessage() : "";
+    }
 }

@@ -87,17 +87,17 @@ public abstract class CommonApi {
 
     private <K> Map<String, String> toMap(K request, Class<K> tClass) throws IllegalAccessException {
         if (request == null) return new HashMap<>();
-        JsonHandler<K> jsonHandler = new JsonHandler<>(tClass);
+        JsonHandler<K> jsonHandler = createJsonHandler(tClass);
         return jsonHandler.toMap(request);
     }
 
     protected <T> JSONObject toJson(T obj, Class<T> tClass) throws Throwable {
-        JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
+        JsonHandler<T> jsonHandler = createJsonHandler(tClass);
         return jsonHandler.toJsonObject(obj);
     }
 
     protected  <T> T toObject(String string, Class<T> tClass) {
-        JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
+        JsonHandler<T> jsonHandler = createJsonHandler(tClass);
         return jsonHandler.fromJsonString(string);
     }
 
@@ -114,6 +114,10 @@ public abstract class CommonApi {
 
     public String getString(int resourceId) {
         return context.getString(resourceId);
+    }
+
+    protected <T> JsonHandler<T> createJsonHandler(Class<T> tClass) {
+        return new JsonHandler<>(tClass);
     }
 
     protected abstract String host();
