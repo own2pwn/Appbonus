@@ -14,7 +14,6 @@ import com.dolphin.R;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.ui.fragment.root.RootFragment;
-import com.dolphin.utils.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -25,8 +24,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class SimpleActivity extends ActionBarActivity {
     protected Toolbar toolbar;
 
-    @SuppressWarnings("unused")
-    private static final String TAG = Log.getNormalizedTag(SimpleActivity.class);
     protected List<WeakReference<Fragment>> fragList = new CopyOnWriteArrayList<>();
 
     @Override
@@ -96,8 +93,6 @@ public abstract class SimpleActivity extends ActionBarActivity {
     public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
         if (targetFragment != null && fragmentTag.equals(targetFragment.getTag())) return;
 
-        Log.d(TAG, "placeProperFragment " + fragmentTag);
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
@@ -129,8 +124,7 @@ public abstract class SimpleActivity extends ActionBarActivity {
             fragmentManager.popBackStack();
 
             transaction.commit();
-        } catch (Throwable th) {
-            Log.e("closeCurrentFragment", th);
+        } catch (Throwable ignored) {
         }
     }
 

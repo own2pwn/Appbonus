@@ -1,4 +1,4 @@
-package com.dolphin.utils;
+package com.dolphin.net;
 
 
 import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
@@ -12,8 +12,6 @@ import javax.net.ssl.SSLContext;
 
 public class ConnectionUtils {
 
-    @SuppressWarnings("unused")
-    private static final String TAG = Log.getNormalizedTag(ConnectionUtils.class);
     private static final String HTTPS_PROTOCOL = "https";
 
     protected static URL sServerUrl;
@@ -27,7 +25,6 @@ public class ConnectionUtils {
             HttpsURLConnection.setDefaultHostnameVerifier(new BrowserCompatHostnameVerifier());
         }
         catch (NoSuchAlgorithmException e) {
-            Log.e(TAG, e);
             throw new RuntimeException();
         }
     }
@@ -38,8 +35,7 @@ public class ConnectionUtils {
             if (HTTPS_PROTOCOL.equals(sServerUrl.getProtocol()))
                 configureHttpsUrlConnection();
         }
-        catch (MalformedURLException e) {
-            Log.e("Selected server url", sServerUrl.toString(), e);
+        catch (MalformedURLException ignored) {
         }
     }
 

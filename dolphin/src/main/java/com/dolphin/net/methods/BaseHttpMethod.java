@@ -5,8 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.LruCache;
 
-import com.dolphin.utils.ConnectionUtilsInsecure;
-import com.dolphin.utils.NetUtils;
+import com.dolphin.net.ConnectionUtilsInsecure;
+import com.dolphin.net.NetUtils;
 
 import org.apache.http.HttpStatus;
 

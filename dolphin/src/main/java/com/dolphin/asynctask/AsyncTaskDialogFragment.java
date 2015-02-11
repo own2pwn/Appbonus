@@ -1,4 +1,4 @@
-package com.appbonus.android.component;
+package com.dolphin.asynctask;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;

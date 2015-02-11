@@ -1,12 +1,10 @@
-package com.appbonus.android.component;
+package com.dolphin.asynctask;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 
-import com.appbonus.android.R;
-import com.dolphin.asynctask.ExceptionAsyncTask;
 
 public abstract class DialogExceptionalAsyncTask<Params, Progress, Result> extends ExceptionAsyncTask<Params, Progress, Result> {
     protected AsyncTaskDialogFragment dialogFragment;
@@ -39,12 +37,16 @@ public abstract class DialogExceptionalAsyncTask<Params, Progress, Result> exten
     protected abstract FragmentManager getFragmentManager();
 
     protected String message() {
-        return context.getResources().getString(R.string.loading);
+        return context.getResources().getString(loadingString());
     }
 
     protected Bundle createArguments() {
         Bundle bundle = new Bundle();
         bundle.putString(AsyncTaskDialogFragment.MESSAGE, message());
         return bundle;
+    }
+
+    protected int loadingString() {
+        return context.getResources().getIdentifier("loading", "string", context.getPackageName());
     }
 }

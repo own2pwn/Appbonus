@@ -13,7 +13,6 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.DeviceRequest;
-import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.push.GoogleCloudMessagingUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
@@ -23,6 +22,7 @@ import com.appbonus.android.ui.fragments.navigation.NavigationDrawerFragment;
 import com.appbonus.android.ui.fragments.offer.OfferListFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.login.LoginActivity;
+import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
 

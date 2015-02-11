@@ -3,9 +3,6 @@ package com.dolphin.asynctask;
 import android.content.Context;
 import android.os.AsyncTask;
 
-/**
- * Created by darkdelphin on 27.08.2014.
- */
 public abstract class ExceptionAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
     protected Context context;
     protected Throwable throwable;

@@ -102,7 +102,7 @@ public abstract class SlidingTabsBasicFragment extends SimpleFragment implements
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = Fragment.instantiate(getContext(), fragments.get(position));
+            Fragment fragment = Fragment.instantiate(getActivity(), fragments.get(position));
             shownFragments.add(fragment);
             return fragment;
         }

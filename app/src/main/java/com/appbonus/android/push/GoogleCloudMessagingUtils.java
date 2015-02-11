@@ -12,13 +12,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.dolphin.utils.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -63,7 +63,7 @@ public class GoogleCloudMessagingUtils {
                 try {
                     sendRegistrationIdToBackend(context);
                 } catch (Throwable throwable) {
-                    Log.e(GoogleCloudMessagingUtils.class.getName(), throwable);
+                    Log.e(GoogleCloudMessagingUtils.class.getName(), throwable.getMessage(), throwable);
                 }
                 return null;
             }

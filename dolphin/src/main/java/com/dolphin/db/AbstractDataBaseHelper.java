@@ -38,8 +38,7 @@ public abstract class AbstractDataBaseHelper extends SQLiteOpenHelper {
                 copyDataBase();
                 Log.e("DataBaseHelper", "createDatabase database created");
                 return true;
-            } catch (IOException e) {
-                com.dolphin.utils.Log.e("ErrorCopyingDataBase", e);
+            } catch (IOException ignored) {
             }
         }
         return false;

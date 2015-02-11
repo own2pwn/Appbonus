@@ -10,10 +10,10 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.LoginRequest;
-import com.appbonus.android.component.DialogExceptionalAsyncTask;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.ui.helper.DataHelper;
+import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 
 import java.lang.reflect.InvocationTargetException;
 
