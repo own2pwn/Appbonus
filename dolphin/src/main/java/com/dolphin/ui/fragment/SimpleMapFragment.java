@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 
-import com.dolphin.ui.BaseActivity;
+import com.dolphin.ui.SimpleActivity;
 import com.google.android.gms.maps.SupportMapFragment;
 
-public class BaseMapFragment extends SupportMapFragment implements StandardFragment {
+public abstract class SimpleMapFragment extends SupportMapFragment implements StandardFragment {
     @Override
     public void placeProperFragment(String fragmentTag) {
         placeProperFragment(fragmentTag, null, true, this);
@@ -16,14 +16,14 @@ public class BaseMapFragment extends SupportMapFragment implements StandardFragm
     @Override
     public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
         if (getActivity() != null) {
-            ((BaseActivity) getActivity()).placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment);
+            ((SimpleActivity) getActivity()).placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment);
         }
     }
 
     @Override
     public boolean closeCurrentFragment() {
         if (getActivity() != null) {
-            ((BaseActivity) getActivity()).closeCurrentFragment(this);
+            ((SimpleActivity) getActivity()).closeCurrentFragment(this);
         }
         return true;
     }

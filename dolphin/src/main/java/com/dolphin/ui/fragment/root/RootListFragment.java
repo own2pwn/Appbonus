@@ -3,10 +3,10 @@ package com.dolphin.ui.fragment.root;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.dolphin.ui.fragment.BaseListFragment;
+import com.dolphin.ui.fragment.SimpleListFragment;
 
 public abstract class RootListFragment<T extends ListView, A extends ListAdapter>
-        extends BaseListFragment<T, A> implements RootFragment {
+        extends SimpleListFragment<T, A> implements RootFragment {
     protected boolean closeActivityAfterDestroy = true;
 
     @Override

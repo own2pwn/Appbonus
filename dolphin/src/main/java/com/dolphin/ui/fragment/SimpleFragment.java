@@ -18,7 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.dolphin.ui.BaseActivity;
+import com.dolphin.ui.SimpleActivity;
 
 import org.apache.commons.lang3.BooleanUtils;
 
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class BaseFragment extends Fragment implements StandardFragment {
+public abstract class SimpleFragment extends Fragment implements StandardFragment {
     private Map<String, AlertDialog.Builder> alertDialogs = new HashMap<>();
     private Map<String, Boolean> alertDialogsVisibility = new HashMap<>();
 
@@ -47,17 +47,13 @@ public class BaseFragment extends Fragment implements StandardFragment {
         }
     }
 
-    protected BaseActivity getBaseActivity() {
-        Activity activity = getActivity();
-        if (activity == null) {
-            return (BaseActivity) getContext();
-        } else return (BaseActivity) activity;
+    protected SimpleActivity getSimpleActivity() {
+        return (SimpleActivity) getActivity();
     }
 
     protected ActionBar getActionBar() {
-
-        BaseActivity baseActivity = getBaseActivity();
-        return baseActivity != null ? baseActivity.getSupportActionBar() : null;
+        SimpleActivity simpleActivity = getSimpleActivity();
+        return simpleActivity != null ? simpleActivity.getSupportActionBar() : null;
     }
 
     protected void setDisplayHomeAsUpEnabled(boolean showHomeAsUp) {
@@ -75,23 +71,19 @@ public class BaseFragment extends Fragment implements StandardFragment {
     }
 
     protected void setTitle(int titleRes) {
-
         ActionBar actionBar = getActionBar();
-
         if (actionBar != null)
             actionBar.setTitle(titleRes);
     }
 
     protected void setTitle(String titleRes) {
-
         ActionBar actionBar = getActionBar();
-
         if (actionBar != null)
             actionBar.setTitle(titleRes);
     }
 
     protected int getScreenOrientation() {
-        Activity activity = getContext();
+        Activity activity = getActivity();
         if (activity != null) {
             Resources resources = activity.getResources();
             if (resources != null) {
@@ -105,35 +97,31 @@ public class BaseFragment extends Fragment implements StandardFragment {
     }
 
     protected void showToast(String msg) {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null)
-            baseActivity.showToast(msg);
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null)
+            simpleActivity.showToast(msg);
     }
 
     protected void showToast(int msg) {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null)
-            baseActivity.showToast(msg);
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null)
+            simpleActivity.showToast(msg);
     }
 
     protected void showError(String message) {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null)
-            baseActivity.showError(message);
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null)
+            simpleActivity.showError(message);
     }
 
     protected void showError(int message) {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null)
-            baseActivity.showError(message);
-    }
-
-    public Activity getContext() {
-        return getActivity();
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null)
+            simpleActivity.showError(message);
     }
 
     public ComponentName getComponentName() {
-        return getContext().getComponentName();
+        return getActivity().getComponentName();
     }
 
     public void putArguments(Bundle bundle) {
@@ -145,18 +133,18 @@ public class BaseFragment extends Fragment implements StandardFragment {
     }
 
     public boolean closeCurrentFragment() {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null) {
-            baseActivity.closeCurrentFragment(this);
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null) {
+            simpleActivity.closeCurrentFragment(this);
             return true;
         }
         return false;
     }
 
     public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null) {
-            baseActivity.placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment);
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null) {
+            simpleActivity.placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment);
         }
     }
 
@@ -182,7 +170,7 @@ public class BaseFragment extends Fragment implements StandardFragment {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     protected AlertDialog.Builder createAlertDialogBuilder(final String tag) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         alertDialogs.put(tag, builder);
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -221,28 +209,28 @@ public class BaseFragment extends Fragment implements StandardFragment {
     }
 
     public void setDrawerIndicatorEnabled(boolean enable) {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null) {
-            baseActivity.setDrawerIndicatorEnabled(enable);
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null) {
+            simpleActivity.setDrawerIndicatorEnabled(enable);
         }
     }
 
     public void lockNavigationDrawer() {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null) {
-            baseActivity.lockNavigationDrawer();
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null) {
+            simpleActivity.lockNavigationDrawer();
         }
     }
 
     public void unlockNavigationDrawer() {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null) {
-            baseActivity.unlockNavigationDrawer();
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null) {
+            simpleActivity.unlockNavigationDrawer();
         }
     }
 
     protected View inflateView(int layout) {
-        return LayoutInflater.from(getContext()).inflate(layout, null);
+        return LayoutInflater.from(getActivity()).inflate(layout, null);
     }
 
     public void setToolbar(Toolbar toolbar) {
@@ -253,8 +241,8 @@ public class BaseFragment extends Fragment implements StandardFragment {
     public void onDetach() {
         super.onDetach();
         FragmentActivity activity = getActivity();
-        if (activity instanceof BaseActivity) {
-            ((BaseActivity) activity).onDestroyFragment(this);
+        if (activity instanceof SimpleActivity) {
+            ((SimpleActivity) activity).onDestroyFragment(this);
         }
     }
 
@@ -265,9 +253,9 @@ public class BaseFragment extends Fragment implements StandardFragment {
     }
 
     public void toggleDrawer() {
-        BaseActivity baseActivity = getBaseActivity();
-        if (baseActivity != null) {
-            baseActivity.toggleDrawer();
+        SimpleActivity simpleActivity = getSimpleActivity();
+        if (simpleActivity != null) {
+            simpleActivity.toggleDrawer();
         }
     }
 }

@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appbonus.android.R;
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class LicenseFragment extends BaseFragment {
+public class LicenseFragment extends SimpleFragment {
     protected TextView answer;
 
     @Override

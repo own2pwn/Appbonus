@@ -25,14 +25,14 @@ import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validate.ConfirmValidate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 
-public class ProfileEditorFragment extends BaseFragment implements View.OnClickListener {
+public class ProfileEditorFragment extends SimpleFragment implements View.OnClickListener {
     protected FloatLabel mail;
     protected FloatLabel phone;
     protected TextView country;

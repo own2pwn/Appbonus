@@ -11,8 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public abstract class BaseListFragment<T extends ListView, A extends ListAdapter>
-        extends BaseFragment implements AdapterView.OnItemClickListener {
+public abstract class SimpleListFragment<T extends ListView, A extends ListAdapter>
+        extends SimpleFragment implements AdapterView.OnItemClickListener {
     protected T listView;
     protected A adapter;
 

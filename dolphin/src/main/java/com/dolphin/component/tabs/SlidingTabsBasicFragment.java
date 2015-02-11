@@ -28,12 +28,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dolphin.R;
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SlidingTabsBasicFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
+public abstract class SlidingTabsBasicFragment extends SimpleFragment implements ViewPager.OnPageChangeListener {
 
     protected SlidingTabLayout mSlidingTabLayout;
     protected ViewPager mViewPager;

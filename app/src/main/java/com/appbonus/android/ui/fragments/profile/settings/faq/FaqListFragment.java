@@ -21,14 +21,14 @@ import com.appbonus.android.loaders.FaqLoader;
 import com.appbonus.android.model.Question;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.loader.AbstractLoader;
-import com.dolphin.ui.fragment.BaseListFragment;
+import com.dolphin.ui.fragment.SimpleListFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FaqListFragment extends BaseListFragment<ListView, SimpleAdapter>
+public class FaqListFragment extends SimpleListFragment<ListView, SimpleAdapter>
         implements LoaderManager.LoaderCallbacks<List<Question>>, AdapterView.OnItemClickListener, View.OnClickListener {
     public static final int LOADER_ID = 1;
     public static final String QUESTION_PARAMETER = "question";

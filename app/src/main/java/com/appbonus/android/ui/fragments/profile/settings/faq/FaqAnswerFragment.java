@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.appbonus.android.R;
 import com.appbonus.android.model.Question;
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 
-public class FaqAnswerFragment extends BaseFragment {
+public class FaqAnswerFragment extends SimpleFragment {
     protected TextView question;
     protected TextView answer;
 

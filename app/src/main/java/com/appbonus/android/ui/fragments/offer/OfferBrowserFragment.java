@@ -24,14 +24,14 @@ import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.loader.AbstractLoader;
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.utils.ClipboardUtils;
 import com.dolphin.utils.Log;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
-public class OfferBrowserFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<OfferWrapper>, View.OnClickListener {
+public class OfferBrowserFragment extends SimpleFragment implements LoaderManager.LoaderCallbacks<OfferWrapper>, View.OnClickListener {
     private static final int LOADER_ID = 1;
 
     protected Api api;

@@ -14,9 +14,9 @@ import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 
-public class AutowithdrawalFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener {
+public class AutowithdrawalFragment extends SimpleFragment implements CompoundButton.OnCheckedChangeListener {
     protected Api api;
 
     protected CheckBox auto;

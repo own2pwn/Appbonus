@@ -23,10 +23,10 @@ import com.appbonus.android.ui.fragments.navigation.NavigationDrawerFragment;
 import com.appbonus.android.ui.fragments.offer.OfferListFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.login.LoginActivity;
-import com.dolphin.ui.BaseActivity;
+import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
 
-public class MainActivity extends BaseActivity implements NavigationDrawer.NavigationDrawerCallbacks {
+public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
     public static final String BALANCE_FRAGMENT = BalanceBrowserFragment.class.getName();

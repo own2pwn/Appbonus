@@ -18,15 +18,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.appbonus.android.R;
-import com.dolphin.ui.fragment.BaseFragment;
 import com.dolphin.ui.fragment.NavigationDrawer;
+import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class NavigationDrawerFragment extends BaseFragment implements NavigationDrawer {
+public class NavigationDrawerFragment extends SimpleFragment implements NavigationDrawer {
 
     @SuppressWarnings("unused")
     private static final String TAG = Log.getNormalizedTag(NavigationDrawerFragment.class);

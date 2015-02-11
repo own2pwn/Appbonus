@@ -16,12 +16,12 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.WithdrawalRequest;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
 
-public class WithdrawalFragment extends BaseFragment implements View.OnClickListener {
+public class WithdrawalFragment extends SimpleFragment implements View.OnClickListener {
     protected Api api;
 
     protected Button mobileBtn;

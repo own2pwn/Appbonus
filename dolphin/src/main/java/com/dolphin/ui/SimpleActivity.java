@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.dolphin.R;
-import com.dolphin.ui.fragment.BaseFragment;
 import com.dolphin.ui.fragment.NavigationDrawer;
+import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.ui.fragment.root.RootFragment;
 import com.dolphin.utils.Log;
 
@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class SimpleActivity extends ActionBarActivity {
     protected Toolbar toolbar;
 
     @SuppressWarnings("unused")
-    private static final String TAG = Log.getNormalizedTag(BaseActivity.class);
+    private static final String TAG = Log.getNormalizedTag(SimpleActivity.class);
     protected List<WeakReference<Fragment>> fragList = new CopyOnWriteArrayList<>();
 
     @Override
@@ -108,9 +108,9 @@ public abstract class BaseActivity extends ActionBarActivity {
             fragment = Fragment.instantiate(this, fragmentTag);
             fragment.setTargetFragment(targetFragment, -1);
         }
-        if (args != null && fragment instanceof BaseFragment) ((BaseFragment) fragment).putArguments(args);
-        if (fragment instanceof BaseFragment) {
-            ((BaseFragment) fragment).setToolbar(getToolbar());
+        if (args != null && fragment instanceof SimpleFragment) ((SimpleFragment) fragment).putArguments(args);
+        if (fragment instanceof SimpleFragment) {
+            ((SimpleFragment) fragment).setToolbar(getToolbar());
         }
 
         transaction.replace(getContainerLayout(), fragment, fragmentTag);

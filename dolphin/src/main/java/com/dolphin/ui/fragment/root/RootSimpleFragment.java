@@ -1,8 +1,8 @@
 package com.dolphin.ui.fragment.root;
 
-import com.dolphin.ui.fragment.BaseFragment;
+import com.dolphin.ui.fragment.SimpleFragment;
 
-public class RootBaseFragment extends BaseFragment implements RootFragment {
+public abstract class RootSimpleFragment extends SimpleFragment implements RootFragment {
     protected boolean closeActivityAfterDestroy = true;
 
     @Override
