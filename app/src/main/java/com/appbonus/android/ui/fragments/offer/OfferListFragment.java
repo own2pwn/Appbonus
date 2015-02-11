@@ -1,9 +1,7 @@
 package com.appbonus.android.ui.fragments.offer;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -26,7 +24,7 @@ import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.friends.MeetFriendsFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
-import com.dolphin.activity.fragment.root.RootBaseFragment;
+import com.dolphin.activity.fragment.root.RootListFragment;
 import com.dolphin.loader.AbstractLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,15 +34,13 @@ import com.paging.listview.PagingListView;
 
 import java.util.List;
 
-public class OfferListFragment extends RootBaseFragment
+public class OfferListFragment extends RootListFragment<PagingListView, OfferListFragment.OfferAdapter>
         implements LoaderManager.LoaderCallbacks<OffersWrapper>, View.OnClickListener {
     public static final int LOADER_ID = 1;
 
     protected Api api;
 
     protected TextView balance;
-    protected PagingListView offerList;
-
     protected View inputProfile;
     protected View meetFriends;
     protected ImageView inputProfileAvatar;
@@ -55,8 +51,6 @@ public class OfferListFragment extends RootBaseFragment
     protected Meta meta;
 
     protected long currentPage = -1L;
-    protected int selectionItem;
-    protected int top;
 
     protected Typeface typeFace;
 
@@ -69,9 +63,9 @@ public class OfferListFragment extends RootBaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.offers_list, null);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         View header = inflateView(R.layout.offer_list_header);
-        initUI(view, header);
+        initUI(header);
         return view;
     }
 
@@ -80,15 +74,18 @@ public class OfferListFragment extends RootBaseFragment
         super.onViewCreated(view, savedInstanceState);
         setDrawerIndicatorEnabled(true);
         setTitle(R.string.offers);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (getLoaderManager().getLoader(LOADER_ID) == null) {
-            Loader<OffersWrapper> loader = getLoaderManager().initLoader(LOADER_ID, null, this);
-            loader.forceLoad();
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
     }
 
-    private void initUI(View view, View header) {
-        offerList = (PagingListView) view.findViewById(android.R.id.list);
-        offerList.addHeaderView(header, null, false);
+    private void initUI(View header) {
+        listView.addHeaderView(header, null, false);
         balance = (TextView) header.findViewById(R.id.balance);
 
         inputProfile = header.findViewById(R.id.input_profile);
@@ -116,7 +113,9 @@ public class OfferListFragment extends RootBaseFragment
 
     @Override
     public Loader<OffersWrapper> onCreateLoader(int id, Bundle args) {
-        return new OffersLoader(getActivity(), api, currentPage + 1);
+        OffersLoader loader = new OffersLoader(getActivity(), api, currentPage + 1);
+        loader.forceLoad();
+        return loader;
     }
 
     @Override
@@ -132,27 +131,27 @@ public class OfferListFragment extends RootBaseFragment
         if (adapter == null) {
             adapter = new OfferAdapter(data.getOffers());
             setListSettings();
-            offerList.setAdapter(adapter);
+            setListAdapter(adapter);
         } else {
             if (currentPage == meta.getCurrentPage()) {
-                offerList.setAdapter(adapter);
+                setListAdapter(adapter);
                 setListSettings();
-            } else offerList.onFinishLoading(currentPage != meta.getTotalPages(), data.getOffers());
+            } else listView.onFinishLoading(currentPage != meta.getTotalPages(), data.getOffers());
         }
     }
 
     private void setListSettings() {
         if (meta.getTotalPages() == 1) {
-            offerList.setHasMoreItems(false);
+            listView.setHasMoreItems(false);
         } else {
-            offerList.setHasMoreItems(true);
-            offerList.setPagingableListener(new PagingListView.Pagingable() {
+            listView.setHasMoreItems(true);
+            listView.setPagingableListener(new PagingListView.Pagingable() {
                 @Override
                 public void onLoadMoreItems() {
                     if (currentPage != meta.getTotalPages()) {
                         Loader<OffersWrapper> loader = getLoaderManager().restartLoader(LOADER_ID, null, OfferListFragment.this);
                         loader.forceLoad();
-                    } else offerList.onFinishLoading(false, null);
+                    } else listView.onFinishLoading(false, null);
                 }
             });
         }
@@ -176,18 +175,8 @@ public class OfferListFragment extends RootBaseFragment
     }
 
     @Override
-    public void onPause() {
-        selectionItem = offerList.getFirstVisiblePosition();
-        View v = offerList.getChildAt(0);
-        top = (v == null) ? 0 : v.getTop();
-        super.onPause();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onResume() {
-        super.onResume();
-        offerList.setSelectionFromTop(selectionItem, top);
+    protected int layout() {
+        return R.layout.offers_list;
     }
 
     @Override

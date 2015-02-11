@@ -22,9 +22,12 @@ public abstract class BaseListFragment<T extends ListView, A extends ListAdapter
     @Override
     @SuppressWarnings("unchecked")
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        listView = (T) inflater.inflate(layout(), null);
+        View view = inflater.inflate(layout(), null);
+        if (view instanceof ListView) {
+            listView = (T) view;
+        } else listView = (T) view.findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        return listView;
+        return view;
     }
 
     @Override
