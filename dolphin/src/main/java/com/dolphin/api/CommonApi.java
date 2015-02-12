@@ -8,6 +8,7 @@ import com.dolphin.net.methods.HttpMethod;
 import com.dolphin.net.methods.MethodDelete;
 import com.dolphin.net.methods.MethodGet;
 import com.dolphin.net.methods.MethodPost;
+import com.dolphin.net.methods.MethodPostFile;
 import com.dolphin.net.methods.MultipartUploader;
 
 import org.json.JSONObject;
@@ -91,6 +92,17 @@ public abstract class CommonApi {
     protected <T, K> T doUpload(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
         String[] array = collectParameters(path);
         HttpMethod method = new MultipartUploader(host(), toUploadMap(request, requestType), array);
+        preparation(method);
+        ApiLogger logger = new ApiLogger();
+        logger.start();
+        String answer = method.perform(context);
+        logger.end(Arrays.toString(path));
+        return toObject(answer, responseType);
+    }
+
+    protected <T, K> T doPostUpload(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
+        String[] array = collectParameters(path);
+        HttpMethod method = new MethodPostFile(host(), toUploadMap(request, requestType), array);
         preparation(method);
         ApiLogger logger = new ApiLogger();
         logger.start();
