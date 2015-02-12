@@ -8,9 +8,12 @@ import com.dolphin.net.methods.HttpMethod;
 import com.dolphin.net.methods.MethodDelete;
 import com.dolphin.net.methods.MethodGet;
 import com.dolphin.net.methods.MethodPost;
+import com.dolphin.net.methods.MultipartUploader;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,10 +88,36 @@ public abstract class CommonApi {
         return toObject(answer, responseType);
     }
 
-    private <K> Map<String, String> toMap(K request, Class<K> tClass) throws IllegalAccessException {
-        if (request == null) return new HashMap<>();
+    protected <T, K> T doUpload(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
+        String[] array = collectParameters(path);
+        HttpMethod method = new MultipartUploader(host(), toUploadMap(request, requestType), array);
+        preparation(method);
+        ApiLogger logger = new ApiLogger();
+        logger.start();
+        String answer = method.perform(context);
+        logger.end(Arrays.toString(path));
+        return toObject(answer, responseType);
+    }
+
+    private <K> Map<String, File> toUploadMap(K obj, Class<K> tClass) throws Throwable{
+        if (obj == null) return new HashMap<>();
+        Field[] fields = tClass.getFields();
+        Map<String, File> map = new HashMap<>();
+        if (fields != null) {
+            for (Field field : fields) {
+                if (File.class.equals(field.getType())) {
+                    File file = (File) field.get(obj);
+                    map.put(field.getName(), file);
+                }
+            }
+        }
+        return map;
+    }
+
+    private <K> Map<String, String> toMap(K obj, Class<K> tClass) {
+        if (obj == null) return new HashMap<>();
         JsonHandler<K> jsonHandler = createJsonHandler(tClass);
-        return jsonHandler.toMap(request);
+        return jsonHandler.toMap(obj);
     }
 
     protected <T> JSONObject toJson(T obj, Class<T> tClass) throws Throwable {
