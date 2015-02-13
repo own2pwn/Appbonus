@@ -14,7 +14,7 @@ import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.model.api.DataWrapper;
-import com.appbonus.android.push.GoogleCloudMessagingUtils;
+import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.BalanceBrowserFragment;
 import com.appbonus.android.ui.fragments.friends.FriendsFragment;
@@ -114,7 +114,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
                 return api.unregisterDevice(new DeviceRequest(SharedPreferencesStorage.getToken(context),
-                        GoogleCloudMessagingUtils.getRegistrationId(context)));
+                        new BonusGCMUtils().getRegistrationId(context)));
             }
 
             @Override

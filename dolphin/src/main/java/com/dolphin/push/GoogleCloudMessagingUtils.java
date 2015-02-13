@@ -4,36 +4,33 @@
  * Use is subject to license terms.
  */
 
-package com.appbonus.android.push;
+package com.dolphin.push;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
-import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
-import com.appbonus.android.api.model.DeviceRequest;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
-public class GoogleCloudMessagingUtils {
+public abstract class GoogleCloudMessagingUtils {
     public final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String PROPERTY_REG_ID = "registration_id";
     public static final String PROPERTY_APP_VERSION = "appVersion";
 
-    private static GoogleCloudMessaging gcm;
-    private static String regId;
+    protected GoogleCloudMessaging gcm;
+    protected String regId;
 
-    public static boolean checkPlayServices(Activity context) {
+    public boolean checkPlayServices(Activity context) {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
@@ -45,21 +42,17 @@ public class GoogleCloudMessagingUtils {
         return true;
     }
 
-    public static void register(final Context context) {
+    public void register(final Context context) {
         gcm = GoogleCloudMessaging.getInstance(context);
         regId = getRegistrationId(context);
 
-        if (regId.isEmpty()) {
+        if (TextUtils.isEmpty(regId)) {
             registerInBackground(context);
         }
 
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                // You should send the registration ID to your server over HTTP,
-                // so it can use GCM/HTTP or CCS to send messages to your app.
-                // The request to your server should be authenticated if your app
-                // is using accounts.
                 try {
                     sendRegistrationIdToBackend(context);
                 } catch (Throwable throwable) {
@@ -70,33 +63,23 @@ public class GoogleCloudMessagingUtils {
         }.execute();
     }
 
-    public static String getRegistrationId(Context context) {
+    public String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
-        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+        String registrationId = prefs.getString(PROPERTY_REG_ID, null);
         if (registrationId.isEmpty()) {
-            return "";
+            return null;
         }
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing regID is not guaranteed to work with the new
-        // app version.
+
         int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion) {
-            return "";
+            return null;
         }
         return registrationId;
     }
 
-    /**
-     * @return Application's {@code SharedPreferences}.
-     */
-    private static SharedPreferences getGCMPreferences(Context context) {
-        return SharedPreferencesStorage.getPreferences(context);
-    }
+    protected abstract SharedPreferences getGCMPreferences(Context context);
 
-    /**
-     * @return Application's version code from the {@code PackageManager}.
-     */
     private static int getAppVersion(Context context) {
         try {
             PackageInfo packageInfo = context.getPackageManager()
@@ -107,25 +90,20 @@ public class GoogleCloudMessagingUtils {
         }
     }
 
-    /**
-     * Registers the application with GCM servers asynchronously.
-     * <p>
-     * Stores the registration ID and app versionCode in the application's
-     * shared preferences.
-     */
-    private static void registerInBackground(final Context context) {
-        new AsyncTask<Void, String, String>() {
+    private void registerInBackground(Context context) {
+        new AsyncTask<Context, String, String>() {
             @Override
-            protected String doInBackground(Void... params) {
+            protected String doInBackground(Context... params) {
                 String msg;
+                Context context = params[0];
                 try {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
-                    regId = gcm.register(context.getString(R.string.project_number));
+                    Resources resources = context.getResources();
+                    regId = gcm.register(resources.getString(resources.getIdentifier("project_number", "string", context.getPackageName())));
                     msg = "Device registered, registration ID=" + regId;
 
-                    // Persist the regID - no need to register again.
                     storeRegistrationId(context, regId);
 
                 } catch (IOException ex) {
@@ -133,34 +111,17 @@ public class GoogleCloudMessagingUtils {
                 }
                 return msg;
             }
-        }.execute();
+        }.execute(context);
     }
 
-    /**
-     * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
-     * or CCS to send messages to your app. Not needed for this demo since the
-     * device sends upstream messages to a server that echoes back the message
-     * using the 'from' address in the message.
-     * @param context
-     */
-    private static void sendRegistrationIdToBackend(Context context) throws Throwable {
-        Api api = new ApiImpl(context);
-        api.registerDevice(new DeviceRequest(SharedPreferencesStorage.getToken(context), regId));
-    }
+    protected abstract void sendRegistrationIdToBackend(Context context) throws Throwable;
 
-    /**
-     * Stores the registration ID and app versionCode in the application's
-     * {@code SharedPreferences}.
-     *
-     * @param context application's context.
-     * @param regId registration ID
-     */
-    private static void storeRegistrationId(Context context, String regId) {
+    private void storeRegistrationId(Context context, String regId) {
         final SharedPreferences prefs = getGCMPreferences(context);
         int appVersion = getAppVersion(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        editor.apply();
     }
 }

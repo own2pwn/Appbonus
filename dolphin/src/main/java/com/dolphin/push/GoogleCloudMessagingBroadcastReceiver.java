@@ -4,7 +4,7 @@
  * Use is subject to license terms.
  */
 
-package com.appbonus.android.push;
+package com.dolphin.push;
 
 import android.app.Activity;
 import android.content.ComponentName;

@@ -35,14 +35,14 @@
             android:name="AA_MODELS"
             android:value="@string/models" />
         <receiver
-            android:name=".push.GoogleCloudMessagingBroadcastReceiver"
+            android:name="com.dolphin.push.GoogleCloudMessagingBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
                 <category android:name="com.appbonus.android"/>
             </intent-filter>
         </receiver>
-        <service android:name=".push.GoogleCloudMessagingIntentService"/>
+        <service android:name=".push.BonusGCMService"/>
 
         <activity
             android:name=".ui.SplashActivity"

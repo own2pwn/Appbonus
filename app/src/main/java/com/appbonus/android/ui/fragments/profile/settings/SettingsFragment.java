@@ -19,7 +19,7 @@ import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.DataWrapper;
-import com.appbonus.android.push.GoogleCloudMessagingUtils;
+import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.OnUserUpdateListener;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
@@ -129,7 +129,7 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
                 return api.unregisterDevice(new DeviceRequest(SharedPreferencesStorage.getToken(context),
-                        GoogleCloudMessagingUtils.getRegistrationId(context)));
+                        new BonusGCMUtils().getRegistrationId(context)));
             }
 
             @Override

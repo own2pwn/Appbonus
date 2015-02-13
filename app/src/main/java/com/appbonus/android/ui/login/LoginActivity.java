@@ -16,11 +16,12 @@ import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.model.api.SimpleResult;
-import com.appbonus.android.push.GoogleCloudMessagingUtils;
+import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
+import com.dolphin.push.GoogleCloudMessagingUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
@@ -171,8 +172,10 @@ public class LoginActivity extends FragmentActivity {
         if (password != null) {
             SharedPreferencesStorage.savePassword(this, password);
         }
-        if (GoogleCloudMessagingUtils.checkPlayServices(this)) {
-            GoogleCloudMessagingUtils.register(this);
+
+        GoogleCloudMessagingUtils cloudMessagingUtils = new BonusGCMUtils();
+        if (cloudMessagingUtils.checkPlayServices(this)) {
+            cloudMessagingUtils.register(this);
         }
     }
 
