@@ -1,6 +1,8 @@
 package com.dolphin.net.methods;
 
 
+import org.apache.http.entity.ContentType;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -24,7 +26,7 @@ public class MethodPut extends BaseHttpMethod {
     protected void configureConnection(URL postUrl) throws IOException {
 
         super.configureConnection(postUrl);
-        this.connection.setRequestProperty("Content-Type", contentType);
+        this.connection.setRequestProperty("Content-Type", ContentType.APPLICATION_JSON.getMimeType());
         this.connection.setDoInput(true);
         this.connection.setDoOutput(true);
     }

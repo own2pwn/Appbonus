@@ -14,14 +14,12 @@ import java.util.Map;
 
 
 public class MultipartUploader extends BaseHttpMethod {
-
     private static final String REQUEST_METHOD = "PUT";
 
     private Map<String, File> files;
     private HttpEntity mHttpEntity;
 
     public MultipartUploader(String hostUri, Map<String, File> files, String... apiPath) {
-
         super(hostUri, "", apiPath);
         this.requestMethod = REQUEST_METHOD;
         this.files = files;
@@ -29,7 +27,6 @@ public class MultipartUploader extends BaseHttpMethod {
 
     @Override
     protected void configureConnection(URL postUrl) throws IOException {
-
         MultipartEntityBuilder builder = MultipartEntityBuilder
                 .create()
                 .setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -58,7 +55,6 @@ public class MultipartUploader extends BaseHttpMethod {
 
     @Override
     protected void writeToOpenedConnection(String avatarPath) throws IOException {
-
         mHttpEntity.writeTo(connection.getOutputStream());
     }
 }

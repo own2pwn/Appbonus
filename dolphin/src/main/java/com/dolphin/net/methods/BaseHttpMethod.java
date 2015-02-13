@@ -39,7 +39,6 @@ public abstract class BaseHttpMethod implements HttpMethod {
     protected String requestMethod;
     protected HttpURLConnection connection;
 
-    protected String contentType = "application/json";
     protected ErrorHandler errorHandler;
 
     static final LruCache<Integer, String> requestCache = new LruCache<>(REQUEST_CACHE_SIZE);
