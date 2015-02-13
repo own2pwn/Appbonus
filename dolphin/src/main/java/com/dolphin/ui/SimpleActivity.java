@@ -15,16 +15,17 @@ import com.dolphin.ui.fragment.NavigationDrawer;
 import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.ui.fragment.root.RootFragment;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 
 public abstract class SimpleActivity extends ActionBarActivity {
     protected Toolbar toolbar;
 
-    protected List<WeakReference<Fragment>> fragList = new CopyOnWriteArrayList<>();
+    protected Set<Fragment> heap = Collections.newSetFromMap(new WeakHashMap<Fragment, Boolean>());
+    protected Fragment mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,6 @@ public abstract class SimpleActivity extends ActionBarActivity {
     }
 
     protected void beforeSetContentView() {
-
     }
 
     protected abstract int layout();
@@ -76,23 +76,19 @@ public abstract class SimpleActivity extends ActionBarActivity {
         showError(getString(message));
     }
 
-    public Fragment placeProperFragment(String fragmentTag, boolean addToBackStackCustom) {
-        return placeProperFragment(fragmentTag, null, addToBackStackCustom, null);
+    public Fragment placeProperFragment(String fragmentTag, boolean forceCreate) {
+        return placeProperFragment(fragmentTag, null, true, null, forceCreate);
     }
 
     public Fragment placeProperFragment(String fragmentTag) {
-        return placeProperFragment(fragmentTag, true);
+        return placeProperFragment(fragmentTag, null, true, null, false);
     }
 
     public Fragment placeProperFragment(String fragmentTag, Bundle args) {
-        return placeProperFragment(fragmentTag, args, true, null);
+        return placeProperFragment(fragmentTag, args, true, null, false);
     }
 
-    protected List<String> getExcluded() {
-        return new ArrayList<>();
-    }
-
-    public Fragment placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
+    public Fragment placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment, boolean forceCreate) {
         if (targetFragment != null && fragmentTag.equals(targetFragment.getTag())) return null;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -101,7 +97,7 @@ public abstract class SimpleActivity extends ActionBarActivity {
         boolean addToBackStack = !isFragmentContainerEmpty(fragmentManager) && addToBackStackCustom;
 
         Fragment fragment = fragmentManager.findFragmentByTag(fragmentTag);
-        if (fragment == null || getExcluded().contains(fragmentTag)) {
+        if (forceCreate || fragment == null) {
             fragment = Fragment.instantiate(this, fragmentTag);
             fragment.setTargetFragment(targetFragment, -1);
         }
@@ -131,12 +127,18 @@ public abstract class SimpleActivity extends ActionBarActivity {
         }
     }
 
+    protected void openBaseFragment(String name) {
+        if (!name.equals(mCurrentFragment.getTag())) {
+            closeAll();
+            placeProperFragment(name, true);
+        }
+    }
+
     protected void closeAll() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        List<Fragment> fragments = getActiveFragments();
 
-        for (Fragment fragment : fragments) {
+        for (Fragment fragment : getActiveFragments()) {
             if (fragment instanceof NavigationDrawer) continue;
 
             if (fragment instanceof RootFragment) {
@@ -149,7 +151,6 @@ public abstract class SimpleActivity extends ActionBarActivity {
     }
 
     private boolean isFragmentContainerEmpty(FragmentManager manager) {
-
         Fragment prevFragment = manager.findFragmentById(getContainerLayout());
         return prevFragment == null || prevFragment.isDetached();
     }
@@ -157,55 +158,29 @@ public abstract class SimpleActivity extends ActionBarActivity {
     protected abstract int getContainerLayout();
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if (outState != null) {
-            outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
-        }
-        super.onSaveInstanceState(outState);
+    public void onAttachFragment(Fragment fragment) {
+        heap.add(fragment);
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        fragList.add(new WeakReference<>(fragment));
+    public void onFragmentView(Fragment fragment) {
+        mCurrentFragment = fragment;
     }
 
     public void onDestroyFragment(Fragment fragment) {
-        WeakReference reference = null;
-        for (WeakReference<Fragment> weakReference : fragList) {
-            String tag = fragment.getTag();
-            if (tag != null && weakReference.get() != null && tag.equals(weakReference.get().getTag())) {
-                reference = weakReference;
-                break;
-            }
-        }
-        if (reference != null) {
-            fragList.remove(reference);
-        }
+        heap.remove(fragment);
     }
 
-    public List<Fragment> getActiveFragments() {
-        ArrayList<Fragment> ret = new ArrayList<>();
-        for (WeakReference<Fragment> ref : fragList) {
-            Fragment f = ref.get();
-            if (f != null) {
-                if (f.isVisible()) {
-                    ret.add(f);
-                }
-            }
-        }
-        return ret;
+    public Collection<Fragment> getActiveFragments() {
+        return heap;
     }
 
     public void setDrawerIndicatorEnabled(boolean enable) {
-
     }
 
     public void lockNavigationDrawer() {
-
     }
 
     public void unlockNavigationDrawer() {
-
     }
 
     protected Toolbar getToolbar() {
@@ -213,6 +188,5 @@ public abstract class SimpleActivity extends ActionBarActivity {
     }
 
     public void toggleDrawer() {
-
     }
 }

@@ -145,13 +145,6 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         }
     }
 
-    private void openBaseFragment(String name) {
-        if (!name.equals(fragList.get(fragList.size() - 1).get().getTag())) {
-            closeAll();
-            placeProperFragment(name);
-        }
-    }
-
     @Override
     public void setDrawerIndicatorEnabled(boolean enable) {
         mNavigationDrawerFragment.setDrawerIndicatorEnabled(enable);

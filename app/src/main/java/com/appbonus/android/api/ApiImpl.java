@@ -30,6 +30,7 @@ import com.dolphin.net.methods.HttpMethod;
 import com.dynamixsoftware.ErrorAgent;
 
 import org.apache.commons.lang3.text.WordUtils;
+import org.apache.http.HttpHeaders;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -154,7 +155,7 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     private void addDefaultHeader(HttpMethod httpMethod) {
-        httpMethod.addHeader(HEADER_USER_AGENT_KEY, HEADER_USER_AGENT_VALUE);
+        httpMethod.addHeader(HttpHeaders.USER_AGENT, HEADER_USER_AGENT_VALUE);
     }
 
     @Override

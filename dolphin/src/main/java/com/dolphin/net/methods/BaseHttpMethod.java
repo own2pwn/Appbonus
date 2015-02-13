@@ -8,6 +8,7 @@ import android.util.LruCache;
 import com.dolphin.net.ConnectionUtilsInsecure;
 import com.dolphin.net.NetUtils;
 
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 
 import java.io.BufferedWriter;
@@ -20,10 +21,6 @@ import java.util.Map;
 
 
 public abstract class BaseHttpMethod implements HttpMethod {
-
-    private static final String E_TAG = "ETag";
-    private static final String IF_NONE_MATCH_HEADER = "if-none-match";
-
     private static final int TIMEOUT_MILLIS = 20000;
     private static final int REQUEST_CACHE_SIZE = 1 * 1024 * 1024;
     private static final int RESPONSE_CACHE_SIZE = 1 * 1024 * 1024;
@@ -104,20 +101,20 @@ public abstract class BaseHttpMethod implements HttpMethod {
         connection.setRequestMethod(requestMethod);
 
         addETagHeaderIfExists();
-        addHeaders(connection);
+        addHeaders();
     }
 
     private void addETagHeaderIfExists() {
         String tag = getRequestTag(connectionHash());
         if (tag != null) {
-            addHeader(IF_NONE_MATCH_HEADER, tag);
+            addHeader(HttpHeaders.IF_NONE_MATCH, tag);
         }
     }
 
-    public void addHeaders(HttpURLConnection connection) {
+    public void addHeaders() {
         if (headers != null) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
-                connection.addRequestProperty(entry.getKey(), entry.getValue());
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
             }
         }
     }
@@ -157,7 +154,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
         }
         try {
 
-            String eTag = connection.getHeaderField(E_TAG);
+            String eTag = connection.getHeaderField(HttpHeaders.ETAG);
             if (responseCode == HttpStatus.SC_OK) {
                 saveRequest(connectionHash(), eTag);
                 String response = readResponse(connection);

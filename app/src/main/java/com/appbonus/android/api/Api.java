@@ -30,7 +30,6 @@ public interface Api extends Serializable {
     String API_SUFX = "api";
     String API_VERSION = "v1";
 
-    String HEADER_USER_AGENT_KEY = "User-Agent";
     String HEADER_USER_AGENT_VALUE = "Appbonus Android App";
 
     String SUFX_SIGNIN = "signin";

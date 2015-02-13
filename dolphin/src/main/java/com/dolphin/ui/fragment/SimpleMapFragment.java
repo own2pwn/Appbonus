@@ -16,7 +16,7 @@ public abstract class SimpleMapFragment extends SupportMapFragment implements St
     @Override
     public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
         if (getActivity() != null) {
-            ((SimpleActivity) getActivity()).placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment);
+            ((SimpleActivity) getActivity()).placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment, false);
         }
     }
 

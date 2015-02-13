@@ -1,5 +1,6 @@
 package com.dolphin.ui.fragment.root;
 
+import android.os.Bundle;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -8,6 +9,12 @@ import com.dolphin.ui.fragment.SimpleListFragment;
 public abstract class RootListFragment<T extends ListView, A extends ListAdapter>
         extends SimpleListFragment<T, A> implements RootFragment {
     protected boolean closeActivityAfterDestroy = true;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        closeActivityAfterDestroy = true;
+    }
 
     @Override
     public void onDestroy() {

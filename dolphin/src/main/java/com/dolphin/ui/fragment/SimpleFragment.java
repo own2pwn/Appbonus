@@ -144,7 +144,7 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
     public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
         SimpleActivity simpleActivity = getSimpleActivity();
         if (simpleActivity != null) {
-            simpleActivity.placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment);
+            simpleActivity.placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment, false);
         }
     }
 
@@ -250,6 +250,7 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setDisplayHomeAsUpEnabled(true);
+        ((SimpleActivity) getActivity()).onFragmentView(this);
     }
 
     public void toggleDrawer() {
