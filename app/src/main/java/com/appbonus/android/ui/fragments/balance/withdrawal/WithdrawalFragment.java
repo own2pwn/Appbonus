@@ -2,6 +2,7 @@ package com.appbonus.android.ui.fragments.balance.withdrawal;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.WithdrawalRequest;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.fragments.balance.OnWithdrawalListener;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.fragment.SimpleFragment;
 import com.throrinstudio.android.common.libs.validator.Form;
@@ -104,9 +106,17 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
             protected void onPostExecute(DataWrapper dataWrapper) {
                 super.onPostExecute(dataWrapper);
                 if (isSuccess()) {
+                    notifyObservers();
                     closeCurrentFragment();
                 } else showError(throwable.getMessage());
             }
         }.execute();
+    }
+
+    private void notifyObservers() {
+        Fragment fragment = getTargetFragment();
+        if (fragment instanceof OnWithdrawalListener) {
+            ((OnWithdrawalListener) fragment).onWithdrawal();
+        }
     }
 }

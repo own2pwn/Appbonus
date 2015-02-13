@@ -30,6 +30,7 @@ import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.loader.AbstractLoader;
 import com.dolphin.ui.fragment.root.RootListFragment;
+import com.dolphin.utils.KeyboardUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -38,7 +39,8 @@ import com.paging.listview.PagingListView;
 
 import java.util.List;
 
-public class BalanceBrowserFragment extends RootListFragment<PagingListView, BalanceBrowserFragment.HistoryAdapter> implements View.OnClickListener {
+public class BalanceBrowserFragment extends RootListFragment<PagingListView, BalanceBrowserFragment.HistoryAdapter>
+        implements View.OnClickListener, OnWithdrawalListener {
     public static final int BALANCE_LOADER_ID = 1;
     public static final int HISTORY_LOADER_ID = 2;
 
@@ -85,16 +87,15 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getLoaderManager().getLoader(BALANCE_LOADER_ID) == null) {
-            Loader<BalanceWrapper> loader = getLoaderManager().initLoader(BALANCE_LOADER_ID, null, balanceHandler);
-            loader.forceLoad();
+            getLoaderManager().initLoader(BALANCE_LOADER_ID, null, balanceHandler);
         }
         if (getLoaderManager().getLoader(HISTORY_LOADER_ID) == null) {
-            Loader<HistoryWrapper> loader = getLoaderManager().initLoader(HISTORY_LOADER_ID, null, historyHandler);
-            loader.forceLoad();
+            getLoaderManager().initLoader(HISTORY_LOADER_ID, null, historyHandler);
         }
         setDrawerIndicatorEnabled(true);
         setTitle(R.string.balance);
         setWithdrawalVisibility();
+        KeyboardUtils.hideFragmentKeyboard(this);
     }
 
     private void initUI(View header) {
@@ -168,9 +169,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
         int id = v.getId();
         if (footer.equals(v)) {
             if (currentPage != meta.getTotalPages()) {
-                Loader<HistoryWrapper> loader =
-                        getLoaderManager().restartLoader(HISTORY_LOADER_ID, null, historyHandler);
-                loader.forceLoad();
+                getLoaderManager().restartLoader(HISTORY_LOADER_ID, null, historyHandler);
             } else hideMoreFooter();
             return;
         }
@@ -187,11 +186,18 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
         }
     }
 
+    @Override
+    public void onWithdrawal() {
+        getLoaderManager().restartLoader(BALANCE_LOADER_ID, null, balanceHandler);
+    }
+
     public class BalanceHandler implements LoaderManager.LoaderCallbacks<BalanceWrapper> {
 
         @Override
         public Loader<BalanceWrapper> onCreateLoader(int id, Bundle args) {
-            return new BalanceLoader(getActivity(), api);
+            BalanceLoader loader = new BalanceLoader(getActivity(), api);
+            loader.forceLoad();
+            return loader;
         }
 
         @Override
@@ -210,7 +216,9 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
         @Override
         public Loader<HistoryWrapper> onCreateLoader(int id, Bundle args) {
-            return new HistoryLoader(getActivity(), api, currentPage + 1);
+            HistoryLoader loader = new HistoryLoader(getActivity(), api, currentPage + 1);
+            loader.forceLoad();
+            return loader;
         }
 
         @Override
