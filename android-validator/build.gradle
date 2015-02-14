@@ -20,13 +20,6 @@ repositories {
     }
 }
 
-sourceSets {
-    testLocal {
-        java.srcDir file('test')
-        resources.srcDir file('test')
-    }
-}
-
 android {
     compileSdkVersion 19
     buildToolsVersion "19.1"
@@ -42,41 +35,13 @@ android {
             java.srcDirs = ['src']
             res.srcDirs = ['res']
         }
+    }
 
-        instrumentTest.java.srcDirs = ['test']
-        androidTest.java.srcDirs = ['test']
+    lintOptions {
+        abortOnError false
     }
 }
 
 dependencies {
     compile 'com.android.support:support-v4:21.0.3'
-
-    // Dependencies for the `testLocal` task, make sure to list all your global dependencies here as well
-    testLocalCompile files("$project.buildDir/classes/release")
-    testLocalCompile 'junit:junit:4.11'
-    testLocalCompile 'com.android.support:support-v4:21.0.3'
-    testLocalCompile 'org.robolectric:robolectric:2.4'
-    testLocalCompile 'com.google.android:android:4.1.1.4'
-
-    // Android Studio doesn't recognize the `testLocal` task, so we define the same dependencies as above for instrumentTest
-    // which is Android Studio's test task
-    instrumentTestCompile 'junit:junit:4.11'
-    instrumentTestCompile 'com.android.support:support-v4:21.0.3'
-    instrumentTestCompile 'org.robolectric:robolectric:2.4'
-    instrumentTestCompile 'com.google.android:android:4.1.1.4'
-
 }
-
-//task localTest(type: Test, dependsOn: assemble) {
-//    testClassesDir = sourceSets.testLocal.output.classesDir
-//
-//    android.sourceSets.main.java.srcDirs.each { dir ->
-//        def buildDir = dir.getAbsolutePath().split('/')
-//        buildDir =  (buildDir[0..(buildDir.length - 4)] + ['build', 'classes', 'debug']).join('/')
-//
-//        sourceSets.testLocal.compileClasspath += files(buildDir)
-//        sourceSets.testLocal.runtimeClasspath += files(buildDir)
-//    }
-//
-//    classpath = sourceSets.testLocal.runtimeClasspath
-//}

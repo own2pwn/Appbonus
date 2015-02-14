@@ -66,7 +66,7 @@ public abstract class GoogleCloudMessagingUtils {
     public String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, null);
-        if (registrationId.isEmpty()) {
+        if (TextUtils.isEmpty(registrationId)) {
             return null;
         }
 
