@@ -123,5 +123,6 @@
     <string name="re_enter">Произошла непредвиденная ошибка - перезайдите в свой профиль</string>
     <string name="password_was_changed">Пароль успешно изменен</string>
     <string name="input_phone">Введите номер телефона</string>
+    <string name="network_problem">Кажется, нет интернета :(\nНажми на экран, чтобы попробовать ещё раз!</string>
 
 </resources>

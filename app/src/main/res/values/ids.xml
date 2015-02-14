@@ -65,4 +65,6 @@
     <item name="fragments_container" type="id" />
     <item name="rules_text" type="id" />
     <item name="action_settings" type="id" />
+    <item name="loading_text" type="id" />
+    <item name="root_view" type="id" />
 </resources>

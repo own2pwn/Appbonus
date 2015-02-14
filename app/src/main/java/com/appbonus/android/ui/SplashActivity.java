@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
 
 import com.activeandroid.sebbia.ActiveAndroid;
 import com.activeandroid.sebbia.query.Delete;
@@ -20,32 +22,65 @@ import com.dolphin.asynctask.ExceptionAsyncTask;
 
 import java.util.List;
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends Activity implements View.OnClickListener {
     public static final long MILLS_PER_SECOND = 1000;
     public static final long SPLASH_DELAY = MILLS_PER_SECOND * 1;
 
     protected Api api;
+    protected TextView loadingText;
+    protected View progressBar;
+    protected View rootView;
+    protected boolean loadingIsExecuted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_layout);
-
         api = new ApiImpl(this);
+        loadingText = (TextView) findViewById(R.id.loading_text);
+        progressBar = findViewById(R.id.progress_circular);
+        rootView = findViewById(R.id.root_view);
+        loadingIsExecuted = false;
 
-        new ExceptionAsyncTask<Void, Void, QuestionsWrapper>(this) {
-            @Override
-            protected QuestionsWrapper background(Void... params) throws Throwable {
-                return api.getFaq();
-            }
+        loading();
+    }
 
-            @Override
-            protected void onPostExecute(QuestionsWrapper questionsWrapper) {
-                super.onPostExecute(questionsWrapper);
-                saveFaq(questionsWrapper);
-                enter();
-            }
-        }.execute();
+    private void loading() {
+        if (!loadingIsExecuted) {
+            new ExceptionAsyncTask<Void, Void, QuestionsWrapper>(this) {
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    rootView.setOnClickListener(null);
+                    progressBar.setVisibility(View.VISIBLE);
+                    loadingText.setText(R.string.loading);
+                }
+
+                @Override
+                protected QuestionsWrapper background(Void... params) throws Throwable {
+                    return api.getFaq();
+                }
+
+                @Override
+                protected void onPostExecute(QuestionsWrapper questionsWrapper) {
+                    super.onPostExecute(questionsWrapper);
+                    if (isSuccess()) {
+                        saveFaq(questionsWrapper);
+                        enter();
+                    } else {
+                        showNetworkError();
+                    }
+                }
+            }.execute();
+            loadingIsExecuted = true;
+        }
+    }
+
+    private void showNetworkError() {
+        progressBar.setVisibility(View.INVISIBLE);
+        loadingText.setText(R.string.network_problem);
+        rootView.setOnClickListener(this);
+        loadingIsExecuted = false;
     }
 
     private void saveFaq(QuestionsWrapper questionsWrapper) {
@@ -77,5 +112,10 @@ public class SplashActivity extends Activity {
                 finish();
             }
         }, SPLASH_DELAY);
+    }
+
+    @Override
+    public void onClick(View v) {
+        loading();
     }
 }
