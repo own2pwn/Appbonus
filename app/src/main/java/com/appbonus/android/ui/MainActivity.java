@@ -25,6 +25,7 @@ import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
+import com.flurry.android.FlurryAgent;
 
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
@@ -153,5 +154,17 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     @Override
     public void toggleDrawer() {
         mNavigationDrawerFragment.toggle();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FlurryAgent.onStartSession(this, getString(R.string.flurry_app_key));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FlurryAgent.onEndSession(this);
     }
 }

@@ -2,6 +2,8 @@
 <resources>
     <string name="project_number">329875651575</string>
 
+    <string name="flurry_app_key">9ZWYC87ZBY24B9SJT4KY</string>
+
     <string name="vk_id">4739637</string>
     <string name="vk_secret">BDMI2dCGJltlLmOYTBMD</string>
     <string name="referrer_app_link">http://appbonus.ru/?referrer_id=%s</string>

@@ -3,6 +3,7 @@ package com.appbonus.android;
 import com.activeandroid.sebbia.ActiveAndroid;
 import com.activeandroid.sebbia.app.Application;
 import com.dynamixsoftware.ErrorAgent;
+import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,6 +19,11 @@ public class BonusApplication extends Application {
         CookieManager.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
         initImageLoader();
         ErrorAgent.register(this, getResources().getInteger(R.integer.watch_cat_project_id));
+        // configure Flurry
+        FlurryAgent.setLogEnabled(false);
+
+        // init Flurry
+        FlurryAgent.init(this, getString(R.string.flurry_app_key));
     }
 
     private void initImageLoader() {
