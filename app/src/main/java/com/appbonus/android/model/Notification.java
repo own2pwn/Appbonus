@@ -24,4 +24,11 @@ public class Notification implements com.dolphin.push.Notification {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public static Notification createRandom() {
+        Notification notification = new Notification();
+        notification.message = "Random message";
+        notification.notificationType = BALANCE;
+        return notification;
+    }
 }

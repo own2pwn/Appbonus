@@ -14,6 +14,7 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.DeviceRequest;
+import com.appbonus.android.model.Notification;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
@@ -29,6 +30,8 @@ import com.dolphin.ui.fragment.NavigationDrawer;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.mobileapptracker.MobileAppTracker;
+
+import java.io.Serializable;
 
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
@@ -55,7 +58,13 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         super.onCreate(savedInstanceState);
         api = new ApiImpl(this);
         if (savedInstanceState == null) {
-            openDefaultFragment();
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                Serializable object = extras.getSerializable("notification");
+                if (object instanceof Notification) {
+                    openNotificationFragment(((Notification) object));
+                } else openDefaultFragment();
+            } else openDefaultFragment();
         }
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -66,6 +75,14 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
                 (DrawerLayout) findViewById(R.id.drawer_layout)
         );
         initMobileAppTracker();
+    }
+
+    private void openNotificationFragment(Notification notification) {
+        if (Notification.BALANCE.equals(notification.getNotificationType())) {
+            openBaseFragment(BALANCE_FRAGMENT);
+        } else if (Notification.REFERRALS.equals(notification.getNotificationType())) {
+            openBaseFragment(FRIENDS_FRAGMENT);
+        } else openDefaultFragment();
     }
 
     private void initMobileAppTracker() {
@@ -85,7 +102,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     }
 
     private void openDefaultFragment() {
-        placeProperFragment(OFFERS_FRAGMENT);
+        openBaseFragment(OFFERS_FRAGMENT);
     }
 
     @Override
@@ -152,7 +169,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     @Override
     public void onNavigationItemSelected(int position) {
         switch (position) {
-            case NavigationDrawerFragment.NAV_PROFILE :
+            case NavigationDrawerFragment.NAV_PROFILE:
                 openBaseFragment(PROFILE_FRAGMENT);
                 break;
             case NavigationDrawerFragment.NAV_OFFERS:

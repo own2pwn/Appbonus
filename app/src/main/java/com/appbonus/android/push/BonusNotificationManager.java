@@ -13,7 +13,7 @@ public class BonusNotificationManager extends AbstractNotificationManager {
 
     @Override
     protected int icon() {
-        return R.drawable.ic_launcher;
+        return R.drawable.app_bonus_icon;
     }
 
     @Override
