@@ -84,14 +84,10 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getLoaderManager().getLoader(REFERRALS_DETAILS_LOADER_ID) == null) {
-            Loader<ReferralsDetailsWrapper> loader = getLoaderManager()
-                    .initLoader(REFERRALS_DETAILS_LOADER_ID, null, referralsDetailsHandler);
-            loader.forceLoad();
+            getLoaderManager().initLoader(REFERRALS_DETAILS_LOADER_ID, null, referralsDetailsHandler);
         }
         if (getLoaderManager().getLoader(REFERRALS_HISTORY_LOADER_ID) == null) {
-            Loader<ReferralsHistoryWrapper> loader = getLoaderManager()
-                    .initLoader(REFERRALS_HISTORY_LOADER_ID, null, referralsHistoryHandler);
-            loader.forceLoad();
+            getLoaderManager().initLoader(REFERRALS_HISTORY_LOADER_ID, null, referralsHistoryHandler);
         }
         setTitle(R.string.friends);
         setDrawerIndicatorEnabled(true);
@@ -126,10 +122,8 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
         int id = v.getId();
         if (footer.equals(v)) {
             if (currentPage != meta.getTotalPages()) {
-                Loader<ReferralsHistoryWrapper> loader =
-                        getLoaderManager().restartLoader(REFERRALS_HISTORY_LOADER_ID, null, referralsHistoryHandler);
-                loader.forceLoad();
-            } else listView.onFinishLoading(false, null);
+                getLoaderManager().restartLoader(REFERRALS_HISTORY_LOADER_ID, null, referralsHistoryHandler);
+            } else hideMoreFooter();
             return;
         }
         switch (id) {
@@ -146,7 +140,9 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
 
         @Override
         public Loader<ReferralsDetailsWrapper> onCreateLoader(int id, Bundle args) {
-            return new ReferralsDetailsLoader(getActivity(), api);
+            ReferralsDetailsLoader loader = new ReferralsDetailsLoader(getActivity(), api);
+            loader.forceLoad();
+            return loader;
         }
 
         @Override
@@ -164,14 +160,16 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
 
         @Override
         public Loader<ReferralsHistoryWrapper> onCreateLoader(int id, Bundle args) {
-            return new ReferralsHistoryLoader(getActivity(), api, currentPage);
+            ReferralsHistoryLoader loader = new ReferralsHistoryLoader(getActivity(), api, currentPage + 1);
+            loader.forceLoad();
+            return loader;
         }
 
         @Override
         public void onLoadFinished(Loader<ReferralsHistoryWrapper> loader, ReferralsHistoryWrapper data) {
             if (((AbstractLoader) loader).isSuccess()) {
                 meta = data.getMeta();
-                if (meta.getTotalCount() == 0) {
+                if (meta.getTotalCount() == 0 || meta.getCurrentPage().equals(meta.getTotalPages())) {
                     hideMoreFooter();
                 }
                 setReferralsHistory(data);
