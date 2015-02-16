@@ -3,6 +3,7 @@ package com.appbonus.android.ui;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -26,6 +27,8 @@ import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.flurry.android.FlurryAgent;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.mobileapptracker.MobileAppTracker;
 
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
@@ -35,6 +38,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private Api api;
+    private MobileAppTracker mobileAppTracker;
 
     @Override
     protected int layout() {
@@ -61,6 +65,23 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout)
         );
+        initMobileAppTracker();
+    }
+
+    private void initMobileAppTracker() {
+        MobileAppTracker.init(getApplicationContext(), getString(R.string.mobile_app_tracking_advertiser_id), getString(R.string.mobile_app_tracking_conversion_key));
+        mobileAppTracker = MobileAppTracker.getInstance();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    AdvertisingIdClient.Info idInfo = AdvertisingIdClient.getAdvertisingIdInfo(getApplicationContext());
+                    mobileAppTracker.setGoogleAdvertisingId(idInfo.getId(), idInfo.isLimitAdTrackingEnabled());
+                } catch (Exception e) {
+                    mobileAppTracker.setAndroidId(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                }
+            }
+        }).start();
     }
 
     private void openDefaultFragment() {
@@ -166,5 +187,12 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     protected void onStop() {
         super.onStop();
         FlurryAgent.onEndSession(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mobileAppTracker.setReferralSources(this);
+        mobileAppTracker.measureSession();
     }
 }

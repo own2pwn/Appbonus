@@ -4,6 +4,9 @@
 
     <string name="flurry_app_key">9ZWYC87ZBY24B9SJT4KY</string>
 
+    <string name="mobile_app_tracking_advertiser_id">15520</string>
+    <string name="mobile_app_tracking_conversion_key">f7736f1cdc49b3723ca359bf12f228de</string>
+
     <string name="vk_id">4739637</string>
     <string name="vk_secret">BDMI2dCGJltlLmOYTBMD</string>
     <string name="referrer_app_link">http://appbonus.ru/?referrer_id=%s</string>
