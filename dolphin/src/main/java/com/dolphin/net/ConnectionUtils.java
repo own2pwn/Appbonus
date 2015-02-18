@@ -33,7 +33,7 @@ public class ConnectionUtils {
         try {
             sServerUrl = new URL(url);
             if (HTTPS_PROTOCOL.equals(sServerUrl.getProtocol()))
-                configureHttpsUrlConnection();
+                ConnectionUtilsInsecure.configureHttpsUrlConnection();
         }
         catch (MalformedURLException ignored) {
         }

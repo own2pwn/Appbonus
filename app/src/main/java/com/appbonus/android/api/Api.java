@@ -26,7 +26,7 @@ import com.appbonus.android.model.api.UserWrapper;
 import java.io.Serializable;
 
 public interface Api extends Serializable {
-    String HOST_URI = "http://staging.appbonus.ru/";
+    String HOST_URI = "https://staging.appbonus.ru/";
     String API_SUFX = "api";
     String API_VERSION = "v1";
 
