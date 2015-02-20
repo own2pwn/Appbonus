@@ -51,7 +51,7 @@ public abstract class CommonApi {
 
         public void logTime(String tag) {
             long time = end - start;
-            tag = String.format(LOG_TAG, tag, DateFormat.format("dd/MM/yyyy HH:mm:ss", new Date()));
+            tag = String.format(LOG_TAG, tag, DateFormat.format("dd/MM/yyyy HH:mm:ssZ", new Date()));
             String duration = String.valueOf(time / (NANO_PER_MILLS)) + MILLS;
             Log.i(tag, duration);
             report(tag, duration);
