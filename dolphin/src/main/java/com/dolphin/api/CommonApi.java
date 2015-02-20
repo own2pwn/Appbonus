@@ -1,6 +1,7 @@
 package com.dolphin.api;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.dolphin.json.JsonHandler;
@@ -16,13 +17,14 @@ import org.json.JSONObject;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class CommonApi {
     private static final int NANO_PER_MILLS = 1000 * 1000;
     private static final String MILLS = "ms.";
-    private static final String LOG_TAG = "Log path - %s";
+    private static final String LOG_TAG = "Log path - %s; Date - %s";
 
     protected Context context;
 
@@ -49,7 +51,7 @@ public abstract class CommonApi {
 
         public void logTime(String tag) {
             long time = end - start;
-            tag = String.format(LOG_TAG, tag);
+            tag = String.format(LOG_TAG, tag, DateFormat.format("dd/MM/yyyy HH:mm:ss", new Date()));
             String duration = String.valueOf(time / (NANO_PER_MILLS)) + MILLS;
             Log.i(tag, duration);
             report(tag, duration);

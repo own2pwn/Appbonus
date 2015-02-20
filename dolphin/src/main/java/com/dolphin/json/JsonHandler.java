@@ -4,27 +4,20 @@ package com.dolphin.json;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 public class JsonHandler<T> {
-    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     private Gson gsonParser;
 
@@ -34,7 +27,7 @@ public class JsonHandler<T> {
         mClass = aClass;
         gsonParser = new GsonBuilder()
                 .setFieldNamingPolicy(fieldNamingPolicy())
-                .registerTypeAdapter(Date.class, new DateSerializer())
+                .setDateFormat(getDateFormat())
                 .create();
     }
 
@@ -77,22 +70,11 @@ public class JsonHandler<T> {
         }.getType());
     }
 
-    private static class DateSerializer implements JsonDeserializer<Date> {
-        @Override
-        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            String date = json.getAsString();
-            if (StringUtils.isNoneBlank(date)) {
-                try {
-                    return new SimpleDateFormat(DATE_FORMAT).parse(date);
-                } catch (ParseException e) {
-                    return null;
-                }
-            }
-            return null;
-        }
-    }
-
     protected FieldNamingPolicy fieldNamingPolicy() {
         return FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
+    }
+
+    protected String getDateFormat() {
+        return DEFAULT_DATE_FORMAT;
     }
 }
