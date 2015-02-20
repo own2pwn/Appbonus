@@ -212,4 +212,12 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         mobileAppTracker.setReferralSources(this);
         mobileAppTracker.measureSession();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
+            mNavigationDrawerFragment.toggle();
+        } else
+            super.onBackPressed();
+    }
 }
