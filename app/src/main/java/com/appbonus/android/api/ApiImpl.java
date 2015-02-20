@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.appbonus.android.R;
 import com.appbonus.android.api.model.ChangePasswordRequest;
+import com.appbonus.android.api.model.ConfirmPhoneRequest;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.OfferRequest;
@@ -106,8 +107,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public DataWrapper confirmPhone(SimpleRequest request) throws Throwable {
-        return doPost(request, SimpleRequest.class, DataWrapper.class, SUFX_MY, SUFX_CONFIRM_PHONE);
+    public DataWrapper confirmPhone(ConfirmPhoneRequest request) throws Throwable {
+        return doPost(request, ConfirmPhoneRequest.class, DataWrapper.class, SUFX_MY, SUFX_CONFIRM_PHONE);
     }
 
     @Override
@@ -143,6 +144,11 @@ public class ApiImpl extends CommonApi implements Api {
     @Override
     public ReferralsDetailsWrapper readReferralsDetails(SimpleRequest request) throws Throwable {
         return doGet(request, SimpleRequest.class, ReferralsDetailsWrapper.class, SUFX_MY, SUFX_REFERRALS_DETAILS);
+    }
+
+    @Override
+    public DataWrapper requestConfirmation(SimpleRequest request) throws Throwable {
+        return doPost(request, SimpleRequest.class, DataWrapper.class, SUFX_MY, SUFX_REQUEST_CONFIRMATION);
     }
 
     protected void preparation(HttpMethod httpMethod) {

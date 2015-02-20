@@ -31,7 +31,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:id="@id/action_meet_friends">
 
         <include layout="@layout/meet_friends_view" />
@@ -43,8 +44,11 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@id/tip_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/offers_caption" />
+
+    <include layout="@layout/no_offers_view" android:visibility="gone" android:id="@id/no_offers_view"/>
 </LinearLayout>

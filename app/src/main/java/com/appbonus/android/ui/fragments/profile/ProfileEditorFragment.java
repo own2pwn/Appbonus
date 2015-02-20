@@ -17,7 +17,7 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.ChangePasswordRequest;
-import com.appbonus.android.api.model.SimpleRequest;
+import com.appbonus.android.api.model.ConfirmPhoneRequest;
 import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
@@ -236,7 +236,8 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.confirmPhone(new SimpleRequest(SharedPreferencesStorage.getToken(context)));
+                //todo
+                return api.confirmPhone(new ConfirmPhoneRequest(SharedPreferencesStorage.getToken(context), ""));
             }
 
             @Override

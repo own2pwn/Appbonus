@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/login_caption"
             android:inputType="textEmailAddress"
-            android:layout="@layout/login_float_label"/>
+            android:layout="@layout/default_float_label_white_hint"/>
 
         <com.appbonus.android.component.FloatLabel
             android:id="@id/phone"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/phone_caption"
             android:inputType="phone"
-            android:layout="@layout/login_float_label"/>
+            android:layout="@layout/default_float_label_white_hint"/>
 
         <com.appbonus.android.component.FloatLabel
             android:id="@id/password"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/password_caption"
             android:inputType="textPassword"
-            android:layout="@layout/login_float_label"/>
+            android:layout="@layout/default_float_label_white_hint"/>
 
         <Button
             style="@style/login_button"

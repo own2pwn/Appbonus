@@ -1,6 +1,7 @@
 package com.appbonus.android.api;
 
 import com.appbonus.android.api.model.ChangePasswordRequest;
+import com.appbonus.android.api.model.ConfirmPhoneRequest;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.OfferRequest;
@@ -40,6 +41,7 @@ public interface Api extends Serializable {
     String SUFX_MY = "my";
     String SUFX_BALANCE = "balance";
     String SUFX_CONFIRM_PHONE = "confirm_phone";
+    String SUFX_REQUEST_CONFIRMATION = "request_confirmation";
     String SUFX_HISTORY = "history";
     String SUFX_REFERRALS_HISTORY = "referrals_history";
     String SUFX_REFERRALS_DETAILS = "referrals_details";
@@ -236,17 +238,21 @@ public interface Api extends Serializable {
     DataWrapper makeWithdrawal(WithdrawalRequest request) throws Throwable;
 
     /*
-     *  PATCH /api/v1/my/confirm_phone
-        PARAMS -
+     *
+     *  my/confirm_phone
+        PATCH /api/v1/my/confirm_phone
+        PARAMS auth_token: "xxxxxxxxxxxxxxxxxxxx", {user: {
+          phone_code: '1234'
+        }}
         AUTH required
         ROLE any
         RESPONSE
           {
-            data: "ok|fail",
-            info: errors if fails
+            data: "ok", //if ok
+            errors: errors //if fails
           }
      */
-    DataWrapper confirmPhone(SimpleRequest request) throws Throwable;
+    DataWrapper confirmPhone(ConfirmPhoneRequest request) throws Throwable;
 
     /*
      *  PATCH /api/v1/my
@@ -388,4 +394,20 @@ public interface Api extends Serializable {
           }
      */
     ReferralsDetailsWrapper readReferralsDetails(SimpleRequest request) throws Throwable;
+
+    /*
+        my/request_confirmation
+        POST /api/v1/my/request_confirmation
+        PARAMS auth_token: "xxxxxxxxxxxxxxxxxxxx"
+        AUTH required
+        ROLE any
+        RESPONSE
+          {
+            data: "sms sent message", //if ok
+            errors: errors //if fails
+          }
+     */
+    DataWrapper requestConfirmation(SimpleRequest request) throws Throwable;
+
+
 }

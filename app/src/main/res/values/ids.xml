@@ -67,4 +67,6 @@
     <item name="action_settings" type="id" />
     <item name="loading_text" type="id" />
     <item name="root_view" type="id" />
+    <item name="tip_view" type="id" />
+    <item name="no_offers_view" type="id" />
 </resources>

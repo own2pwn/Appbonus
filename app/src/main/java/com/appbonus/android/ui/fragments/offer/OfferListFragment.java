@@ -47,6 +47,9 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
     protected TextView inputProfileCost;
     protected TextView inputProfileText;
 
+    protected View tipView;
+    protected View noOffersView;
+
     protected OfferAdapter adapter;
     protected Meta meta;
 
@@ -93,6 +96,9 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
         inputProfileCost = (TextView) inputProfile.findViewById(R.id.cost);
         inputProfileText = (TextView) inputProfile.findViewById(android.R.id.text1);
         meetFriends = header.findViewById(R.id.action_meet_friends);
+
+        tipView = header.findViewById(R.id.tip_view);
+        noOffersView = header.findViewById(R.id.no_offers_view);
 
         changeInputProfileView(getActivity());
         balance.setText(RoubleHelper.convert(SharedPreferencesStorage.getBalance(getActivity())));
@@ -141,7 +147,11 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
     }
 
     private void setListSettings() {
-        if (meta.getTotalPages() == 1) {
+        if (meta.getTotalCount() == 0) {
+            tipView.setVisibility(View.GONE);
+            noOffersView.setVisibility(View.VISIBLE);
+        }
+        if (meta.getTotalPages() <= 1) {
             listView.setHasMoreItems(false);
         } else {
             listView.setHasMoreItems(true);
