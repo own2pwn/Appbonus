@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/confirm_phone"
+                android:text="@string/confirm_phone_short"
                 android:gravity="center"
                 android:textColor="@color/main_color"
                 android:id="@id/confirm_phone_button"
