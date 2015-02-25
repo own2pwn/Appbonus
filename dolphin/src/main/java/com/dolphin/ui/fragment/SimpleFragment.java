@@ -124,10 +124,6 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
         return getActivity().getComponentName();
     }
 
-    public void putArguments(Bundle bundle) {
-        setArguments(bundle);
-    }
-
     public Bundle takeArguments() {
         return getArguments();
     }

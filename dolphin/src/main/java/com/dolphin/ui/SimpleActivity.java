@@ -101,7 +101,8 @@ public abstract class SimpleActivity extends ActionBarActivity {
             fragment = Fragment.instantiate(this, fragmentTag);
             fragment.setTargetFragment(targetFragment, -1);
         }
-        if (args != null && fragment instanceof SimpleFragment) ((SimpleFragment) fragment).putArguments(args);
+        if (args != null)
+            fragment.setArguments(args);
         if (fragment instanceof SimpleFragment) {
             ((SimpleFragment) fragment).setToolbar(getToolbar());
         }
