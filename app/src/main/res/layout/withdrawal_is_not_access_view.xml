@@ -25,6 +25,8 @@
             android:layout_height="wrap_content"
             android:text="@string/confirm_phone"
             android:gravity="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:textColor="@color/main_color"
             android:layout_marginBottom="5dp"/>
         <TextView

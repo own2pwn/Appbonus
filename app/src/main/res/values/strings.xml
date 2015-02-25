@@ -45,7 +45,7 @@
     <string name="password_changing">Изменение пароля</string>
     <string name="main_info">Основная информация</string>
     <string name="phone_was_not_confirmed">Не подтвержден</string>
-    <string name="confirm_phone"><![CDATA[Подтвердить номер]]></string>
+    <string name="confirm_phone"><![CDATA[Подтвердить номер телефона]]></string>
 
     <string name="russia">Россия</string>
     <string name="belarus">Беларусь</string>
@@ -98,7 +98,7 @@
     <string name="empty_amount">Введите сумму</string>
     <string name="qiwi_caption">QIWI</string>
     <string name="mobile_caption">Мобильный</string>
-    <string name="withdrawal_is_not_access_info">Пока телефон не подтвержден, вы\nне сможете выводить деньги</string>
+    <string name="withdrawal_is_not_access_info">Чтобы вывести деньги, необходимо\nподтвердить номер телефона</string>
     <string name="meet_friends">Пригласить друзей</string>
     <string name="get_percent">И заработать больше</string>
     <string name="first_level">1 уровень</string>
