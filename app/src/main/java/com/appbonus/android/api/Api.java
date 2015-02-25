@@ -57,7 +57,7 @@ public interface Api extends Serializable {
      *  POST /api/v1/signup
         AUTH no
         ROLE no-user
-        PARAMS user: {email: "email@email.com",password: "password", country: "russia|ukraine|belarus", phone: "xxxxxxxxx", device_id: "ID"}
+        PARAMS user: {email: "email@email.com",password: "password", country: "russia|ukraine|belarus", phone: "xxxxxxxxx", device_id: "ID", promo_code: "code"}
         RESPONSE
           {
             "user": user.as_json, "auth_token": "xxxxxxxxxxxxxxxxxxxx"

@@ -49,10 +49,10 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/card"
             android:orientation="vertical"
-            android:paddingRight="40dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="40dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:paddingRight="40dp"
+            android:paddingTop="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/percent_seven"/>
+                    android:src="@drawable/percent_seven" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -77,13 +77,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/percent_five"/>
+                    android:src="@drawable/percent_five" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -98,13 +98,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/percent_three"/>
+                    android:src="@drawable/percent_three" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -124,6 +124,7 @@
         android:layout_weight="1" />
 
     <LinearLayout
+        android:id="@id/meet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -131,8 +132,35 @@
         android:paddingBottom="20dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="20dp"
-        android:id="@id/meet">
+        android:paddingTop="20dp">
+
+        <RelativeLayout
+            android:id="@id/promo_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@id/promo_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textSize="16sp"
+                android:text="@string/promo"
+                android:layout_marginRight="5dp"/>
+
+            <TextView
+                android:id="@id/promo"
+                android:padding="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@color/main_color"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/promo_label" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -144,21 +172,21 @@
                 android:id="@id/meet_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:contentDescription="@string/share"
-                android:src="@drawable/add_friends_icon"
-                android:layout_marginRight="5dp"/>
+                android:src="@drawable/add_friends_icon" />
 
             <TextView
                 android:id="@id/meet_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/meet_icon"
                 android:text="@string/to_meet"
                 android:textColor="@color/main_color"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="5dp"/>
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <TextView

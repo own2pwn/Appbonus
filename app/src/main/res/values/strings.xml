@@ -114,7 +114,7 @@
     <string name="friend_friend_profit_ref">от доходов\nдрузей друзей</string>
     <string name="friend_friend_friend_profit_ref">от доходов друзей\n3-го уровня</string>
     <string name="to_meet">Пригласить</string>
-    <string name="friends_info">Поделитесь с друзьями\nссылкой для регистрации</string>
+    <string name="friends_info">Поделитесь промо-кодом с друзьями\nи они получат бонус при регистрации</string>
     <string name="meeting_subject">meeting_subject</string>
     <string name="share_chooser_text">Выберите приложение, чтобы поделиться</string>
     <string name="human_count">%s чел.</string>
@@ -129,5 +129,7 @@
     <string name="password_was_changed">Пароль успешно изменен</string>
     <string name="input_phone">Введите номер телефона</string>
     <string name="network_problem">Кажется, нет интернета :(\nНажми на экран, чтобы попробовать ещё раз!</string>
+    <string name="promo_caption">Промо-код (если есть)</string>
+    <string name="promo">Промо-код:</string>
 
 </resources>

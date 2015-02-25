@@ -3,13 +3,14 @@ package com.appbonus.android.api.model;
 public class RegisterRequest {
     protected User user;
 
-    public RegisterRequest(String email, String password, String country, String phone, String deviceId) {
+    public RegisterRequest(String email, String password, String country, String phone, String deviceId, String promoCode) {
         user = new User();
         user.setEmail(email);
         user.setPassword(password);
         user.setCountry(country);
         user.setPhone(phone);
         user.setDeviceId(deviceId);
+        user.setPromoCode(promoCode);
     }
 
     static class User {
@@ -18,45 +19,30 @@ public class RegisterRequest {
         protected String country;
         protected String phone;
         protected String deviceId;
-
-        public String getEmail() {
-            return email;
-        }
+        protected String promoCode;
 
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public String getPassword() {
-            return password;
         }
 
         public void setPassword(String password) {
             this.password = password;
         }
 
-        public String getCountry() {
-            return country;
-        }
-
         public void setCountry(String country) {
             this.country = country;
-        }
-
-        public String getPhone() {
-            return phone;
         }
 
         public void setPhone(String phone) {
             this.phone = phone;
         }
 
-        public String getDeviceId() {
-            return deviceId;
-        }
-
         public void setDeviceId(String deviceId) {
             this.deviceId = deviceId;
+        }
+
+        public void setPromoCode(String promoCode) {
+            this.promoCode = promoCode;
         }
     }
 }

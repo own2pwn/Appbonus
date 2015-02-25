@@ -69,4 +69,7 @@
     <item name="root_view" type="id" />
     <item name="tip_view" type="id" />
     <item name="no_offers_view" type="id" />
+    <item name="promo" type="id" />
+    <item name="promo_label" type="id" />
+    <item name="promo_view" type="id" />
 </resources>

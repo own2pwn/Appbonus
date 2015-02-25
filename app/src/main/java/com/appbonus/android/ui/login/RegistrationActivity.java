@@ -31,6 +31,7 @@ public class RegistrationActivity extends FragmentActivity {
     protected FloatLabel mail;
     protected FloatLabel phone;
     protected FloatLabel password;
+    protected FloatLabel promo;
 
     protected Form form;
     protected Form vkForm;
@@ -71,6 +72,7 @@ public class RegistrationActivity extends FragmentActivity {
         mail = (FloatLabel) findViewById(R.id.login);
         phone = (FloatLabel) findViewById(R.id.phone);
         password = (FloatLabel) findViewById(R.id.password);
+        promo = (FloatLabel) findViewById(R.id.promo);
     }
 
     public void registerHandler(View view) {
@@ -78,9 +80,10 @@ public class RegistrationActivity extends FragmentActivity {
         if (form.validate()) {
             String mailStr = mail.getText();
             String phoneStr = phone.getText();
+            String promoStr = promo.getText();
             final String passwordStr = password.getText();
             final RegisterRequest request = new RegisterRequest(mailStr, passwordStr, getCountry(),
-                    phoneStr, DeviceUtils.getUniqueCode(this));
+                    phoneStr, DeviceUtils.getUniqueCode(this), promoStr);
 
             new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
 

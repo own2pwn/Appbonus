@@ -36,6 +36,13 @@
             android:inputType="textPassword"
             android:layout="@layout/default_float_label_white_hint"/>
 
+        <com.appbonus.android.component.FloatLabel
+            android:id="@id/promo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/promo_caption"
+            android:layout="@layout/default_float_label_white_hint"/>
+
         <Button
             style="@style/login_button"
             android:onClick="registerHandler"

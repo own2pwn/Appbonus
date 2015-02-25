@@ -34,6 +34,7 @@ public class User implements Serializable {
     protected boolean phoneConfirmed;
     protected Date phoneConfirmedAt;
     protected List<AuthService> authServices;
+    protected String promoCode;
 
     public long getId() {
         return id;
@@ -217,5 +218,9 @@ public class User implements Serializable {
 
     public void setAuthServices(List<AuthService> authServices) {
         this.authServices = authServices;
+    }
+
+    public String getPromoCode() {
+        return promoCode;
     }
 }

@@ -3,14 +3,17 @@ package com.appbonus.android.ui.fragments.friends;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.appbonus.android.R;
+import com.appbonus.android.model.User;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.dolphin.ui.fragment.SimpleFragment;
@@ -18,6 +21,16 @@ import com.dolphin.ui.fragment.SimpleFragment;
 public class MeetFriendsFragment extends SimpleFragment implements View.OnClickListener {
     protected View referralsInfo;
     protected View meet;
+    protected View promoView;
+    protected TextView promo;
+
+    protected User user;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        user = SharedPreferencesStorage.getUser(getActivity());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,6 +51,11 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
         referralsInfo.setOnClickListener(this);
         meet = view.findViewById(R.id.meet);
         meet.setOnClickListener(this);
+        promoView = view.findViewById(R.id.promo_view);
+        if (!TextUtils.isEmpty(user.getPromoCode())) {
+            promo = (TextView) promoView.findViewById(R.id.promo);
+            promo.setText(user.getPromoCode());
+        } else promoView.setVisibility(View.GONE);
     }
 
     @Override
