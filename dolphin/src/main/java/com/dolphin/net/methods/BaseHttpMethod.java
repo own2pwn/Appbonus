@@ -7,6 +7,7 @@ import android.util.LruCache;
 
 import com.dolphin.net.ConnectionUtilsInsecure;
 import com.dolphin.net.NetUtils;
+import com.dolphin.net.exception.NetworkException;
 
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
@@ -60,7 +61,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
 
     public String perform(Context context) throws Throwable {
         if (!NetUtils.isNetworkAvailable(context))
-            throw new Throwable(NET_PROBLEM_ERROR_CODE);
+            throw new NetworkException();
 
         configureConnection(assembleUrl(apiPaths));
         connect();
@@ -177,7 +178,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
     private String throwError() throws Throwable {
         String detailMessage = readError(connection);
         if (errorHandler != null) {
-            throw new Throwable(errorHandler.handle(detailMessage));
+            throw errorHandler.handle(detailMessage);
         }
         throw new Throwable(detailMessage);
     }

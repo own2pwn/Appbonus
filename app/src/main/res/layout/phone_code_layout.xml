@@ -31,7 +31,7 @@
         android:textAllCaps="true" />
 
     <LinearLayout
-        android:id="@string/tech_support"
+        android:id="@id/tech_support"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">

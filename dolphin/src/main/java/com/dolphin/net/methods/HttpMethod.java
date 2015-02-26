@@ -3,6 +3,8 @@ package com.dolphin.net.methods;
 
 import android.content.Context;
 
+import com.dolphin.net.exception.FormException;
+
 
 public interface HttpMethod {
     String NET_PROBLEM_ERROR_CODE = "NET_PROBLEM_ERROR_CODE";
@@ -12,7 +14,7 @@ public interface HttpMethod {
     void addHeader(String key, String value);
 
     static interface ErrorHandler {
-        String handle(String error);
+        FormException handle(String error);
     }
 
     public void setErrorHandler(ErrorHandler errorHandler);

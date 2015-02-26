@@ -27,6 +27,7 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 import com.dolphin.api.CommonApi;
+import com.dolphin.net.exception.FormException;
 import com.dolphin.net.methods.HttpMethod;
 import com.dynamixsoftware.ErrorAgent;
 
@@ -191,11 +192,12 @@ public class ApiImpl extends CommonApi implements Api {
         }
 
         @Override
-        public String handle(String error) {
+        public FormException handle(String error) {
+            FormException exception = new FormException();
             try {
                 JSONObject object = new JSONObject(error);
                 if (object.has(ERROR_PARAMETER)) {
-                    return object.getString(ERROR_PARAMETER);
+                    exception.message = object.getString(ERROR_PARAMETER);
                 } else if (object.has(ERRORS_PARAMETER)) {
                     JSONObject errors = object.getJSONObject(ERRORS_PARAMETER);
                     Iterator<String> keys = errors.keys();
@@ -203,18 +205,19 @@ public class ApiImpl extends CommonApi implements Api {
                         String next = keys.next();
                         Object o = errors.get(next);
                         if (o instanceof JSONArray) {
-                            return WordUtils.capitalize(next) + " " + ((JSONArray) o).get(0);
-                        } else return WordUtils.capitalize(errors.optString(next));
+                            exception.form = WordUtils.capitalize(next);
+                            exception.message = ((JSONArray) o).get(0).toString();
+                        } else exception.form = WordUtils.capitalize(errors.optString(next));
                     }
                 } else if (object.has(SUCCESS_PARAMETER)) {
                     boolean aBoolean = object.getBoolean(SUCCESS_PARAMETER);
                     if (!aBoolean) {
-                        return api.getString(R.string.failed);
-                    } else return api.getString(R.string.success);
+                        exception.message =  api.getString(R.string.failed);
+                    } else exception.message =  api.getString(R.string.success);
                 }
             } catch (JSONException ignored) {
             }
-            return error;
+            return exception;
         }
     }
 }

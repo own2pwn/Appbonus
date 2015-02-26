@@ -57,4 +57,9 @@ public class FloatLabel extends com.iangclifton.android.floatlabel.FloatLabel {
         EditText editText = getEditText();
         editText.setText("");
     }
+
+    public void setError(String error) {
+        EditText editText = getEditText();
+        editText.setError(error);
+    }
 }

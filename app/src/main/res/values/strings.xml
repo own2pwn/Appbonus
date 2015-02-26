@@ -12,6 +12,7 @@
     <string name="referrer_app_link">http://appbonus.ru/?referrer_id=%s</string>
     <string name="referrer_link">http://appbonus.ru/?referrer_id=%s</string>
     <string name="my_web_cab_link">http://appbonus.ru/my</string>
+    <string name="app_bonus_mail">mail@appbonus.ru</string>
 
     <string name="name_db">app_bonus.db</string>
     <string name="models">
@@ -83,7 +84,7 @@
     <string name="referrer_link_was_copied">Ссылка скопирована</string>
     <string name="edit">Изменить</string>
     <string name="app_bonus_user_question">Вопрос по AppBonus</string>
-    <string name="app_bonus_mail">mail@appbonus.ru</string>
+
     <string name="current_balance">Текущий баланс</string>
     <string name="withdrawal_money">Вывести деньги</string>
     <string name="auto_withdrawal">Автовыплаты</string>
@@ -137,5 +138,7 @@
     <string name="confirm_phone_info_1">Если в течение 15 минут код не пришел,</string>
     <string name="confirm_phone_info_2">обратитесь в службу поддержки</string>
     <string name="tech_support" />
+    <string name="error">Ошибка</string>
+    <string name="confirm_title">Ваш номер</string>
 
 </resources>

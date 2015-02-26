@@ -16,12 +16,15 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
+import com.dolphin.net.exception.FormException;
 import com.dolphin.utils.DeviceUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
 import com.throrinstudio.android.common.libs.validator.validator.PhoneValidator;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class RegistrationActivity extends FragmentActivity {
     public static final int LOGIN_VK_CODE = 1;
@@ -122,9 +125,22 @@ public class RegistrationActivity extends FragmentActivity {
      * 422 - такое мыло уже используется или мыло введено некорректно или мыло вообще не введено
      */
     private void showError(Throwable throwable) {
+        if (throwable instanceof FormException) {
+            showFormException(((FormException) throwable));
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(throwable.getMessage());
         builder.show();
+
+    }
+
+    private void showFormException(FormException e) {
+        if (StringUtils.equalsIgnoreCase(e.form, "email")) {
+            mail.setError(e.message);
+        } else if (StringUtils.equalsIgnoreCase(e.form, "phone")) {
+            phone.setError(e.message);
+        }
     }
 
     public void registerVkHandler(View view) {

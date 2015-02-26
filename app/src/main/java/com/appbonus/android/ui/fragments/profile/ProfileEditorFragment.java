@@ -249,6 +249,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
                 super.onPostExecute(dataWrapper);
                 if (isSuccess()) {
                     Toast.makeText(context, dataWrapper.toString(), Toast.LENGTH_LONG).show();
+                    placeProperFragment(ConfirmPhoneFragment.class.getName());
                 }
             }
         }.execute();

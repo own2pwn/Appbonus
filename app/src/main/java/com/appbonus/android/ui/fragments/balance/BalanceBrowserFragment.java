@@ -23,10 +23,9 @@ import com.appbonus.android.model.History;
 import com.appbonus.android.model.Meta;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.autowithdrawal.AutowithdrawalFragment;
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
-import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
+import com.appbonus.android.ui.fragments.profile.ConfirmPhoneFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.loader.AbstractLoader;
 import com.dolphin.ui.fragment.root.RootListFragment;
@@ -124,7 +123,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
 
     private void setWithdrawalVisibility() {
-        boolean phoneConfirmed = SharedPreferencesStorage.isPhoneConfirmed(getActivity());
+        boolean phoneConfirmed = /*SharedPreferencesStorage.isPhoneConfirmed(getActivity())*/true;
         withdrawalMoney.setVisibility(phoneConfirmed ? View.VISIBLE : View.GONE);
         withdrawalIsNotAccessView.setVisibility(phoneConfirmed ? View.GONE : View.VISIBLE);
     }
@@ -181,7 +180,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
                 placeProperFragment(AutowithdrawalFragment.class.getName());
                 break;
             case R.id.withdrawal_is_not_access_view:
-                placeProperFragment(ProfileBrowserFragment.class.getName());
+                placeProperFragment(ConfirmPhoneFragment.class.getName());
                 break;
         }
     }

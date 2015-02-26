@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -80,7 +81,9 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     private void setData(User user) {
         mail.setText(user.getEmail());
         phone.setText(user.getPhone());
-        country.setText(getString(getResources().getIdentifier(user.getCountry(), "string", getActivity().getPackageName())));
+        if (!TextUtils.isEmpty(user.getCountry())) {
+            country.setText(getString(getResources().getIdentifier(user.getCountry(), "string", getActivity().getPackageName())));
+        }
 
         if (!user.isPhoneConfirmed()) {
             confirmPhoneLabel.setVisibility(View.VISIBLE);

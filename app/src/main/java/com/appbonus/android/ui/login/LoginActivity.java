@@ -109,7 +109,8 @@ public class LoginActivity extends FragmentActivity {
 
     private void showError(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(message);
+        builder.setTitle(R.string.error);
+        builder.setMessage(message);
         builder.show();
     }
 
