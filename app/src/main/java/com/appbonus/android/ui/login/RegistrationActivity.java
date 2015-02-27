@@ -3,6 +3,7 @@ package com.appbonus.android.ui.login;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -100,7 +101,7 @@ public class RegistrationActivity extends FragmentActivity {
                     super.onPostExecute(loginWrapper);
                     if (isSuccess()) {
                         savePassword(passwordStr);
-                        setResult(RESULT_OK, new Intent().putExtra("login_info", loginWrapper));
+                        setResult(RESULT_OK, new Intent().putExtra("login_info", ((Parcelable) loginWrapper)));
                         finish();
                     } else showError(throwable);
                 }
@@ -169,7 +170,7 @@ public class RegistrationActivity extends FragmentActivity {
                         protected void onPostExecute(LoginWrapper loginWrapper) {
                             super.onPostExecute(loginWrapper);
                             if (isSuccess()) {
-                                setResult(RESULT_OK, new Intent().putExtra("login_info", loginWrapper));
+                                setResult(RESULT_OK, new Intent().putExtra("login_info", ((Parcelable) loginWrapper)));
                                 finish();
                             } else showError(throwable);
                         }

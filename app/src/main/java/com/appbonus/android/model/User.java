@@ -1,10 +1,14 @@
 package com.appbonus.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class User implements Serializable {
+public class User implements Serializable, Parcelable {
     public static final String COUNTRY_RUSSIA = "russia";
     public static final String COUNTRY_BELARUS = "belarus";
     public static final String COUNTRY_UKRAINE = "ukraine";
@@ -223,4 +227,81 @@ public class User implements Serializable {
     public String getPromoCode() {
         return promoCode;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.email);
+        dest.writeLong(createAt != null ? createAt.getTime() : -1);
+        dest.writeLong(updatedAt != null ? updatedAt.getTime() : -1);
+        dest.writeString(this.phone);
+        dest.writeString(this.country);
+        dest.writeString(this.role);
+        dest.writeValue(this.balance);
+        dest.writeByte(iphone ? (byte) 1 : (byte) 0);
+        dest.writeByte(ipad ? (byte) 1 : (byte) 0);
+        dest.writeByte(android ? (byte) 1 : (byte) 0);
+        dest.writeValue(this.referrerId);
+        dest.writeString(this.ymToken);
+        dest.writeString(this.tester);
+        dest.writeString(this.ftxSearch);
+        dest.writeByte(notify ? (byte) 1 : (byte) 0);
+        dest.writeString(this.refRate);
+        dest.writeString(this.status);
+        dest.writeString(this.postbackLink);
+        dest.writeByte(notifySound ? (byte) 1 : (byte) 0);
+        dest.writeByte(phoneConfirmed ? (byte) 1 : (byte) 0);
+        dest.writeLong(phoneConfirmedAt != null ? phoneConfirmedAt.getTime() : -1);
+        dest.writeList(this.authServices);
+        dest.writeString(this.promoCode);
+    }
+
+    public User() {
+    }
+
+    private User(Parcel in) {
+        this.id = in.readLong();
+        this.email = in.readString();
+        long tmpCreateAt = in.readLong();
+        this.createAt = tmpCreateAt == -1 ? null : new Date(tmpCreateAt);
+        long tmpUpdatedAt = in.readLong();
+        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
+        this.phone = in.readString();
+        this.country = in.readString();
+        this.role = in.readString();
+        this.balance = (Double) in.readValue(Double.class.getClassLoader());
+        this.iphone = in.readByte() != 0;
+        this.ipad = in.readByte() != 0;
+        this.android = in.readByte() != 0;
+        this.referrerId = (Long) in.readValue(Long.class.getClassLoader());
+        this.ymToken = in.readString();
+        this.tester = in.readString();
+        this.ftxSearch = in.readString();
+        this.notify = in.readByte() != 0;
+        this.refRate = in.readString();
+        this.status = in.readString();
+        this.postbackLink = in.readString();
+        this.notifySound = in.readByte() != 0;
+        this.phoneConfirmed = in.readByte() != 0;
+        long tmpPhoneConfirmedAt = in.readLong();
+        this.phoneConfirmedAt = tmpPhoneConfirmedAt == -1 ? null : new Date(tmpPhoneConfirmedAt);
+        this.authServices = new ArrayList<>();
+        in.readList(this.authServices, List.class.getClassLoader());
+        this.promoCode = in.readString();
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

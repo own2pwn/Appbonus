@@ -99,7 +99,7 @@ public class FaqListFragment extends SimpleListFragment<ListView, SimpleAdapter>
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Question question = questions.get(position);
         Bundle args = new Bundle();
-        args.putSerializable(QUESTION_PARAMETER, question);
+        args.putLong(QUESTION_PARAMETER, question.id);
         placeProperFragment(FaqAnswerFragment.class.getName(), args);
     }
 

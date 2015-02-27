@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,8 +71,8 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Bundle bundle = takeArguments();
-        user = (User) bundle.getSerializable("user");
+        Bundle bundle = getArguments();
+        user = bundle.getParcelable("user");
         setData(user);
         setDrawerIndicatorEnabled(false);
     }
@@ -197,7 +198,9 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     private void setData(User user) {
         mail.setText(user.getEmail());
         phone.setText(user.getPhone());
-        country.setText(getString(getResources().getIdentifier(user.getCountry(), "string", getActivity().getPackageName())));
+        if (!TextUtils.isEmpty(user.getCountry())) {
+            country.setText(getString(getResources().getIdentifier(user.getCountry(), "string", getActivity().getPackageName())));
+        }
 
         setPhoneSetting(user);
     }

@@ -3,6 +3,7 @@ package com.appbonus.android.ui;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -31,8 +32,6 @@ import com.flurry.android.FlurryAgent;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.mobileapptracker.MobileAppTracker;
 
-import java.io.Serializable;
-
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
@@ -60,7 +59,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                Serializable object = extras.getSerializable("notification");
+                Parcelable object = extras.getParcelable("notification");
                 if (object instanceof Notification) {
                     openNotificationFragment(((Notification) object));
                 } else openDefaultFragment();

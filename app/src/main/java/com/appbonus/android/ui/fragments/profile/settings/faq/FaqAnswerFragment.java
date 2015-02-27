@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.activeandroid.sebbia.query.Select;
 import com.appbonus.android.R;
 import com.appbonus.android.model.Question;
 import com.dolphin.ui.fragment.SimpleFragment;
@@ -26,9 +27,10 @@ public class FaqAnswerFragment extends SimpleFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Bundle bundle = takeArguments();
+        Bundle bundle = getArguments();
 
-        Question object = (Question) bundle.getSerializable("question");
+        long questionId = bundle.getLong("question");
+        Question object = new Select().from(Question.class).where(Question.ID + "=?", questionId).executeSingle();
         question.setText(object.getText());
         answer.setText(object.getAnswer());
 

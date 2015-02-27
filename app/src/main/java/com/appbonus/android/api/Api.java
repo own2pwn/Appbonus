@@ -24,9 +24,7 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 
-import java.io.Serializable;
-
-public interface Api extends Serializable {
+public interface Api {
     String HOST_URI = "https://staging.appbonus.ru/";
     String API_SUFX = "api";
     String API_VERSION = "v1";

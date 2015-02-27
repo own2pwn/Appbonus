@@ -77,7 +77,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
 
     private void setPrimaryData() {
         Bundle bundle = getArguments();
-        offer = (Offer) bundle.getSerializable("offer");
+        offer = (Offer) bundle.getParcelable("offer");
 
         ImageLoader.getInstance().displayImage(offer.getIcon(), avatar, new DisplayImageOptions.Builder()
                 .displayer(new RoundedBitmapDisplayer(10))

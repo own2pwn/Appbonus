@@ -124,7 +124,7 @@ public class LoginActivity extends FragmentActivity {
         switch (requestCode) {
             case REGISTRATION_INTENT_CODE:
                 if (resultCode == RESULT_OK) {
-                    LoginWrapper loginObj = (LoginWrapper) data.getSerializableExtra("login_info");
+                    LoginWrapper loginObj = data.getParcelableExtra("login_info");
                     saveLoginInformation(loginObj);
                     startActivity(IntentHelper.openMain(this));
                     finish();

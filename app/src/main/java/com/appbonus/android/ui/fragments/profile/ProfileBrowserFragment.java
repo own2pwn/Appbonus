@@ -146,7 +146,7 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
     private Bundle getUserBundle() {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
+        bundle.putParcelable("user", user);
         return bundle;
     }
 }

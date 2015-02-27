@@ -284,7 +284,7 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
 
         public void onItemClick(Offer offer) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable("offer", offer);
+            bundle.putParcelable("offer", offer);
             placeProperFragment(OfferBrowserFragment.class.getName(), bundle);
         }
 
