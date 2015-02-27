@@ -2,6 +2,7 @@ package com.dolphin.net.methods;
 
 
 import org.apache.http.entity.ContentType;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +20,12 @@ public class MethodPut extends BaseHttpMethod {
     public MethodPut(String hostUri, String json, String... apiPath) {
 
         super(hostUri, json, apiPath);
+        requestMethod = REQUEST_METHOD;
+    }
+
+    public MethodPut(String hostUri, JSONObject json, String... apiPath) {
+
+        super(hostUri, json.toString(), apiPath);
         requestMethod = REQUEST_METHOD;
     }
 

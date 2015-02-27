@@ -10,6 +10,7 @@ import com.dolphin.net.methods.MethodDelete;
 import com.dolphin.net.methods.MethodGet;
 import com.dolphin.net.methods.MethodPost;
 import com.dolphin.net.methods.MethodPostFile;
+import com.dolphin.net.methods.MethodPut;
 import com.dolphin.net.methods.MultipartUploader;
 
 import org.json.JSONObject;
@@ -73,6 +74,17 @@ public abstract class CommonApi {
     protected <T, K> T doGet(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
         String[] array = collectParameters(path);
         HttpMethod method = new MethodGet(host(), toMap(request, requestType), array);
+        preparation(method);
+        ApiLogger logger = new ApiLogger();
+        logger.start();
+        String answer = method.perform(context);
+        logger.end(Arrays.toString(path));
+        return toObject(answer, responseType);
+    }
+
+    protected <T, K> T doPut(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
+        String[] array = collectParameters(path);
+        HttpMethod method = new MethodPut(host(), toJson(request, requestType), array);
         preparation(method);
         ApiLogger logger = new ApiLogger();
         logger.start();
