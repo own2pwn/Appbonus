@@ -9,6 +9,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +19,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.dolphin.R;
 import com.dolphin.ui.SimpleActivity;
 
 import org.apache.commons.lang3.BooleanUtils;
@@ -31,6 +35,31 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
     private Map<String, Boolean> alertDialogsVisibility = new HashMap<>();
 
     protected Toolbar toolbar;
+
+    private Handler uiHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            Object obj = msg.obj;
+            String message = "";
+            if (obj instanceof String) {
+                message = (String) obj;
+            } else if (obj instanceof Integer) {
+                message = getString((Integer) obj);
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(message);
+            builder.setTitle(R.string.exception);
+            builder.setCancelable(true);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //close;
+                }
+            });
+            builder.show();
+            return true;
+        }
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,35 +126,23 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
     }
 
     protected void showToast(String msg) {
-        SimpleActivity simpleActivity = getSimpleActivity();
-        if (simpleActivity != null)
-            simpleActivity.showToast(msg);
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
     protected void showToast(int msg) {
-        SimpleActivity simpleActivity = getSimpleActivity();
-        if (simpleActivity != null)
-            simpleActivity.showToast(msg);
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
     protected void showError(String message) {
-        SimpleActivity simpleActivity = getSimpleActivity();
-        if (simpleActivity != null)
-            simpleActivity.showError(message);
+        uiHandler.obtainMessage(0, message);
     }
 
     protected void showError(int message) {
-        SimpleActivity simpleActivity = getSimpleActivity();
-        if (simpleActivity != null)
-            simpleActivity.showError(message);
+        uiHandler.obtainMessage(0, message);
     }
 
     public ComponentName getComponentName() {
         return getActivity().getComponentName();
-    }
-
-    public Bundle takeArguments() {
-        return getArguments();
     }
 
     public boolean closeCurrentFragment() {

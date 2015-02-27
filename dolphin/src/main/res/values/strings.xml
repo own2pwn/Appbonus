@@ -1,4 +1,4 @@
 <resources>
     <string name="exception">Ошибка</string>
-    <string name="ok">Хорошо</string>
+    <string name="ok">Закрыть</string>
 </resources>

@@ -18,7 +18,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0.0-alpha"
+        versionName "1.0.0-beta"
     }
     buildTypes {
         release {
@@ -53,14 +53,19 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    /*markdown*/
     compile 'com.commonsware.cwac:anddown:0.2.3'
 
+    /*support-libraries*/
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:support-v13:20.0.0'
 
+    /*edittext с подсказкой*/
     compile 'com.iangclifton.android:floatlabel:1.0.1'
+    /*image loader*/
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.8.6'
 
+    /*listview с подзагрузкой*/
     compile 'com.github.nicolasjafelle:paginglistview:1.2'
 
     compile project(':dolphin')
