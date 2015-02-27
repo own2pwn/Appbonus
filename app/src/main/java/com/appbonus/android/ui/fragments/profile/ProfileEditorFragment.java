@@ -32,6 +32,7 @@ import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validate.ConfirmValidate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
+import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
 
 public class ProfileEditorFragment extends SimpleFragment implements View.OnClickListener {
     protected FloatLabel mail;
@@ -106,7 +107,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
     public void changePassword() {
         if (passwordForm.validate()) {
-            String password = newPassword.getText();
+            final String password = newPassword.getText();
             final ChangePasswordRequest request = new ChangePasswordRequest(SharedPreferencesStorage.getToken(getActivity()),
                     SharedPreferencesStorage.getPassword(getActivity()), password);
             new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
@@ -124,6 +125,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
                 protected void onPostExecute(UserWrapper userWrapper) {
                     super.onPostExecute(userWrapper);
                     if (isSuccess()) {
+                        SharedPreferencesStorage.savePassword(context, password);
                         newPassword.clear();
                         confirmPassword.clear();
                         Toast.makeText(context, R.string.password_was_changed, Toast.LENGTH_LONG).show();
@@ -185,9 +187,20 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         confirmPhoneButton.setOnClickListener(this);
 
         passwordForm = new Form();
+
+        NotEmptyValidator newPasswordValidator = new NotEmptyValidator(getActivity(), R.string.input_password);
+        Validate newPasswordValidate = new Validate(newPassword.getEditText());
+        newPasswordValidate.addValidator(newPasswordValidator);
+
+        NotEmptyValidator confirmPasswordValidator = new NotEmptyValidator(getActivity(), R.string.input_password);
+        Validate confirmPasswordValidate = new Validate(confirmPassword.getEditText());
+        confirmPasswordValidate.addValidator(confirmPasswordValidator);
+
         ConfirmValidate confirmValidate = new ConfirmValidate(newPassword.getEditText(),
                 confirmPassword.getEditText(), R.string.password_are_not_confirmed);
         passwordForm.addValidates(confirmValidate);
+        passwordForm.addValidates(newPasswordValidate);
+        passwordForm.addValidates(confirmPasswordValidate);
 
         mailForm = new Form();
         Validate mailValidate = new Validate(mail.getEditText());

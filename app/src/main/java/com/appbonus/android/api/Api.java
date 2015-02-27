@@ -46,6 +46,7 @@ public interface Api {
     String SUFX_REGISTER_DEVICE = "register_device";
     String SUFX_UNREGISTER_DEVICE = "unregister_device";
     String SUFX_WITHDRAWAL = "withdrawal";
+    String SUFX_UPDATE_PASSWORD = "update_password";
 
     String SUFX_OFFERS = "offers";
 
@@ -264,6 +265,24 @@ public interface Api {
      */
     UserWrapper writeProfile(UserRequest request) throws Throwable;
 
+    /*
+    PATCH /api/v1/my/update_password
+    PARAMS auth_token: "xxxxxxxxxxxxxxxxxxxx", user: {
+      current_password: 'old',
+      password: 'new',
+      password_confirmation: 'new'
+    }
+    AUTH required
+    ROLE any
+    RESPONSE
+      {
+        "user": user.as_json
+      }
+      or
+      {
+        errors: ...
+      }
+     */
     UserWrapper changePassword(ChangePasswordRequest request) throws Throwable;
 
     /*

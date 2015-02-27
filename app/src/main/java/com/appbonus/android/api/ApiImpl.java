@@ -104,7 +104,7 @@ public class ApiImpl extends CommonApi implements Api {
 
     @Override
     public UserWrapper changePassword(ChangePasswordRequest request) throws Throwable {
-        return doPost(request, ChangePasswordRequest.class, UserWrapper.class, SUFX_MY);
+        return doPost(request, ChangePasswordRequest.class, UserWrapper.class, SUFX_MY, SUFX_UPDATE_PASSWORD);
     }
 
     @Override

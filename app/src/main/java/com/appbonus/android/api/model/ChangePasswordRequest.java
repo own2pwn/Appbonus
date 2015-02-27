@@ -12,26 +12,24 @@ public class ChangePasswordRequest extends SimpleRequest {
         this(authToken);
         user.setCurrentPassword(currentPassword);
         user.setPassword(password);
+        user.setPasswordConfirmation(password);
     }
 
     static class User {
         protected String currentPassword;
         protected String password;
-
-        public String getCurrentPassword() {
-            return currentPassword;
-        }
+        protected String passwordConfirmation;
 
         public void setCurrentPassword(String currentPassword) {
             this.currentPassword = currentPassword;
         }
 
-        public String getPassword() {
-            return password;
-        }
-
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public void setPasswordConfirmation(String passwordConfirmation) {
+            this.passwordConfirmation = passwordConfirmation;
         }
     }
 }
