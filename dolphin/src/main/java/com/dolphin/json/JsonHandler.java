@@ -73,8 +73,13 @@ public class JsonHandler<T> {
     }
 
     public Map<String, String> toMap(T object) {
-        return gsonParser.fromJson(toJsonString(object), new TypeToken<HashMap<String, String>>() {
-        }.getType());
+        Type type = new TypeToken<Map<String, Object>>() {}.getType();
+        Map<String, Object> stringObjectMap = gsonParser.fromJson(toJsonString(object), type);
+        HashMap<String, String> stringStringMap = new HashMap<>();
+        for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
+            stringStringMap.put(entry.getKey(), String.valueOf(entry.getValue()));
+        }
+        return stringStringMap;
     }
 
     protected FieldNamingPolicy fieldNamingPolicy() {

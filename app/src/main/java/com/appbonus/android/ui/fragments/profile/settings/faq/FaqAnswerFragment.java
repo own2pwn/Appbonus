@@ -29,8 +29,12 @@ public class FaqAnswerFragment extends SimpleFragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
 
-        long questionId = bundle.getLong("question");
-        Question object = new Select().from(Question.class).where(Question.ID + "=?", questionId).executeSingle();
+        long questionId = bundle.getLong("question", -1L);
+        Question object;
+        if (questionId != -1L) {
+            object = new Select().from(Question.class).where(Question.ID + "=?", questionId).executeSingle();
+        } else object = new Select().from(Question.class).where(Question.ABOUT_RULES + "=?", true).executeSingle();
+
         if (object != null) {
             question.setText(object.getText());
             answer.setText(object.getAnswer());

@@ -103,6 +103,7 @@ public abstract class SimpleActivity extends ActionBarActivity {
         }
         if (args != null)
             fragment.setArguments(args);
+        else fragment.setArguments(new Bundle());
         if (fragment instanceof SimpleFragment) {
             ((SimpleFragment) fragment).setToolbar(getToolbar());
         }

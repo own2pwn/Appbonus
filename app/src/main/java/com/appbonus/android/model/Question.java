@@ -28,15 +28,15 @@ public class Question extends Model implements Serializable {
     @Column(name = ABOUT_REFERRALS)
     public Boolean aboutReferrals;
 
+    public static final String ABOUT_RULES = "about_rules";
+    @Column(name = ABOUT_RULES)
+    public Boolean aboutRules;
+
     public String getText() {
         return text;
     }
 
     public String getAnswer() {
         return answer;
-    }
-
-    public Boolean getAboutReferrals() {
-        return aboutReferrals;
     }
 }

@@ -21,7 +21,7 @@ import com.appbonus.android.loaders.OfferLoader;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OfferWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
+import com.appbonus.android.ui.fragments.profile.settings.faq.FaqAnswerFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.loader.AbstractLoader;
@@ -77,7 +77,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
 
     private void setPrimaryData() {
         Bundle bundle = getArguments();
-        offer = (Offer) bundle.getParcelable("offer");
+        offer = bundle.getParcelable("offer");
 
         ImageLoader.getInstance().displayImage(offer.getIcon(), avatar, new DisplayImageOptions.Builder()
                 .displayer(new RoundedBitmapDisplayer(10))
@@ -95,14 +95,15 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
         super.onViewCreated(view, savedInstanceState);
         setDrawerIndicatorEnabled(false);
         if (getLoaderManager().getLoader(LOADER_ID) == null) {
-            Loader<OfferWrapper> loader = getLoaderManager().initLoader(LOADER_ID, null, this);
-            loader.forceLoad();
+            getLoaderManager().initLoader(LOADER_ID, null, this);
         }
     }
 
     @Override
     public Loader<OfferWrapper> onCreateLoader(int id, Bundle args) {
-        return new OfferLoader(getActivity(), api, offer);
+        OfferLoader loader = new OfferLoader(getActivity(), api, offer);
+        loader.forceLoad();
+        return loader;
     }
 
     @Override
@@ -126,7 +127,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
         int id = v.getId();
         switch (id) {
             case R.id.rules_button:
-                placeProperFragment(FaqListFragment.class.getName());
+                placeProperFragment(FaqAnswerFragment.class.getName());
                 break;
             case R.id.download:
                 if (!offer.isCompleted()) {
