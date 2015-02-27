@@ -85,7 +85,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
         title.setText(offer.getTitle());
         cost.setText("+" + RoubleHelper.convert(offer.getReward()));
         description.setText(offer.getDescription());
-        if (offer.isDone()) {
+        if (offer.isCompleted()) {
             downloadBtn.setEnabled(false);
         }
     }
@@ -129,7 +129,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
                 placeProperFragment(FaqListFragment.class.getName());
                 break;
             case R.id.download:
-                if (!offer.isDone()) {
+                if (!offer.isCompleted()) {
                     String link = offer.getDownloadLink();
                     download(link);
                 }

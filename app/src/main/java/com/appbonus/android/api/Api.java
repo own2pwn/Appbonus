@@ -14,6 +14,7 @@ import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.api.model.WithdrawalRequest;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.DataWrapper;
+import com.appbonus.android.model.api.DoneOffersWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.model.api.OfferWrapper;
@@ -49,6 +50,7 @@ public interface Api {
     String SUFX_UPDATE_PASSWORD = "update_password";
 
     String SUFX_OFFERS = "offers";
+    String SUFX_DONE = "done_ids";
 
     String SUFX_FAQ = "faq";
 
@@ -426,5 +428,15 @@ public interface Api {
      */
     DataWrapper requestConfirmation(SimpleRequest request) throws Throwable;
 
-
+    /*
+    GET /api/v1/offers/done_ids
+    PARAMS auth_token: "xxxxxxxxxxxxxxxxxxxx"
+    AUTH required
+    ROLE any
+    RESPONSE
+      {
+        done_ids: [5, 10, ...]
+      }
+     */
+    DoneOffersWrapper readDoneIds(SimpleRequest request) throws Throwable;
 }

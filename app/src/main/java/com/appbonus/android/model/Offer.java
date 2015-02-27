@@ -11,63 +11,42 @@ public class Offer implements Serializable, Parcelable {
     protected Long id;
     protected Double reward;
     protected String title;
-    protected boolean done;
     protected String downloadLink;
+    protected boolean completed = false;
 
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Double getReward() {
         return reward;
     }
 
-    public void setReward(Double reward) {
-        this.reward = reward;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
-    public void setDone(boolean done) {
-        this.done = done;
     }
 
     public String getDownloadLink() {
         return downloadLink;
     }
 
-    public void setDownloadLink(String downloadLink) {
-        this.downloadLink = downloadLink;
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public Offer() {
     }
 
     @Override
@@ -82,11 +61,8 @@ public class Offer implements Serializable, Parcelable {
         dest.writeValue(this.id);
         dest.writeValue(this.reward);
         dest.writeString(this.title);
-        dest.writeByte(done ? (byte) 1 : (byte) 0);
         dest.writeString(this.downloadLink);
-    }
-
-    public Offer() {
+        dest.writeByte(completed ? (byte) 1 : (byte) 0);
     }
 
     private Offer(Parcel in) {
@@ -95,11 +71,11 @@ public class Offer implements Serializable, Parcelable {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.reward = (Double) in.readValue(Double.class.getClassLoader());
         this.title = in.readString();
-        this.done = in.readByte() != 0;
         this.downloadLink = in.readString();
+        this.completed = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
+    public static final Creator<Offer> CREATOR = new Creator<Offer>() {
         public Offer createFromParcel(Parcel source) {
             return new Offer(source);
         }

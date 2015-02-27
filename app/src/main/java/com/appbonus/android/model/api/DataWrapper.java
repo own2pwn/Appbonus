@@ -13,16 +13,8 @@ public class DataWrapper implements Serializable {
         return data;
     }
 
-    public void setData(String data) {
-        this.data = data;
-    }
-
     public List<String> getErrors() {
         return errors;
-    }
-
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
     }
 
     @Override

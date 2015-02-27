@@ -17,6 +17,7 @@ import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.api.model.WithdrawalRequest;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.DataWrapper;
+import com.appbonus.android.model.api.DoneOffersWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.model.api.OfferWrapper;
@@ -150,6 +151,11 @@ public class ApiImpl extends CommonApi implements Api {
     @Override
     public DataWrapper requestConfirmation(SimpleRequest request) throws Throwable {
         return doPost(request, SimpleRequest.class, DataWrapper.class, SUFX_MY, SUFX_REQUEST_CONFIRMATION);
+    }
+
+    @Override
+    public DoneOffersWrapper readDoneIds(SimpleRequest request) throws Throwable {
+        return doGet(request, SimpleRequest.class, DoneOffersWrapper.class, SUFX_OFFERS, SUFX_DONE);
     }
 
     protected void preparation(HttpMethod httpMethod) {

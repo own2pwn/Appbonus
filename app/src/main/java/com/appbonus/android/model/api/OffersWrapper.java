@@ -14,15 +14,7 @@ public class OffersWrapper implements Serializable {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
-
     public List<Offer> getOffers() {
         return offers;
-    }
-
-    public void setOffers(List<Offer> offers) {
-        this.offers = offers;
     }
 }

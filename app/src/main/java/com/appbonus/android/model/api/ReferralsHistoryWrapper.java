@@ -14,15 +14,7 @@ public class ReferralsHistoryWrapper implements Serializable {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
-
     public List<ReferralsHistory> getReferralsHistory() {
         return referralsHistory;
-    }
-
-    public void setReferralsHistory(List<ReferralsHistory> referralsHistory) {
-        this.referralsHistory = referralsHistory;
     }
 }

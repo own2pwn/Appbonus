@@ -8,8 +8,4 @@ public class ReferralsDetailsWrapper {
     public ReferralsDetails getReferralsDetails() {
         return referralsDetails;
     }
-
-    public void setReferralsDetails(ReferralsDetails referralsDetails) {
-        this.referralsDetails = referralsDetails;
-    }
 }

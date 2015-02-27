@@ -10,8 +10,4 @@ public class BalanceWrapper implements Serializable {
     public Balance getBalance() {
         return balance;
     }
-
-    public void setBalance(Balance balance) {
-        this.balance = balance;
-    }
 }

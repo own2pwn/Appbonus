@@ -14,15 +14,7 @@ public class HistoryWrapper implements Serializable {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
-
     public List<History> getHistory() {
         return history;
-    }
-
-    public void setHistory(List<History> history) {
-        this.history = history;
     }
 }

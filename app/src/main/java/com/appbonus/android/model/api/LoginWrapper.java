@@ -15,16 +15,8 @@ public class LoginWrapper implements Serializable, Parcelable {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getAuthToken() {
         return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
     }
 
     @Override
