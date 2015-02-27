@@ -31,8 +31,10 @@ public class FaqAnswerFragment extends SimpleFragment {
 
         long questionId = bundle.getLong("question");
         Question object = new Select().from(Question.class).where(Question.ID + "=?", questionId).executeSingle();
-        question.setText(object.getText());
-        answer.setText(object.getAnswer());
+        if (object != null) {
+            question.setText(object.getText());
+            answer.setText(object.getAnswer());
+        }
 
         setTitle(R.string.faq);
         setDrawerIndicatorEnabled(false);
