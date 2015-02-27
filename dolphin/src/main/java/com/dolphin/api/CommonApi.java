@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class CommonApi {
@@ -80,6 +81,17 @@ public abstract class CommonApi {
         return toObject(answer, responseType);
     }
 
+    protected <T, K> List<T> doGetList(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
+        String[] array = collectParameters(path);
+        HttpMethod method = new MethodGet(host(), toMap(request, requestType), array);
+        preparation(method);
+        ApiLogger logger = new ApiLogger();
+        logger.start();
+        String answer = method.perform(context);
+        logger.end(Arrays.toString(path));
+        return toList(answer, responseType);
+    }
+
     protected <T, K> T doDelete(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
         String[] array = collectParameters(path);
         HttpMethod method = new MethodDelete(host(), toMap(request, requestType), array);
@@ -113,7 +125,7 @@ public abstract class CommonApi {
         return toObject(answer, responseType);
     }
 
-    private <K> Map<String, File> toUploadMap(K obj, Class<K> tClass) throws Throwable{
+    private <K> Map<String, File> toUploadMap(K obj, Class<K> tClass) throws Throwable {
         if (obj == null) return new HashMap<>();
         Field[] fields = tClass.getFields();
         Map<String, File> map = new HashMap<>();
@@ -139,9 +151,14 @@ public abstract class CommonApi {
         return jsonHandler.toJsonObject(obj);
     }
 
-    protected  <T> T toObject(String string, Class<T> tClass) {
+    protected <T> T toObject(String string, Class<T> tClass) {
         JsonHandler<T> jsonHandler = createJsonHandler(tClass);
         return jsonHandler.fromJsonString(string);
+    }
+
+    protected <T> List<T> toList(String string, Class<T> tClass) {
+        JsonHandler<T> jsonHandler = createJsonHandler(tClass);
+        return jsonHandler.listFromJsonString(string);
     }
 
     private String[] collectParameters(String[] path) {
