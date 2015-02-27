@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.appbonus.android.model.api.OfferWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqAnswerFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
+import com.commonsware.cwac.anddown.AndDown;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.loader.AbstractLoader;
 import com.dolphin.ui.fragment.SimpleFragment;
@@ -30,6 +33,8 @@ import com.dolphin.utils.ClipboardUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class OfferBrowserFragment extends SimpleFragment implements LoaderManager.LoaderCallbacks<OfferWrapper>, View.OnClickListener {
     private static final int LOADER_ID = 1;
@@ -40,6 +45,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     protected TextView title;
     protected TextView cost;
     protected TextView description;
+    protected TextView note;
     protected Button downloadBtn;
     protected View rules;
     protected View share;
@@ -65,6 +71,8 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
         cost = (TextView) view.findViewById(R.id.cost);
         cost.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "rouble.otf"));
         description = (TextView) view.findViewById(R.id.description);
+        note = (TextView) view.findViewById(R.id.note);
+        note.setMovementMethod(LinkMovementMethod.getInstance());
         downloadBtn = (Button) view.findViewById(R.id.download);
         downloadBtn.setOnClickListener(this);
         rules = view.findViewById(R.id.rules_button);
@@ -88,6 +96,8 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
         if (offer.isCompleted()) {
             downloadBtn.setEnabled(false);
         }
+        if (StringUtils.isNotBlank(offer.getNote()))
+            note.setText(Html.fromHtml(new AndDown().markdownToHtml(offer.getNote())));
     }
 
     @Override
@@ -115,6 +125,8 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
 
     private void setData(OfferWrapper data) {
         offer = data.getOffer();
+        if (StringUtils.isNotBlank(offer.getNote()))
+            note.setText(Html.fromHtml(new AndDown().markdownToHtml(offer.getNote())));
     }
 
     @Override

@@ -13,6 +13,7 @@ public class Offer implements Serializable, Parcelable {
     protected String title;
     protected String downloadLink;
     protected boolean completed = false;
+    protected String note;
 
     public String getDescription() {
         return description;
@@ -46,6 +47,10 @@ public class Offer implements Serializable, Parcelable {
         this.completed = completed;
     }
 
+    public String getNote() {
+        return note;
+    }
+
     public Offer() {
     }
 
@@ -63,6 +68,7 @@ public class Offer implements Serializable, Parcelable {
         dest.writeString(this.title);
         dest.writeString(this.downloadLink);
         dest.writeByte(completed ? (byte) 1 : (byte) 0);
+        dest.writeString(this.note);
     }
 
     private Offer(Parcel in) {
@@ -73,6 +79,7 @@ public class Offer implements Serializable, Parcelable {
         this.title = in.readString();
         this.downloadLink = in.readString();
         this.completed = in.readByte() != 0;
+        this.note = in.readString();
     }
 
     public static final Creator<Offer> CREATOR = new Creator<Offer>() {

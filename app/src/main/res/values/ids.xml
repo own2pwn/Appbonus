@@ -76,4 +76,5 @@
     <item name="enter" type="id" />
     <item name="confirm" type="id" />
     <item name="tech_support" type="id" />
+    <item name="note" type="id" />
 </resources>
