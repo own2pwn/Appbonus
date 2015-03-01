@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.friends;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,16 +13,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
-import com.appbonus.android.loaders.ReferralsDetailsLoader;
-import com.appbonus.android.loaders.ReferralsHistoryLoader;
 import com.appbonus.android.model.Level;
 import com.appbonus.android.model.Meta;
 import com.appbonus.android.model.ReferralsDetails;
 import com.appbonus.android.model.ReferralsHistory;
 import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
+import com.appbonus.android.ui.LoadingDialogHelper;
 import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.loader.AbstractLoader;
@@ -34,8 +32,6 @@ import java.util.List;
 public class FriendsFragment extends RootListFragment<PagingListView, FriendsFragment.ReferralsHistoryAdapter> implements View.OnClickListener {
     public static final int REFERRALS_DETAILS_LOADER_ID = 1;
     public static final int REFERRALS_HISTORY_LOADER_ID = 2;
-
-    protected Api api;
 
     protected View footer;
     protected View emptyFooter;
@@ -58,13 +54,26 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
 
     protected Typeface typeface;
 
+    protected FriendsFragmentListener listener;
+
     protected ReferralsDetailsHandler referralsDetailsHandler;
     protected ReferralsHistoryHandler referralsHistoryHandler;
+
+    public interface FriendsFragmentListener extends LoadingDialogHelper {
+        Loader<ReferralsDetailsWrapper> createReferralsDetailsLoader();
+
+        Loader<ReferralsHistoryWrapper> createReferralsHistoryLoader(long page);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (FriendsFragmentListener) activity;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "rouble.otf");
         referralsDetailsHandler = new ReferralsDetailsHandler();
         referralsHistoryHandler = new ReferralsHistoryHandler();
@@ -140,8 +149,9 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
 
         @Override
         public Loader<ReferralsDetailsWrapper> onCreateLoader(int id, Bundle args) {
-            ReferralsDetailsLoader loader = new ReferralsDetailsLoader(getActivity(), api);
+            Loader<ReferralsDetailsWrapper> loader = listener.createReferralsDetailsLoader();
             loader.forceLoad();
+            listener.showLoadingDialog();
             return loader;
         }
 
@@ -149,10 +159,12 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
         public void onLoadFinished(Loader<ReferralsDetailsWrapper> loader, ReferralsDetailsWrapper data) {
             if (((AbstractLoader) loader).isSuccess())
                 setData(data.getReferralsDetails());
+            listener.dismissLoadingDialog();
         }
 
         @Override
         public void onLoaderReset(Loader<ReferralsDetailsWrapper> loader) {
+            listener.dismissLoadingDialog();
         }
     }
 
@@ -160,7 +172,7 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
 
         @Override
         public Loader<ReferralsHistoryWrapper> onCreateLoader(int id, Bundle args) {
-            ReferralsHistoryLoader loader = new ReferralsHistoryLoader(getActivity(), api, currentPage + 1);
+            Loader<ReferralsHistoryWrapper> loader = listener.createReferralsHistoryLoader(currentPage + 1);
             loader.forceLoad();
             return loader;
         }

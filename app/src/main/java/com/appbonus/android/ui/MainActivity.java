@@ -18,11 +18,15 @@ import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.loaders.OfferLoader;
 import com.appbonus.android.loaders.OffersLoader;
+import com.appbonus.android.loaders.ReferralsDetailsLoader;
+import com.appbonus.android.loaders.ReferralsHistoryLoader;
 import com.appbonus.android.model.Notification;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.OfferWrapper;
 import com.appbonus.android.model.api.OffersWrapper;
+import com.appbonus.android.model.api.ReferralsDetailsWrapper;
+import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.BalanceBrowserFragment;
@@ -41,7 +45,8 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.mobileapptracker.MobileAppTracker;
 
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks,
-        OfferListFragment.OffersListFragmentListener, OfferBrowserFragment.OfferBrowserFragmentListener {
+        OfferListFragment.OffersListFragmentListener, OfferBrowserFragment.OfferBrowserFragmentListener,
+        FriendsFragment.FriendsFragmentListener {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
     public static final String BALANCE_FRAGMENT = BalanceBrowserFragment.class.getName();
@@ -239,7 +244,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     }
 
     @Override
-    public Loader<OffersWrapper> createOffersLoader(int page) {
+    public Loader<OffersWrapper> createOffersLoader(long page) {
         return new OffersLoader(this, api, page);
     }
 
@@ -258,5 +263,15 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         if (asyncTaskDialogFragment != null) {
             asyncTaskDialogFragment.dismissAllowingStateLoss();
         }
+    }
+
+    @Override
+    public Loader<ReferralsDetailsWrapper> createReferralsDetailsLoader() {
+        return new ReferralsDetailsLoader(this, api);
+    }
+
+    @Override
+    public Loader<ReferralsHistoryWrapper> createReferralsHistoryLoader(long page) {
+        return new ReferralsHistoryLoader(this, api, page);
     }
 }

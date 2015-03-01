@@ -57,7 +57,7 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
     protected OffersListFragmentListener listener;
 
     public interface OffersListFragmentListener extends LoadingDialogHelper {
-        Loader<OffersWrapper> createOffersLoader(int page);
+        Loader<OffersWrapper> createOffersLoader(long page);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
 
     @Override
     public Loader<OffersWrapper> onCreateLoader(int id, Bundle args) {
-        Loader<OffersWrapper> loader = listener.createOffersLoader((int) (currentPage + 1));
+        Loader<OffersWrapper> loader = listener.createOffersLoader(currentPage + 1);
         loader.forceLoad();
         listener.showLoadingDialog();
         return loader;
