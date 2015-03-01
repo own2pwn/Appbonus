@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.offer;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,12 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
-import com.appbonus.android.loaders.OfferLoader;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OfferWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.LoadingDialogHelper;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqAnswerFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.commonsware.cwac.anddown.AndDown;
@@ -39,8 +38,6 @@ import org.apache.commons.lang3.StringUtils;
 public class OfferBrowserFragment extends SimpleFragment implements LoaderManager.LoaderCallbacks<OfferWrapper>, View.OnClickListener {
     private static final int LOADER_ID = 1;
 
-    protected Api api;
-
     protected ImageView avatar;
     protected TextView title;
     protected TextView cost;
@@ -51,11 +48,16 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     protected View share;
 
     protected Offer offer;
+    protected OfferBrowserFragmentListener listener;
+
+    public interface OfferBrowserFragmentListener extends LoadingDialogHelper {
+        Loader<OfferWrapper> createOfferLoader(Offer offer);
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (OfferBrowserFragmentListener) activity;
     }
 
     @Override
@@ -111,8 +113,9 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
 
     @Override
     public Loader<OfferWrapper> onCreateLoader(int id, Bundle args) {
-        OfferLoader loader = new OfferLoader(getActivity(), api, offer);
+        Loader<OfferWrapper> loader = listener.createOfferLoader(offer);
         loader.forceLoad();
+        listener.showLoadingDialog();
         return loader;
     }
 
@@ -121,6 +124,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
         if (((AbstractLoader) loader).isSuccess()) {
             setData(data);
         }
+        listener.dismissLoadingDialog();
     }
 
     private void setData(OfferWrapper data) {
@@ -131,7 +135,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
 
     @Override
     public void onLoaderReset(Loader<OfferWrapper> loader) {
-
+        listener.dismissLoadingDialog();
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,16 +16,23 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.DeviceRequest;
+import com.appbonus.android.loaders.OfferLoader;
+import com.appbonus.android.loaders.OffersLoader;
 import com.appbonus.android.model.Notification;
+import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.DataWrapper;
+import com.appbonus.android.model.api.OfferWrapper;
+import com.appbonus.android.model.api.OffersWrapper;
 import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.BalanceBrowserFragment;
 import com.appbonus.android.ui.fragments.friends.FriendsFragment;
 import com.appbonus.android.ui.fragments.navigation.NavigationDrawerFragment;
+import com.appbonus.android.ui.fragments.offer.OfferBrowserFragment;
 import com.appbonus.android.ui.fragments.offer.OfferListFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.login.LoginActivity;
+import com.dolphin.asynctask.AsyncTaskDialogFragment;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
@@ -32,7 +40,8 @@ import com.flurry.android.FlurryAgent;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.mobileapptracker.MobileAppTracker;
 
-public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks {
+public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks,
+        OfferListFragment.OffersListFragmentListener, OfferBrowserFragment.OfferBrowserFragmentListener {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
     public static final String BALANCE_FRAGMENT = BalanceBrowserFragment.class.getName();
@@ -41,6 +50,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private Api api;
     private MobileAppTracker mobileAppTracker;
+    private AsyncTaskDialogFragment asyncTaskDialogFragment;
 
     @Override
     protected int layout() {
@@ -74,6 +84,14 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
                 (DrawerLayout) findViewById(R.id.drawer_layout)
         );
         initMobileAppTracker();
+        initLoadingDialog();
+    }
+
+    private void initLoadingDialog() {
+        asyncTaskDialogFragment = AsyncTaskDialogFragment.newInstance();
+        Bundle args = new Bundle();
+        args.putString(AsyncTaskDialogFragment.MESSAGE, getString(R.string.loading));
+        asyncTaskDialogFragment.setArguments(args);
     }
 
     private void openNotificationFragment(Notification notification) {
@@ -218,5 +236,27 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
             mNavigationDrawerFragment.toggle();
         } else
             super.onBackPressed();
+    }
+
+    @Override
+    public Loader<OffersWrapper> createOffersLoader(int page) {
+        return new OffersLoader(this, api, page);
+    }
+
+    @Override
+    public Loader<OfferWrapper> createOfferLoader(Offer offer) {
+        return new OfferLoader(this, api, offer);
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        asyncTaskDialogFragment.show(getSupportFragmentManager(), "loading_dialog");
+    }
+
+    @Override
+    public void dismissLoadingDialog() {
+        if (asyncTaskDialogFragment != null) {
+            asyncTaskDialogFragment.dismissAllowingStateLoss();
+        }
     }
 }

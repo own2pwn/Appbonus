@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.offer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,13 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
-import com.appbonus.android.loaders.OffersLoader;
 import com.appbonus.android.model.Meta;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OffersWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.LoadingDialogHelper;
 import com.appbonus.android.ui.fragments.friends.MeetFriendsFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
@@ -37,8 +36,6 @@ import java.util.List;
 public class OfferListFragment extends RootListFragment<PagingListView, OfferListFragment.OfferAdapter>
         implements LoaderManager.LoaderCallbacks<OffersWrapper>, View.OnClickListener {
     public static final int LOADER_ID = 1;
-
-    protected Api api;
 
     protected TextView balance;
     protected View inputProfile;
@@ -57,10 +54,21 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
 
     protected Typeface typeFace;
 
+    protected OffersListFragmentListener listener;
+
+    public interface OffersListFragmentListener extends LoadingDialogHelper {
+        Loader<OffersWrapper> createOffersLoader(int page);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (OffersListFragmentListener) activity;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
         typeFace = Typeface.createFromAsset(getActivity().getAssets(), "rouble.otf");
     }
 
@@ -119,8 +127,9 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
 
     @Override
     public Loader<OffersWrapper> onCreateLoader(int id, Bundle args) {
-        OffersLoader loader = new OffersLoader(getActivity(), api, currentPage + 1);
+        Loader<OffersWrapper> loader = listener.createOffersLoader((int) (currentPage + 1));
         loader.forceLoad();
+        listener.showLoadingDialog();
         return loader;
     }
 
@@ -131,6 +140,7 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
             setData(data);
             currentPage = meta.getCurrentPage();
         }
+        listener.dismissLoadingDialog();
     }
 
     private void setData(OffersWrapper data) {
@@ -169,6 +179,7 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
 
     @Override
     public void onLoaderReset(Loader<OffersWrapper> loader) {
+        listener.dismissLoadingDialog();
     }
 
     @Override
