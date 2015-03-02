@@ -188,6 +188,7 @@ public class ApiImpl extends CommonApi implements Api {
 
     class ApiErrorHandler implements HttpMethod.ErrorHandler {
         private static final String ERROR_PARAMETER = "error";
+        private static final String INFO_PARAMETER = "info";
         private static final String ERRORS_PARAMETER = "errors";
         private static final String SUCCESS_PARAMETER = "success";
 
@@ -204,6 +205,8 @@ public class ApiImpl extends CommonApi implements Api {
                 JSONObject object = new JSONObject(error);
                 if (object.has(ERROR_PARAMETER)) {
                     exception.message = object.getString(ERROR_PARAMETER);
+                } else if (object.has(INFO_PARAMETER)) {
+                    exception.message = object.getString(INFO_PARAMETER);
                 } else if (object.has(ERRORS_PARAMETER)) {
                     JSONObject errors = object.getJSONObject(ERRORS_PARAMETER);
                     Iterator<String> keys = errors.keys();

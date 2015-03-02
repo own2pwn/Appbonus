@@ -152,7 +152,7 @@ public class LoginActivity extends FragmentActivity {
                                 saveLoginInformation(loginWrapper);
                                 startActivity(IntentHelper.openMain(context));
                                 finish();
-                            }
+                            } else showError(throwable);
                         }
 
                         @Override
