@@ -8,7 +8,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,7 +157,6 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     }
 
     private void download(String link) {
-        Log.d("download_link", link);
         startActivity(IntentHelper.openLink(link));
     }
 
