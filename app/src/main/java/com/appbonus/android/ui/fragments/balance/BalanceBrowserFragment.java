@@ -35,6 +35,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.paging.listview.PagingBaseAdapter;
 import com.paging.listview.PagingListView;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.util.List;
 
 public class BalanceBrowserFragment extends RootListFragment<PagingListView, BalanceBrowserFragment.HistoryAdapter>
@@ -44,6 +46,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
     protected BalanceHandler balanceHandler;
     protected HistoryHandler historyHandler;
+    protected Balance balance;
 
     protected Typeface typeface;
 
@@ -99,9 +102,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
         if (getLoaderManager().getLoader(BALANCE_LOADER_ID) == null) {
             getLoaderManager().initLoader(BALANCE_LOADER_ID, null, balanceHandler);
         }
-        if (getLoaderManager().getLoader(HISTORY_LOADER_ID) == null) {
-            getLoaderManager().initLoader(HISTORY_LOADER_ID, null, historyHandler);
-        }
+
         setDrawerIndicatorEnabled(true);
         setTitle(R.string.balance);
         setWithdrawalVisibility();
@@ -140,7 +141,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     }
 
     private void setBalance(BalanceWrapper data) {
-        Balance balance = data.getBalance();
+        balance = data.getBalance();
         currentBalance.setText(createRouble(balance.getActiveBalance()));
         myProfit.setText("+" + createRouble(balance.getTasksProfit()));
         friendsProfit.setText("+" + createRouble(balance.getReferralsProfit()));
@@ -153,6 +154,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
     private void setHistory(HistoryWrapper data) {
         if (adapter == null) {
+            correlationHistoryWithBalance(data.getHistory(), balance);
             adapter = new HistoryAdapter(data.getHistory());
             setListAdapter(adapter);
             setListSettings();
@@ -161,6 +163,19 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
                 setListAdapter(adapter);
                 setListSettings();
             } else listView.onFinishLoading(false, data.getHistory());
+        }
+    }
+
+    private void correlationHistoryWithBalance(List<History> history, Balance balance) {
+        if (balance != null && balance.getPendingWithdrawal() != null && balance.getPendingWithdrawal() != 0) {
+            if (CollectionUtils.isNotEmpty(history)) {
+                for (History h : history) {
+                    if (History.OPERATION_TYPE_WITHDRAWAL.equals(h.getOperationType())) {
+                        h.setOperationType(History.OPERATION_TYPE_IN_PROGRESS);
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -214,6 +229,8 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
         @Override
         public void onLoadFinished(Loader<BalanceWrapper> loader, BalanceWrapper data) {
             if (((AbstractLoader) loader).isSuccess()) {
+                loadHistory();
+
                 setBalance(data);
             }
             listener.dismissLoadingDialog();
@@ -222,6 +239,12 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
         @Override
         public void onLoaderReset(Loader<BalanceWrapper> loader) {
             listener.dismissLoadingDialog();
+        }
+    }
+
+    protected void loadHistory() {
+        if (getLoaderManager().getLoader(HISTORY_LOADER_ID) == null) {
+            getLoaderManager().initLoader(HISTORY_LOADER_ID, null, historyHandler);
         }
     }
 
