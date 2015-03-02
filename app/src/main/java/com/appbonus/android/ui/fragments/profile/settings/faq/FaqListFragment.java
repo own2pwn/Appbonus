@@ -15,8 +15,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.loaders.FaqLoader;
 import com.appbonus.android.model.Question;
 import com.dolphin.helper.IntentHelper;
@@ -33,14 +31,7 @@ public class FaqListFragment extends SimpleListFragment<ListView, SimpleAdapter>
     public static final int LOADER_ID = 1;
     public static final String QUESTION_PARAMETER = "question";
 
-    protected Api api;
     protected List<Question> questions;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

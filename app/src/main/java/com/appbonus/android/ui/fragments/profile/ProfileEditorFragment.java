@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.profile;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,16 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.ChangePasswordRequest;
-import com.appbonus.android.api.model.SimpleRequest;
-import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.LoadingDialogHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.utils.KeyboardUtils;
@@ -48,17 +46,31 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     protected View confirmPhoneLabel;
     protected View confirmPhoneButton;
 
-    protected Api api;
     protected User user;
     protected Form passwordForm;
     protected Form mailForm;
 
     protected Fragment parentFragment;
 
+    protected ProfileEditorFragmentListener listener;
+
+    public interface ProfileEditorFragmentListener extends LoadingDialogHelper {
+        UserWrapper changePassword(ChangePasswordRequest request) throws Throwable;
+
+        UserWrapper writeProfile(User request) throws Throwable;
+
+        DataWrapper requestConfirmation() throws Throwable;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (ProfileEditorFragmentListener) activity;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
         parentFragment = getTargetFragment();
     }
 
@@ -118,7 +130,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
                 @Override
                 protected UserWrapper background(Void... params) throws Throwable {
-                    return api.changePassword(request);
+                    return listener.changePassword(request);
                 }
 
                 @Override
@@ -137,11 +149,10 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
     public void save() {
         if (mailForm.validate()) {
-            final UserRequest request = new UserRequest(SharedPreferencesStorage.getToken(getActivity()), getResult());
             new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
                 @Override
                 protected UserWrapper background(Void... params) throws Throwable {
-                    return api.writeProfile(request);
+                    return listener.writeProfile(getResult());
                 }
 
                 @Override
@@ -257,7 +268,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.requestConfirmation(new SimpleRequest(SharedPreferencesStorage.getToken(context)));
+                return listener.requestConfirmation();
             }
 
             @Override

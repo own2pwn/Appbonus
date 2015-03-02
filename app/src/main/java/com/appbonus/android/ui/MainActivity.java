@@ -15,26 +15,42 @@ import android.view.MenuItem;
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.ChangePasswordRequest;
+import com.appbonus.android.api.model.ConfirmPhoneRequest;
 import com.appbonus.android.api.model.DeviceRequest;
+import com.appbonus.android.api.model.SimpleRequest;
+import com.appbonus.android.api.model.UserRequest;
+import com.appbonus.android.loaders.BalanceLoader;
+import com.appbonus.android.loaders.HistoryLoader;
 import com.appbonus.android.loaders.OfferLoader;
 import com.appbonus.android.loaders.OffersLoader;
+import com.appbonus.android.loaders.ProfileLoader;
 import com.appbonus.android.loaders.ReferralsDetailsLoader;
 import com.appbonus.android.loaders.ReferralsHistoryLoader;
 import com.appbonus.android.model.Notification;
 import com.appbonus.android.model.Offer;
+import com.appbonus.android.model.User;
+import com.appbonus.android.model.WithdrawalRequest;
+import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.DataWrapper;
+import com.appbonus.android.model.api.HistoryWrapper;
 import com.appbonus.android.model.api.OfferWrapper;
 import com.appbonus.android.model.api.OffersWrapper;
 import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
+import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.BalanceBrowserFragment;
+import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.friends.FriendsFragment;
 import com.appbonus.android.ui.fragments.navigation.NavigationDrawerFragment;
 import com.appbonus.android.ui.fragments.offer.OfferBrowserFragment;
 import com.appbonus.android.ui.fragments.offer.OfferListFragment;
+import com.appbonus.android.ui.fragments.profile.ConfirmPhoneFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
+import com.appbonus.android.ui.fragments.profile.ProfileEditorFragment;
+import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.AsyncTaskDialogFragment;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
@@ -46,7 +62,10 @@ import com.mobileapptracker.MobileAppTracker;
 
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks,
         OfferListFragment.OffersListFragmentListener, OfferBrowserFragment.OfferBrowserFragmentListener,
-        FriendsFragment.FriendsFragmentListener {
+        FriendsFragment.FriendsFragmentListener, BalanceBrowserFragment.BalanceBrowserFragmentListener,
+        WithdrawalFragment.WithdrawalFragmentListener,
+        ProfileBrowserFragment.ProfileBrowserFragmentListener, ProfileEditorFragment.ProfileEditorFragmentListener,
+        ConfirmPhoneFragment.ConfirmPhoneFragmentListener, SettingsFragment.SettingsFragmentListener {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
     public static final String BALANCE_FRAGMENT = BalanceBrowserFragment.class.getName();
@@ -174,7 +193,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.unregisterDevice(new DeviceRequest(SharedPreferencesStorage.getToken(context),
+                return api.unregisterDevice(new DeviceRequest(getToken(),
                         new BonusGCMUtils().getRegistrationId(context)));
             }
 
@@ -273,5 +292,56 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     @Override
     public Loader<ReferralsHistoryWrapper> createReferralsHistoryLoader(long page) {
         return new ReferralsHistoryLoader(this, api, page);
+    }
+
+    @Override
+    public Loader<BalanceWrapper> createBalanceLoader() {
+        return new BalanceLoader(this, api);
+    }
+
+    @Override
+    public Loader<HistoryWrapper> createHistoryLoader(long page) {
+        return new HistoryLoader(this, api, page);
+    }
+
+    @Override
+    public DataWrapper makeWithdrawal(WithdrawalRequest request) throws Throwable {
+        return api.makeWithdrawal(new com.appbonus.android.api.model.WithdrawalRequest(
+                getToken(), request));
+    }
+
+    @Override
+    public Loader<UserWrapper> createUserLoader() {
+        return new ProfileLoader(this, api);
+    }
+
+    @Override
+    public UserWrapper changePassword(ChangePasswordRequest request) throws Throwable {
+        return api.changePassword(request);
+    }
+
+    @Override
+    public DataWrapper unregisterDevice() throws Throwable {
+        return api.unregisterDevice(new DeviceRequest(getToken(),
+                new BonusGCMUtils().getRegistrationId(this)));
+    }
+
+    @Override
+    public UserWrapper writeProfile(User user) throws Throwable {
+        return api.writeProfile(new UserRequest(getToken(), user));
+    }
+
+    @Override
+    public DataWrapper requestConfirmation() throws Throwable {
+        return api.requestConfirmation(new SimpleRequest(getToken()));
+    }
+
+    @Override
+    public DataWrapper confirmPhone(String code) throws Throwable {
+        return api.confirmPhone(new ConfirmPhoneRequest(getToken(), code));
+    }
+
+    protected String getToken() {
+        return SharedPreferencesStorage.getToken(this);
     }
 }

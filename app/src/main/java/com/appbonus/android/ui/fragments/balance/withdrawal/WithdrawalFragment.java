@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.balance.withdrawal;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,12 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.WithdrawalRequest;
 import com.appbonus.android.model.api.DataWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.OnWithdrawalListener;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.fragment.SimpleFragment;
@@ -24,8 +22,6 @@ import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
 
 public class WithdrawalFragment extends SimpleFragment implements View.OnClickListener {
-    protected Api api;
-
     protected Button mobileBtn;
     protected Button qiwiBtn;
 
@@ -34,10 +30,16 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
 
     protected Form form;
 
+    protected WithdrawalFragmentListener listener;
+
+    public interface WithdrawalFragmentListener {
+        DataWrapper makeWithdrawal(WithdrawalRequest request) throws Throwable;
+    }
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (WithdrawalFragmentListener) activity;
     }
 
     @Override
@@ -98,8 +100,7 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.makeWithdrawal(new com.appbonus.android.api.model.WithdrawalRequest(
-                        SharedPreferencesStorage.getToken(context), withdrawalRequest));
+                return listener.makeWithdrawal(withdrawalRequest);
             }
 
             @Override

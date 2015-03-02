@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.balance.autowithdrawal;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,23 +11,25 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.ui.fragment.SimpleFragment;
 
 public class AutowithdrawalFragment extends SimpleFragment implements CompoundButton.OnCheckedChangeListener {
-    protected Api api;
-
     protected CheckBox auto;
     protected FloatLabel qiwi;
     protected FloatLabel mobile;
 
+    protected AutowithdrawalFragmentListener listener;
+
+    public interface AutowithdrawalFragmentListener {
+
+    }
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (AutowithdrawalFragmentListener) activity;
     }
 
     @Override

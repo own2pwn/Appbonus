@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.profile.settings;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,13 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
-import com.appbonus.android.api.model.DeviceRequest;
-import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.DataWrapper;
-import com.appbonus.android.push.BonusGCMUtils;
+import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.OnUserUpdateListener;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
@@ -39,14 +36,26 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
 
     protected TextView enterAs;
 
-    protected Api api;
     protected User user;
+
+    protected SettingsFragmentListener listener;
+
+    public interface SettingsFragmentListener {
+        DataWrapper unregisterDevice() throws Throwable;
+
+        UserWrapper writeProfile(User user) throws Throwable;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (SettingsFragmentListener) activity;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
-        user = (User) getArguments().getParcelable("user");
+        user = getArguments().getParcelable("user");
         if (user == null) {
             user = SharedPreferencesStorage.getUser(getActivity());
         }
@@ -128,8 +137,7 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.unregisterDevice(new DeviceRequest(SharedPreferencesStorage.getToken(context),
-                        new BonusGCMUtils().getRegistrationId(context)));
+                return listener.unregisterDevice();
             }
 
             @Override
@@ -161,7 +169,7 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
             @Override
             public void run() {
                 try {
-                    api.writeProfile(new UserRequest(SharedPreferencesStorage.getToken(getActivity()), user));
+                    listener.writeProfile(user);
                 } catch (Throwable ignored) {
                 }
             }

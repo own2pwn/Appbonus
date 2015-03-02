@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.balance;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,15 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
-import com.appbonus.android.loaders.BalanceLoader;
-import com.appbonus.android.loaders.HistoryLoader;
 import com.appbonus.android.model.Balance;
 import com.appbonus.android.model.History;
 import com.appbonus.android.model.Meta;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
+import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.LoadingDialogHelper;
 import com.appbonus.android.ui.fragments.balance.autowithdrawal.AutowithdrawalFragment;
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.profile.ConfirmPhoneFragment;
@@ -43,7 +42,6 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     public static final int BALANCE_LOADER_ID = 1;
     public static final int HISTORY_LOADER_ID = 2;
 
-    protected Api api;
     protected BalanceHandler balanceHandler;
     protected HistoryHandler historyHandler;
 
@@ -63,10 +61,23 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     protected Meta meta;
     protected long currentPage = -1L;
 
+    protected BalanceBrowserFragmentListener listener;
+
+    public interface BalanceBrowserFragmentListener extends LoadingDialogHelper {
+        Loader<BalanceWrapper> createBalanceLoader();
+
+        Loader<HistoryWrapper> createHistoryLoader(long page);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (BalanceBrowserFragmentListener) activity;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "rouble.otf");
         balanceHandler = new BalanceHandler();
         historyHandler = new HistoryHandler();
@@ -123,7 +134,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
 
     private void setWithdrawalVisibility() {
-        boolean phoneConfirmed = /*SharedPreferencesStorage.isPhoneConfirmed(getActivity())*/true;
+        boolean phoneConfirmed = SharedPreferencesStorage.isPhoneConfirmed(getActivity());
         withdrawalMoney.setVisibility(phoneConfirmed ? View.VISIBLE : View.GONE);
         withdrawalIsNotAccessView.setVisibility(phoneConfirmed ? View.GONE : View.VISIBLE);
     }
@@ -194,8 +205,9 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
         @Override
         public Loader<BalanceWrapper> onCreateLoader(int id, Bundle args) {
-            BalanceLoader loader = new BalanceLoader(getActivity(), api);
+            Loader<BalanceWrapper> loader = listener.createBalanceLoader();
             loader.forceLoad();
+            listener.showLoadingDialog();
             return loader;
         }
 
@@ -204,10 +216,12 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
             if (((AbstractLoader) loader).isSuccess()) {
                 setBalance(data);
             }
+            listener.dismissLoadingDialog();
         }
 
         @Override
         public void onLoaderReset(Loader<BalanceWrapper> loader) {
+            listener.dismissLoadingDialog();
         }
     }
 
@@ -215,7 +229,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
         @Override
         public Loader<HistoryWrapper> onCreateLoader(int id, Bundle args) {
-            HistoryLoader loader = new HistoryLoader(getActivity(), api, currentPage + 1);
+            Loader<HistoryWrapper> loader = listener.createHistoryLoader(currentPage + 1);
             loader.forceLoad();
             return loader;
         }

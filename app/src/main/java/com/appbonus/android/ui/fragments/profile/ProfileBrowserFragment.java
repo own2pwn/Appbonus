@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.profile;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -16,13 +17,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.component.FloatLabel;
-import com.appbonus.android.loaders.ProfileLoader;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.ui.LoadingDialogHelper;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.dolphin.ui.fragment.root.RootSimpleFragment;
 import com.dolphin.utils.KeyboardUtils;
@@ -42,8 +41,19 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
     protected View confirmPhoneLabel;
 
-    protected Api api;
     protected User user;
+
+    protected ProfileBrowserFragmentListener listener;
+
+    public interface ProfileBrowserFragmentListener extends LoadingDialogHelper {
+        Loader<UserWrapper> createUserLoader();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (ProfileBrowserFragmentListener) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,7 +65,6 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        api = new ApiImpl(getActivity());
         if (getLoaderManager().getLoader(LOADER_ID) == null) {
             getLoaderManager().initLoader(LOADER_ID, null, this);
         }
@@ -92,8 +101,9 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
     @Override
     public Loader<UserWrapper> onCreateLoader(int id, Bundle args) {
-        ProfileLoader loader = new ProfileLoader(getActivity(), api);
+        Loader<UserWrapper> loader = listener.createUserLoader();
         loader.forceLoad();
+        listener.showLoadingDialog();
         return loader;
     }
 
@@ -103,11 +113,12 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
             user = data.getUser();
             setData(user);
         }
+        listener.dismissLoadingDialog();
     }
 
     @Override
     public void onLoaderReset(Loader<UserWrapper> loader) {
-
+        listener.dismissLoadingDialog();
     }
 
     @Override

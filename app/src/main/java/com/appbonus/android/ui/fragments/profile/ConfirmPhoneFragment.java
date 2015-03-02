@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.profile;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -9,26 +10,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
-import com.appbonus.android.api.model.ConfirmPhoneRequest;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.DataWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.ui.fragment.SimpleFragment;
 
 public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClickListener {
-    protected Api api;
     protected FloatLabel code;
     protected Button confirmBtn;
     protected View techSupport;
 
+    protected ConfirmPhoneFragmentListener listener;
+
+    public interface ConfirmPhoneFragmentListener {
+        DataWrapper confirmPhone(String code) throws Throwable;
+    }
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        api = new ApiImpl(getActivity());
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (ConfirmPhoneFragmentListener) activity;
     }
 
     @Override
@@ -77,7 +79,7 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.confirmPhone(new ConfirmPhoneRequest(SharedPreferencesStorage.getToken(context), codeStr));
+                return listener.confirmPhone(codeStr);
             }
 
             @Override
