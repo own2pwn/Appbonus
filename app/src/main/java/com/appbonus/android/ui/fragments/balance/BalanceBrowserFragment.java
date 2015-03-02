@@ -168,11 +168,14 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
     private void correlationHistoryWithBalance(List<History> history, Balance balance) {
         if (balance != null && balance.getPendingWithdrawal() != null && balance.getPendingWithdrawal() != 0) {
+            Double pendingWithdrawal = balance.getPendingWithdrawal();
             if (CollectionUtils.isNotEmpty(history)) {
                 for (History h : history) {
                     if (History.OPERATION_TYPE_WITHDRAWAL.equals(h.getOperationType())) {
                         h.setOperationType(History.OPERATION_TYPE_IN_PROGRESS);
-                        break;
+                        pendingWithdrawal -= h.getAmount();
+                        if (pendingWithdrawal <= 0)
+                            break;
                     }
                 }
             }
