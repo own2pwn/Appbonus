@@ -52,9 +52,9 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
         meet = view.findViewById(R.id.meet);
         meet.setOnClickListener(this);
         promoView = view.findViewById(R.id.promo_view);
-        if (!TextUtils.isEmpty(user.getPromoCode())) {
+        if (!TextUtils.isEmpty(user.getInviteCode())) {
             promo = (TextView) promoView.findViewById(R.id.promo);
-            promo.setText(user.getPromoCode());
+            promo.setText(user.getInviteCode());
         } else promoView.setVisibility(View.GONE);
     }
 

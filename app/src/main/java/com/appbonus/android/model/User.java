@@ -3,8 +3,10 @@ package com.appbonus.android.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.appbonus.android.model.enums.Sex;
+import com.appbonus.android.model.enums.UserStatus;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class User implements Serializable, Parcelable {
     protected String ftxSearch;
     protected boolean notify;
     protected String refRate;
-    protected String status;
+    protected UserStatus status;
     //device_ids
     //device_tokens
     protected String postbackLink;
@@ -38,14 +40,13 @@ public class User implements Serializable, Parcelable {
     protected boolean phoneConfirmed;
     protected Date phoneConfirmedAt;
     protected List<AuthService> authServices;
-    protected String promoCode;
+    protected String inviteCode;
+    protected Date birthDate;
+    protected Sex sex;
+    protected String name;
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -60,16 +61,8 @@ public class User implements Serializable, Parcelable {
         return createAt;
     }
 
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getPhone() {
@@ -92,72 +85,36 @@ public class User implements Serializable, Parcelable {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public Double getBalance() {
         return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
     }
 
     public boolean isIphone() {
         return iphone;
     }
 
-    public void setIphone(boolean iphone) {
-        this.iphone = iphone;
-    }
-
     public boolean isIpad() {
         return ipad;
-    }
-
-    public void setIpad(boolean ipad) {
-        this.ipad = ipad;
     }
 
     public boolean isAndroid() {
         return android;
     }
 
-    public void setAndroid(boolean android) {
-        this.android = android;
-    }
-
     public Long getReferrerId() {
         return referrerId;
-    }
-
-    public void setReferrerId(Long referrerId) {
-        this.referrerId = referrerId;
     }
 
     public String getYmToken() {
         return ymToken;
     }
 
-    public void setYmToken(String ymToken) {
-        this.ymToken = ymToken;
-    }
-
     public String getTester() {
         return tester;
     }
 
-    public void setTester(String tester) {
-        this.tester = tester;
-    }
-
     public String getFtxSearch() {
         return ftxSearch;
-    }
-
-    public void setFtxSearch(String ftxSearch) {
-        this.ftxSearch = ftxSearch;
     }
 
     public boolean isNotify() {
@@ -172,24 +129,12 @@ public class User implements Serializable, Parcelable {
         return refRate;
     }
 
-    public void setRefRate(String refRate) {
-        this.refRate = refRate;
-    }
-
-    public String getStatus() {
+    public UserStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getPostbackLink() {
         return postbackLink;
-    }
-
-    public void setPostbackLink(String postbackLink) {
-        this.postbackLink = postbackLink;
     }
 
     public boolean isNotifySound() {
@@ -204,28 +149,31 @@ public class User implements Serializable, Parcelable {
         return phoneConfirmed;
     }
 
-    public void setPhoneConfirmed(boolean phoneConfirmed) {
-        this.phoneConfirmed = phoneConfirmed;
-    }
-
     public Date getPhoneConfirmedAt() {
         return phoneConfirmedAt;
-    }
-
-    public void setPhoneConfirmedAt(Date phoneConfirmedAt) {
-        this.phoneConfirmedAt = phoneConfirmedAt;
     }
 
     public List<AuthService> getAuthServices() {
         return authServices;
     }
 
-    public void setAuthServices(List<AuthService> authServices) {
-        this.authServices = authServices;
+    public String getInviteCode() {
+        return inviteCode;
     }
 
-    public String getPromoCode() {
-        return promoCode;
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public User() {
     }
 
     @Override
@@ -252,16 +200,16 @@ public class User implements Serializable, Parcelable {
         dest.writeString(this.ftxSearch);
         dest.writeByte(notify ? (byte) 1 : (byte) 0);
         dest.writeString(this.refRate);
-        dest.writeString(this.status);
+        dest.writeInt(this.status == null ? -1 : this.status.ordinal());
         dest.writeString(this.postbackLink);
         dest.writeByte(notifySound ? (byte) 1 : (byte) 0);
         dest.writeByte(phoneConfirmed ? (byte) 1 : (byte) 0);
         dest.writeLong(phoneConfirmedAt != null ? phoneConfirmedAt.getTime() : -1);
-        dest.writeList(this.authServices);
-        dest.writeString(this.promoCode);
-    }
-
-    public User() {
+        dest.writeTypedList(authServices);
+        dest.writeString(this.inviteCode);
+        dest.writeLong(birthDate != null ? birthDate.getTime() : -1);
+        dest.writeInt(this.sex == null ? -1 : this.sex.ordinal());
+        dest.writeString(this.name);
     }
 
     private User(Parcel in) {
@@ -284,18 +232,23 @@ public class User implements Serializable, Parcelable {
         this.ftxSearch = in.readString();
         this.notify = in.readByte() != 0;
         this.refRate = in.readString();
-        this.status = in.readString();
+        int tmpStatus = in.readInt();
+        this.status = tmpStatus == -1 ? null : UserStatus.values()[tmpStatus];
         this.postbackLink = in.readString();
         this.notifySound = in.readByte() != 0;
         this.phoneConfirmed = in.readByte() != 0;
         long tmpPhoneConfirmedAt = in.readLong();
         this.phoneConfirmedAt = tmpPhoneConfirmedAt == -1 ? null : new Date(tmpPhoneConfirmedAt);
-        this.authServices = new ArrayList<>();
-        in.readList(this.authServices, List.class.getClassLoader());
-        this.promoCode = in.readString();
+        in.readTypedList(authServices, AuthService.CREATOR);
+        this.inviteCode = in.readString();
+        long tmpBirthDate = in.readLong();
+        this.birthDate = tmpBirthDate == -1 ? null : new Date(tmpBirthDate);
+        int tmpSex = in.readInt();
+        this.sex = tmpSex == -1 ? null : Sex.values()[tmpSex];
+        this.name = in.readString();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         public User createFromParcel(Parcel source) {
             return new User(source);
         }
