@@ -85,6 +85,11 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
             @Override
             protected void onPostExecute(DataWrapper dataWrapper) {
                 super.onPostExecute(dataWrapper);
+                if (dataWrapper != null && dataWrapper.isSuccess()) {
+                    showToast(dataWrapper.toString());
+                    closeCurrentFragment();
+                    //todo
+                } else showError(throwable.getMessage());
             }
         }.execute();
     }
