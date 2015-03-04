@@ -1,4 +1,4 @@
-package com.appbonus.android.ui;
+package com.dolphin.ui;
 
 public interface LoadingDialogHelper {
     void showLoadingDialog();

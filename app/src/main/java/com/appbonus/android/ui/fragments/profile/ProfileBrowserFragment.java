@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,11 +19,14 @@ import com.appbonus.android.R;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.UserWrapper;
+import com.appbonus.android.model.enums.Sex;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.appbonus.android.ui.LoadingDialogHelper;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
+import com.dolphin.ui.LoadingDialogHelper;
 import com.dolphin.ui.fragment.root.RootSimpleFragment;
 import com.dolphin.utils.KeyboardUtils;
+
+import java.text.SimpleDateFormat;
 
 public class ProfileBrowserFragment extends RootSimpleFragment implements LoaderManager.LoaderCallbacks<UserWrapper>,
         OnUserUpdateListener, View.OnClickListener {
@@ -32,7 +34,9 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
     protected FloatLabel mail;
     protected FloatLabel phone;
-    protected TextView country;
+    protected FloatLabel name;
+    protected FloatLabel birthDate;
+    protected TextView sex;
 
     protected FloatLabel newPassword;
     protected FloatLabel confirmPassword;
@@ -65,9 +69,7 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getLoaderManager().getLoader(LOADER_ID) == null) {
-            getLoaderManager().initLoader(LOADER_ID, null, this);
-        }
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
         setDrawerIndicatorEnabled(getTargetFragment() == null);
         KeyboardUtils.hideFragmentKeyboard(this);
     }
@@ -77,9 +79,13 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
         mail = (FloatLabel) view.findViewById(R.id.login);
         phone = (FloatLabel) view.findViewById(R.id.phone);
-        country = (TextView) view.findViewById(R.id.country);
+        name = (FloatLabel) view.findViewById(R.id.name);
+        birthDate = (FloatLabel) view.findViewById(R.id.birthdate);
+        sex = (TextView) view.findViewById(R.id.sex);
+
         newPassword = (FloatLabel) view.findViewById(R.id.new_password);
         confirmPassword = (FloatLabel) view.findViewById(R.id.confirm_password);
+
         editBtn = (Button) view.findViewById(R.id.edit);
 
         confirmPhoneLabel = view.findViewById(R.id.confirm_phone_label);
@@ -90,9 +96,16 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     private void setData(User user) {
         mail.setText(user.getEmail());
         phone.setText(user.getPhone());
-        if (!TextUtils.isEmpty(user.getCountry())) {
-            country.setText(getString(getResources().getIdentifier(user.getCountry(), "string", getActivity().getPackageName())));
+        name.setText(user.getName());
+        if (user.getBirthDate() != null) {
+            birthDate.setText(new SimpleDateFormat(getString(R.string.profile_date_format)).format(user.getBirthDate()));
         }
+        if (user.getGender() == Sex.MALE) {
+            sex.setText(R.string.sex_male);
+        } else if (user.getGender() == Sex.FEMALE) {
+            sex.setText(R.string.sex_female);
+        }
+
 
         if (!user.isPhoneConfirmed()) {
             confirmPhoneLabel.setVisibility(View.VISIBLE);
@@ -145,7 +158,8 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     @Override
     public void onUpdate(User user) {
         SharedPreferencesStorage.saveUser(getActivity(), user);
-        onLoadFinished(null, new UserWrapper(user));
+//        onLoadFinished(null, new UserWrapper(user));
+        this.user = user;
     }
 
     @Override

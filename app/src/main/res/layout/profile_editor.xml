@@ -52,13 +52,24 @@
                 android:hint="@string/login_caption"
                 android:inputType="textEmailAddress" />
 
-            <TextView
-                style="@android:style/Widget.Holo.EditText"
-                android:focusableInTouchMode="false"
-                android:id="@id/country"
+            <com.appbonus.android.component.FloatLabel
+                android:id="@id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/country_caption" />
+                android:hint="@string/name_caption" />
+
+            <com.appbonus.android.component.FloatLabel
+                android:id="@id/birthdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/birthdate_caption"
+                android:layout="@layout/not_editable_float_label"/>
+
+            <Spinner
+                android:id="@id/sex"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

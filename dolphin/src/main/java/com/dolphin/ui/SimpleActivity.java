@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.dolphin.R;
+import com.dolphin.asynctask.AsyncTaskDialogFragment;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.ui.fragment.root.RootFragment;
@@ -21,11 +22,12 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 
-public abstract class SimpleActivity extends ActionBarActivity {
+public abstract class SimpleActivity extends ActionBarActivity implements LoadingDialogHelper {
     protected Toolbar toolbar;
 
     protected Set<Fragment> heap = Collections.newSetFromMap(new WeakHashMap<Fragment, Boolean>());
     protected Fragment mCurrentFragment;
+    protected AsyncTaskDialogFragment asyncTaskDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,14 @@ public abstract class SimpleActivity extends ActionBarActivity {
         beforeSetContentView();
         setContentView(layout());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    protected void initLoadingDialog(String loadingMessage) {
+        asyncTaskDialogFragment = AsyncTaskDialogFragment.newInstance(this);
+        Bundle args = new Bundle();
+        args.putString(AsyncTaskDialogFragment.MESSAGE, loadingMessage);
+        asyncTaskDialogFragment.setArguments(args);
+        asyncTaskDialogFragment.setCancelable(false);
     }
 
     protected void beforeSetContentView() {
@@ -190,5 +200,17 @@ public abstract class SimpleActivity extends ActionBarActivity {
     }
 
     public void toggleDrawer() {
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        asyncTaskDialogFragment.show(getSupportFragmentManager(), "loading_dialog");
+    }
+
+    @Override
+    public void dismissLoadingDialog() {
+        if (asyncTaskDialogFragment != null && asyncTaskDialogFragment.isAdded()) {
+            asyncTaskDialogFragment.dismissAllowingStateLoss();
+        }
     }
 }

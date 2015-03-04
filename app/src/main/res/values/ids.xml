@@ -77,4 +77,7 @@
     <item name="confirm" type="id" />
     <item name="tech_support" type="id" />
     <item name="note" type="id" />
+    <item name="name" type="id" />
+    <item name="birthdate" type="id" />
+    <item name="sex" type="id" />
 </resources>

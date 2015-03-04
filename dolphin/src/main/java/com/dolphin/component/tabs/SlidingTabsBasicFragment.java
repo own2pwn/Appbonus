@@ -38,26 +38,31 @@ public abstract class SlidingTabsBasicFragment extends SimpleFragment implements
     protected SlidingTabLayout mSlidingTabLayout;
     protected ViewPager mViewPager;
     protected PagerAdapter adapter;
-    protected List<Fragment> shownFragments;
+    protected List<Fragment> shownFragments = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.sliding_tab_fragment, container, false);
+        View view = inflater.inflate(R.layout.sliding_tab_fragment, container, false);
+        initUI(view);
+        return view;
+    }
+
+    protected void initUI(View view) {
+        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setOnPageChangeListener(this);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         List<String> fragments = getFragments();
-        shownFragments = new ArrayList<>(fragments.size());
-        adapter = new SamplePagerAdapter(getChildFragmentManager(), fragments, getTitles());
-        mViewPager.setAdapter(adapter);
+        if (adapter == null) {
+            adapter = new SamplePagerAdapter(getChildFragmentManager(), fragments, getTitles());
+        }
         mViewPager.setOffscreenPageLimit(2);
-
-        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setViewPager(mViewPager);
-        mSlidingTabLayout.setOnPageChangeListener(this);
+        mViewPager.setAdapter(adapter);
         onPageSelected(mViewPager.getCurrentItem());
     }
 

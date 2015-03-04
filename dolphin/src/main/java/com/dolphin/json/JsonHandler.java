@@ -32,9 +32,10 @@ public class JsonHandler<T> {
 
     public JsonHandler(Class<T> aClass) {
         mClass = aClass;
-        gsonParser = new GsonBuilder()
+        GsonBuilder gsonBuilder = new GsonBuilder()
                 .setFieldNamingPolicy(fieldNamingPolicy())
-                .registerTypeAdapter(Date.class, new DateSerializer())
+                .registerTypeAdapter(Date.class, new DateSerializer());
+        gsonParser = modify(gsonBuilder)
                 .create();
     }
 
@@ -48,6 +49,10 @@ public class JsonHandler<T> {
 
     public T fromJsonObject(JSONObject object) {
         return gsonParser.fromJson(object.toString(), mClass);
+    }
+
+    public GsonBuilder modify(GsonBuilder builder) {
+        return builder;
     }
 
     public T fromJsonString(String jsonString) {

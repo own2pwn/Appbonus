@@ -1,18 +1,17 @@
 package com.appbonus.android.ui.fragments.profile;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.appbonus.android.R;
@@ -21,9 +20,11 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
+import com.appbonus.android.model.enums.Sex;
 import com.appbonus.android.storage.SharedPreferencesStorage;
-import com.appbonus.android.ui.LoadingDialogHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
+import com.dolphin.component.DatePickerDialog;
+import com.dolphin.ui.LoadingDialogHelper;
 import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
@@ -32,10 +33,21 @@ import com.throrinstudio.android.common.libs.validator.validate.ConfirmValidate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
 
-public class ProfileEditorFragment extends SimpleFragment implements View.OnClickListener {
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+public class ProfileEditorFragment extends SimpleFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+    public static final String SEX_NAME_PARAMETER = "name";
     protected FloatLabel mail;
     protected FloatLabel phone;
-    protected TextView country;
+    protected FloatLabel name;
+    protected FloatLabel birthDate;
+    protected Spinner sex;
+    protected SimpleAdapter sexAdapter;
 
     protected FloatLabel newPassword;
     protected FloatLabel confirmPassword;
@@ -53,6 +65,27 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     protected Fragment parentFragment;
 
     protected ProfileEditorFragmentListener listener;
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                user.setGender(null);
+                break;
+            case 1:
+                //male
+                user.setGender(Sex.MALE);
+                break;
+            case 2:
+                //female
+                user.setGender(Sex.FEMALE);
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
 
     public interface ProfileEditorFragmentListener extends LoadingDialogHelper {
         UserWrapper changePassword(ChangePasswordRequest request) throws Throwable;
@@ -88,33 +121,6 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         user = bundle.getParcelable("user");
         setData(user);
         setDrawerIndicatorEnabled(false);
-    }
-
-    public void changeCountry() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final String[] countries = {
-                getString(getResources().getIdentifier(User.COUNTRY_RUSSIA, "string", getActivity().getPackageName())),
-                getString(getResources().getIdentifier(User.COUNTRY_BELARUS, "string", getActivity().getPackageName())),
-                getString(getResources().getIdentifier(User.COUNTRY_UKRAINE, "string", getActivity().getPackageName()))};
-        builder.setItems(countries,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        country.setText(countries[which]);
-                        switch (which) {
-                            case 0:
-                                user.setCountry(User.COUNTRY_RUSSIA);
-                                break;
-                            case 1:
-                                user.setCountry(User.COUNTRY_BELARUS);
-                                break;
-                            case 2:
-                                user.setCountry(User.COUNTRY_UKRAINE);
-                                break;
-                        }
-                    }
-                });
-        builder.show();
     }
 
     public void changePassword() {
@@ -176,6 +182,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     private User getResult() {
         user.setEmail(mail.getText());
         user.setPhone(phone.getText());
+        user.setName(name.getText());
         return user;
     }
 
@@ -184,14 +191,18 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
         mail = (FloatLabel) view.findViewById(R.id.login);
         phone = (FloatLabel) view.findViewById(R.id.phone);
-        country = (TextView) view.findViewById(R.id.country);
+        name = (FloatLabel) view.findViewById(R.id.name);
+        birthDate = (FloatLabel) view.findViewById(R.id.birthdate);
+        birthDate.setOnClickListener(this);
+        sex = (Spinner) view.findViewById(R.id.sex);
+        initSexSpinner();
+
         newPassword = (FloatLabel) view.findViewById(R.id.new_password);
         confirmPassword = (FloatLabel) view.findViewById(R.id.confirm_password);
         saveBtn = (Button) view.findViewById(R.id.save);
         changePasswordBtn = (Button) view.findViewById(R.id.change_password);
         saveBtn.setOnClickListener(this);
         changePasswordBtn.setOnClickListener(this);
-        country.setOnClickListener(this);
 
         confirmPhoneLabel = view.findViewById(R.id.confirm_phone_label);
         confirmPhoneButton = view.findViewById(R.id.confirm_phone_button);
@@ -219,12 +230,30 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         mailForm.addValidates(mailValidate);
     }
 
+    private void initSexSpinner() {
+        sexAdapter = new SimpleAdapter(getActivity(), sexData(), R.layout.simple_item, new String[]{SEX_NAME_PARAMETER}, new int[]{android.R.id.text1});
+        sexAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        sex.setAdapter(sexAdapter);
+        sex.setOnItemSelectedListener(this);
+    }
+
+    private List<Map<String, String>> sexData() {
+        List<Map<String, String>> data = new ArrayList<>(3);
+        data.add(Collections.singletonMap(SEX_NAME_PARAMETER, ""));
+        data.add(Collections.singletonMap(SEX_NAME_PARAMETER, getString(R.string.sex_male)));
+        data.add(Collections.singletonMap(SEX_NAME_PARAMETER, getString(R.string.sex_female)));
+        return data;
+    }
+
     private void setData(User user) {
         mail.setText(user.getEmail());
         phone.setText(user.getPhone());
-        if (!TextUtils.isEmpty(user.getCountry())) {
-            country.setText(getString(getResources().getIdentifier(user.getCountry(), "string", getActivity().getPackageName())));
+        name.setText(user.getName());
+        if (user.getBirthDate() != null) {
+            birthDate.setText(new SimpleDateFormat(getString(R.string.profile_date_format)).format(user.getBirthDate()));
         }
+        if (user.getGender() != null)
+            sex.setSelection(user.getGender().ordinal());
 
         setPhoneSetting(user);
     }
@@ -253,10 +282,20 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
             case R.id.confirm_phone_button:
                 confirmPhone();
                 break;
-            case R.id.country:
-                changeCountry();
+            case R.id.edit_text:
+                openBirthDateDialog();
                 break;
         }
+    }
+
+    private void openBirthDateDialog() {
+        DatePickerDialog.newInstance(user.getBirthDate(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(Date date) {
+                user.setBirthDate(date);
+                birthDate.setText(new SimpleDateFormat(getString(R.string.profile_date_format)).format(user.getBirthDate()));
+            }
+        }).show(getFragmentManager(), "birth_date_dialog");
     }
 
     private void confirmPhone() {

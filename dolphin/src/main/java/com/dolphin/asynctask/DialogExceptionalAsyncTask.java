@@ -17,7 +17,7 @@ public abstract class DialogExceptionalAsyncTask<Params, Progress, Result> exten
     protected void onPreExecute() {
         super.onPreExecute();
 
-        dialogFragment = AsyncTaskDialogFragment.newInstance();
+        dialogFragment = AsyncTaskDialogFragment.newInstance(context);
         dialogFragment.setArguments(createArguments());
         dialogFragment.show(getFragmentManager(), "dialogFragment");
     }

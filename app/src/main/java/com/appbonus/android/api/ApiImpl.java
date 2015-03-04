@@ -28,16 +28,30 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 import com.dolphin.api.CommonApi;
+import com.dolphin.json.JsonHandler;
 import com.dolphin.net.exception.FormException;
 import com.dolphin.net.methods.HttpMethod;
 import com.dynamixsoftware.ErrorAgent;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.http.HttpHeaders;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 public class ApiImpl extends CommonApi implements Api {
@@ -228,5 +242,36 @@ public class ApiImpl extends CommonApi implements Api {
             }
             return exception;
         }
+    }
+
+    @Override
+    protected <T> JsonHandler<T> createJsonHandler(Class<T> tClass) {
+        return new JsonHandler<T>(tClass) {
+            @Override
+            public GsonBuilder modify(GsonBuilder builder) {
+                GsonBuilder gsonBuilder = super.modify(builder);
+                gsonBuilder.registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+                    @Override
+                    public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+                        return new JsonPrimitive(new SimpleDateFormat("yyyy-MM-dd").format(src));
+                    }
+                });
+                gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                    @Override
+                    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        String date = json.getAsString();
+                        if (StringUtils.isNoneBlank(date)) {
+                            try {
+                                return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+                            } catch (ParseException e) {
+                                return null;
+                            }
+                        }
+                        return null;
+                    }
+                });
+                return gsonBuilder;
+            }
+        };
     }
 }

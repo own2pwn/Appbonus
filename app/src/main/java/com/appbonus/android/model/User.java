@@ -42,7 +42,7 @@ public class User implements Serializable, Parcelable {
     protected List<AuthService> authServices;
     protected String inviteCode;
     protected Date birthDate;
-    protected Sex sex;
+    protected Sex gender;
     protected String name;
 
     public long getId() {
@@ -71,6 +71,10 @@ public class User implements Serializable, Parcelable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCountry() {
@@ -165,8 +169,16 @@ public class User implements Serializable, Parcelable {
         return birthDate;
     }
 
-    public Sex getSex() {
-        return sex;
+    public Sex getGender() {
+        return gender;
+    }
+
+    public void setGender(Sex gender) {
+        this.gender = gender;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getName() {
@@ -208,7 +220,7 @@ public class User implements Serializable, Parcelable {
         dest.writeTypedList(authServices);
         dest.writeString(this.inviteCode);
         dest.writeLong(birthDate != null ? birthDate.getTime() : -1);
-        dest.writeInt(this.sex == null ? -1 : this.sex.ordinal());
+        dest.writeInt(this.gender == null ? -1 : this.gender.ordinal());
         dest.writeString(this.name);
     }
 
@@ -243,8 +255,8 @@ public class User implements Serializable, Parcelable {
         this.inviteCode = in.readString();
         long tmpBirthDate = in.readLong();
         this.birthDate = tmpBirthDate == -1 ? null : new Date(tmpBirthDate);
-        int tmpSex = in.readInt();
-        this.sex = tmpSex == -1 ? null : Sex.values()[tmpSex];
+        int tmpGender = in.readInt();
+        this.gender = tmpGender == -1 ? null : Sex.values()[tmpGender];
         this.name = in.readString();
     }
 

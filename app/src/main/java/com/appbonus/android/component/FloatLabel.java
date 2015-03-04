@@ -62,4 +62,9 @@ public class FloatLabel extends com.iangclifton.android.floatlabel.FloatLabel {
         EditText editText = getEditText();
         editText.setError(error);
     }
+
+    @Override
+    public void setOnClickListener(OnClickListener l) {
+        getEditText().setOnClickListener(l);
+    }
 }

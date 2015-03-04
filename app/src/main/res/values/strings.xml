@@ -14,6 +14,8 @@
     <string name="my_web_cab_link">http://appbonus.ru/my</string>
     <string name="app_bonus_mail">mail@appbonus.ru</string>
 
+    <string name="profile_date_format">dd MMM yyyy</string>
+
     <string name="name_db">app_bonus.db</string>
     <string name="models">
         com.appbonus.android.model.Question
@@ -140,5 +142,10 @@
     <string name="tech_support" />
     <string name="error">Ошибка</string>
     <string name="confirm_title">Ваш номер</string>
+    <string name="name_caption">Ваше имя</string>
+    <string name="birthdate_caption">Ваша дата рождения</string>
+    <string name="sex_caption">Ваш пол</string>
+    <string name="sex_male">Мужской</string>
+    <string name="sex_female">Женский</string>
 
 </resources>

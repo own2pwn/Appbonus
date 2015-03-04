@@ -52,7 +52,6 @@ import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileEditorFragment;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.appbonus.android.ui.login.LoginActivity;
-import com.dolphin.asynctask.AsyncTaskDialogFragment;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
@@ -74,7 +73,6 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private Api api;
     private MobileAppTracker mobileAppTracker;
-    private AsyncTaskDialogFragment asyncTaskDialogFragment;
 
     @Override
     protected int layout() {
@@ -108,14 +106,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
                 (DrawerLayout) findViewById(R.id.drawer_layout)
         );
         initMobileAppTracker();
-        initLoadingDialog();
-    }
-
-    private void initLoadingDialog() {
-        asyncTaskDialogFragment = AsyncTaskDialogFragment.newInstance();
-        Bundle args = new Bundle();
-        args.putString(AsyncTaskDialogFragment.MESSAGE, getString(R.string.loading));
-        asyncTaskDialogFragment.setArguments(args);
+        initLoadingDialog(getString(R.string.loading));
     }
 
     private void openNotificationFragment(Notification notification) {
@@ -270,18 +261,6 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     @Override
     public Loader<OfferWrapper> createOfferLoader(Offer offer) {
         return new OfferLoader(this, api, offer);
-    }
-
-    @Override
-    public void showLoadingDialog() {
-        asyncTaskDialogFragment.show(getSupportFragmentManager(), "loading_dialog");
-    }
-
-    @Override
-    public void dismissLoadingDialog() {
-        if (asyncTaskDialogFragment != null) {
-            asyncTaskDialogFragment.dismissAllowingStateLoss();
-        }
     }
 
     @Override
