@@ -22,6 +22,7 @@ import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.push.GoogleCloudMessagingUtils;
+import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
@@ -48,6 +49,7 @@ public class LoginActivity extends FragmentActivity {
         api = new ApiImpl(this);
         initUI();
         initValidators();
+        KeyboardUtils.setupTouchEvents(this, getWindow().getDecorView());
     }
 
     public void initUI() {

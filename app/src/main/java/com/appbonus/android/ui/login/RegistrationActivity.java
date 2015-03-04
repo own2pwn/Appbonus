@@ -19,6 +19,7 @@ import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.net.exception.FormException;
 import com.dolphin.utils.DeviceUtils;
+import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
@@ -47,6 +48,7 @@ public class RegistrationActivity extends FragmentActivity {
         api = new ApiImpl(this);
         initUI();
         initValidators();
+        KeyboardUtils.setupTouchEvents(this, getWindow().getDecorView());
     }
 
     public void initValidators() {

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.dolphin.R;
 import com.dolphin.ui.SimpleActivity;
+import com.dolphin.utils.KeyboardUtils;
 
 import org.apache.commons.lang3.BooleanUtils;
 
@@ -262,6 +263,7 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        KeyboardUtils.setupTouchEvents(this, getActivity().getWindow().getDecorView());
         setDisplayHomeAsUpEnabled(true);
         ((SimpleActivity) getActivity()).onFragmentView(this);
     }

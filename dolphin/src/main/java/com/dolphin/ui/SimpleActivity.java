@@ -15,6 +15,7 @@ import com.dolphin.asynctask.AsyncTaskDialogFragment;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.dolphin.ui.fragment.SimpleFragment;
 import com.dolphin.ui.fragment.root.RootFragment;
+import com.dolphin.utils.KeyboardUtils;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +36,7 @@ public abstract class SimpleActivity extends ActionBarActivity implements Loadin
         beforeSetContentView();
         setContentView(layout());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        KeyboardUtils.setupTouchEvents(this, getWindow().getDecorView());
     }
 
     protected void initLoadingDialog(String loadingMessage) {

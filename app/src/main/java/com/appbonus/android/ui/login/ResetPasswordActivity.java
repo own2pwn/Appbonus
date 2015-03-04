@@ -14,6 +14,7 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
+import com.dolphin.utils.KeyboardUtils;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -29,6 +30,7 @@ public class ResetPasswordActivity extends FragmentActivity {
         api = new ApiImpl(this);
         mail = getIntent().getStringExtra("mail");
         password = (FloatLabel) findViewById(R.id.password);
+        KeyboardUtils.setupTouchEvents(this, getWindow().getDecorView());
     }
 
     public void resetPasswordHandler(View view) {
