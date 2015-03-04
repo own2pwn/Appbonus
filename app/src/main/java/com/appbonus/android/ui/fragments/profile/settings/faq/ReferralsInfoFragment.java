@@ -2,6 +2,7 @@ package com.appbonus.android.ui.fragments.profile.settings.faq;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.activeandroid.sebbia.query.Select;
 import com.appbonus.android.R;
 import com.appbonus.android.model.Question;
+import com.commonsware.cwac.anddown.AndDown;
 import com.dolphin.ui.fragment.SimpleFragment;
 
 public class ReferralsInfoFragment extends SimpleFragment {
@@ -31,7 +33,7 @@ public class ReferralsInfoFragment extends SimpleFragment {
         Question object = new Select().from(Question.class).where(Question.ABOUT_REFERRALS + "=?", Boolean.TRUE).executeSingle();
         if (object != null) {
             question.setText(object.getText());
-            answer.setText(object.getAnswer());
+            answer.setText(Html.fromHtml(new AndDown().markdownToHtml(object.getAnswer())));
         }
 
         setTitle(R.string.faq);
