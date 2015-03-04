@@ -38,6 +38,7 @@ import com.appbonus.android.model.api.OfferWrapper;
 import com.appbonus.android.model.api.OffersWrapper;
 import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
+import com.appbonus.android.model.api.SettingsWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
@@ -53,6 +54,7 @@ import com.appbonus.android.ui.fragments.profile.ProfileEditorFragment;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
+import com.dolphin.asynctask.ExceptionAsyncTask;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.flurry.android.FlurryAgent;
@@ -107,6 +109,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         );
         initMobileAppTracker();
         initLoadingDialog(getString(R.string.loading));
+        loadSettings();
     }
 
     private void openNotificationFragment(Notification notification) {
@@ -318,6 +321,23 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     @Override
     public DataWrapper confirmPhone(String code) throws Throwable {
         return api.confirmPhone(new ConfirmPhoneRequest(getToken(), code));
+    }
+
+    protected void loadSettings() {
+        new ExceptionAsyncTask<Void, Void, SettingsWrapper>(this) {
+            @Override
+            protected SettingsWrapper background(Void... params) throws Throwable {
+                return api.getSettings(new SimpleRequest(getToken()));
+            }
+
+            @Override
+            protected void onPostExecute(SettingsWrapper settingsWrapper) {
+                super.onPostExecute(settingsWrapper);
+                if (settingsWrapper != null && settingsWrapper.getSettings() != null) {
+                    SharedPreferencesStorage.saveSettings(context, settingsWrapper.getSettings());
+                }
+            }
+        }.execute();
     }
 
     protected String getToken() {

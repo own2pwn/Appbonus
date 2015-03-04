@@ -22,6 +22,7 @@ import com.appbonus.android.model.api.OffersWrapper;
 import com.appbonus.android.model.api.QuestionsWrapper;
 import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
+import com.appbonus.android.model.api.SettingsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 
@@ -53,6 +54,8 @@ public interface Api {
     String SUFX_DONE = "done_ids";
 
     String SUFX_FAQ = "faq";
+
+    String SUFX_SETTINGS = "settings";
 
     /*
      *  POST /api/v1/signup
@@ -439,4 +442,16 @@ public interface Api {
       }
      */
     DoneOffersWrapper readDoneIds(SimpleRequest request) throws Throwable;
+
+    /*
+    GET /api/v1/settings
+    AUTH required
+    RESPONSE
+      {
+        settings: {
+          partner_sign_up_bonus: null //Бонус за регистрацию по промо-коду
+        }
+      }
+     */
+    SettingsWrapper getSettings(SimpleRequest request) throws Throwable;
 }

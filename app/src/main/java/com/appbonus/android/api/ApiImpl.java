@@ -25,6 +25,7 @@ import com.appbonus.android.model.api.OffersWrapper;
 import com.appbonus.android.model.api.QuestionsWrapper;
 import com.appbonus.android.model.api.ReferralsDetailsWrapper;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
+import com.appbonus.android.model.api.SettingsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 import com.dolphin.api.CommonApi;
@@ -170,6 +171,11 @@ public class ApiImpl extends CommonApi implements Api {
     @Override
     public DoneOffersWrapper readDoneIds(SimpleRequest request) throws Throwable {
         return doGet(request, SimpleRequest.class, DoneOffersWrapper.class, SUFX_OFFERS, SUFX_DONE);
+    }
+
+    @Override
+    public SettingsWrapper getSettings(SimpleRequest request) throws Throwable {
+        return doGet(request, SimpleRequest.class, SettingsWrapper.class, SUFX_SETTINGS);
     }
 
     protected void preparation(HttpMethod httpMethod) {

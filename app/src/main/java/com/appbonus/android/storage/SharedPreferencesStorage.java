@@ -3,6 +3,7 @@ package com.appbonus.android.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.appbonus.android.model.Settings;
 import com.appbonus.android.model.User;
 import com.dolphin.helper.PreferencesHelper;
 
@@ -18,6 +19,7 @@ public class SharedPreferencesStorage extends PreferencesHelper {
     private static final String MOBILE_PARAMETER = "mobile_parameter";
     private static final String USER_PARAMETER = "user";
     private static final String PASSWORD_PARAMETER = "password";
+    private static final String SETTINGS_PARAMETER = "settings";
 
     protected SharedPreferencesStorage(Context context) {
         super(context);
@@ -113,15 +115,24 @@ public class SharedPreferencesStorage extends PreferencesHelper {
         return storage.get(PASSWORD_PARAMETER, "");
     }
 
-    @SuppressWarnings("unchecked")
     public static void saveUser(Context context, User user) {
         SharedPreferencesStorage storage = getStorage(context);
-        storage.save(USER_PARAMETER, user, (Class<User>) user.getClass());
+        storage.save(USER_PARAMETER, user, User.class);
     }
 
     public static User getUser(Context context) {
         SharedPreferencesStorage storage = getStorage(context);
         return storage.load(USER_PARAMETER, User.class);
+    }
+
+    public static void saveSettings(Context context, Settings settings) {
+        SharedPreferencesStorage storage = getStorage(context);
+        storage.save(SETTINGS_PARAMETER, settings, Settings.class);
+    }
+
+    public static Settings getSettings(Context context) {
+        SharedPreferencesStorage storage = getStorage(context);
+        return storage.load(SETTINGS_PARAMETER, Settings.class);
     }
 
     private static SharedPreferencesStorage getStorage(Context context) {
