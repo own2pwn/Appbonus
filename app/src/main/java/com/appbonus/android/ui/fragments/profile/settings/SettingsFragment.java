@@ -1,10 +1,8 @@
 package com.appbonus.android.ui.fragments.profile.settings;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +13,10 @@ import android.widget.TextView;
 
 import com.appbonus.android.R;
 import com.appbonus.android.model.User;
-import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.OnUserUpdateListener;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
-import com.appbonus.android.ui.login.LoginActivity;
-import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.ui.fragment.SimpleFragment;
 
@@ -41,9 +36,9 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
     protected SettingsFragmentListener listener;
 
     public interface SettingsFragmentListener {
-        DataWrapper unregisterDevice() throws Throwable;
-
         UserWrapper writeProfile(User user) throws Throwable;
+
+        void exit();
     }
 
     @Override
@@ -119,35 +114,13 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
                 openLicense();
                 break;
             case R.id.exit:
-                exit();
+                listener.exit();
                 break;
         }
     }
 
     private void openLicense() {
         placeProperFragment(LicenseFragment.class.getName());
-    }
-
-    private void exit() {
-        new DialogExceptionalAsyncTask<Void, Void, DataWrapper>(getActivity()) {
-            @Override
-            protected FragmentManager getFragmentManager() {
-                return getActivity().getSupportFragmentManager();
-            }
-
-            @Override
-            protected DataWrapper background(Void... params) throws Throwable {
-                return listener.unregisterDevice();
-            }
-
-            @Override
-            protected void onPostExecute(DataWrapper dataWrapper) {
-                super.onPostExecute(dataWrapper);
-                SharedPreferencesStorage.deleteToken(getActivity());
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
-            }
-        }.execute();
     }
 
     @Override

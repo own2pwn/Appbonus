@@ -195,26 +195,26 @@ public abstract class BaseHttpMethod implements HttpMethod {
         this.errorHandler = errorHandler;
     }
 
-    public String getResponse(String tag) {
+    private String getResponse(String tag) {
         synchronized (responseCache) {
             return responseCache.get(tag);
         }
     }
 
-    public void saveResponse(String tag, String response) {
+    private void saveResponse(String tag, String response) {
         if (tag == null || response == null) return;
         synchronized (responseCache) {
             responseCache.put(tag, response);
         }
     }
 
-    public String getRequestTag(int hash) {
+    private String getRequestTag(int hash) {
         synchronized (requestCache) {
             return requestCache.get(hash);
         }
     }
 
-    public void saveRequest(int hash, String tag) {
+    private void saveRequest(int hash, String tag) {
         if (tag == null) return;
         synchronized (requestCache) {
             requestCache.put(hash, tag);
@@ -225,5 +225,10 @@ public abstract class BaseHttpMethod implements HttpMethod {
         if (connection != null) {
             connection.disconnect();
         }
+    }
+
+    public static void resetCaches() {
+        requestCache.evictAll();
+        responseCache.evictAll();
     }
 }

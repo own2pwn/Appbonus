@@ -55,6 +55,7 @@ import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.asynctask.ExceptionAsyncTask;
+import com.dolphin.net.methods.BaseHttpMethod;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.flurry.android.FlurryAgent;
@@ -178,7 +179,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         return super.onOptionsItemSelected(item);
     }
 
-    private void exit() {
+    public void exit() {
         new DialogExceptionalAsyncTask<Void, Void, DataWrapper>(this) {
             @Override
             protected FragmentManager getFragmentManager() {
@@ -187,18 +188,22 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
 
             @Override
             protected DataWrapper background(Void... params) throws Throwable {
-                return api.unregisterDevice(new DeviceRequest(getToken(),
-                        new BonusGCMUtils().getRegistrationId(context)));
+                return unregisterDevice();
             }
 
             @Override
             protected void onPostExecute(DataWrapper dataWrapper) {
                 super.onPostExecute(dataWrapper);
-                SharedPreferencesStorage.deleteToken(context);
+                cleanStorage();
                 startActivity(new Intent(context, LoginActivity.class));
                 finish();
             }
         }.execute();
+    }
+
+    private void cleanStorage() {
+        SharedPreferencesStorage.deleteToken(this);
+        BaseHttpMethod.resetCaches();
     }
 
     @Override
@@ -302,7 +307,6 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         return api.changePassword(request);
     }
 
-    @Override
     public DataWrapper unregisterDevice() throws Throwable {
         return api.unregisterDevice(new DeviceRequest(getToken(),
                 new BonusGCMUtils().getRegistrationId(this)));

@@ -7,6 +7,7 @@ import com.appbonus.android.model.enums.Sex;
 import com.appbonus.android.model.enums.UserStatus;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -251,6 +252,7 @@ public class User implements Serializable, Parcelable {
         this.phoneConfirmed = in.readByte() != 0;
         long tmpPhoneConfirmedAt = in.readLong();
         this.phoneConfirmedAt = tmpPhoneConfirmedAt == -1 ? null : new Date(tmpPhoneConfirmedAt);
+        authServices = new ArrayList<>();
         in.readTypedList(authServices, AuthService.CREATOR);
         this.inviteCode = in.readString();
         long tmpBirthDate = in.readLong();
