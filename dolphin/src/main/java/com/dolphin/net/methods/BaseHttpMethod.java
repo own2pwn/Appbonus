@@ -93,7 +93,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
         }
 
         Uri uri = builder.build();
-        return new URL(uri != null ? uri.toString() : "");
+        return new URL(uri != null ? Uri.decode(uri.toString()) : "");
     }
 
     protected void configureConnection(URL postUrl) throws IOException {

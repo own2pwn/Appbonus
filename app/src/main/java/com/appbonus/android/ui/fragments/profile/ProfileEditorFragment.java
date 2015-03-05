@@ -40,7 +40,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ProfileEditorFragment extends SimpleFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class ProfileEditorFragment extends SimpleFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener,
+        ConfirmPhoneFragment.OnPhoneConfirmListener {
     public static final String SEX_NAME_PARAMETER = "name";
     protected FloatLabel mail;
     protected FloatLabel phone;
@@ -85,6 +86,11 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    public void onPhoneConfirm() {
+        user.setPhoneConfirmed(true);
     }
 
     public interface ProfileEditorFragmentListener extends LoadingDialogHelper {

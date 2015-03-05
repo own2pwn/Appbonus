@@ -186,6 +186,10 @@ public class User implements Serializable, Parcelable {
         return name;
     }
 
+    public void setPhoneConfirmed(boolean phoneConfirmed) {
+        this.phoneConfirmed = phoneConfirmed;
+    }
+
     public User() {
     }
 

@@ -22,9 +22,14 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
     protected View techSupport;
 
     protected ConfirmPhoneFragmentListener listener;
+    protected OnPhoneConfirmListener onPhoneConfirmListener;
 
     public interface ConfirmPhoneFragmentListener {
         DataWrapper confirmPhone(String code) throws Throwable;
+    }
+
+    public interface OnPhoneConfirmListener {
+        void onPhoneConfirm();
     }
 
     @Override
@@ -45,6 +50,7 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
         super.onViewCreated(view, savedInstanceState);
         setDrawerIndicatorEnabled(false);
         setTitle(R.string.confirm_title);
+        onPhoneConfirmListener = (OnPhoneConfirmListener) getTargetFragment();
     }
 
     private void initUI(View view) {
@@ -87,8 +93,10 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
                 super.onPostExecute(dataWrapper);
                 if (dataWrapper != null && dataWrapper.isSuccess()) {
                     showToast(dataWrapper.toString());
+                    if (onPhoneConfirmListener != null)
+                        onPhoneConfirmListener.onPhoneConfirm();
                     closeCurrentFragment();
-                    //todo
+
                 } else showError(throwable.getMessage());
             }
         }.execute();
