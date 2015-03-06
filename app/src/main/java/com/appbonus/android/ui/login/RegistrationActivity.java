@@ -4,23 +4,20 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
+import com.appbonus.android.ui.ApiActivity;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.net.exception.FormException;
 import com.dolphin.utils.DeviceUtils;
-import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
@@ -29,10 +26,8 @@ import com.throrinstudio.android.common.libs.validator.validator.PhoneValidator;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class RegistrationActivity extends FragmentActivity {
+public class RegistrationActivity extends ApiActivity {
     public static final int LOGIN_VK_CODE = 1;
-
-    protected Api api;
 
     protected FloatLabel mail;
     protected FloatLabel phone;
@@ -46,10 +41,8 @@ public class RegistrationActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_layout);
-        api = new ApiImpl(this);
         initUI();
         initValidators();
-        KeyboardUtils.setupTouchEvents(this, getWindow().getDecorView());
     }
 
     public void initValidators() {
@@ -96,7 +89,7 @@ public class RegistrationActivity extends FragmentActivity {
 
                 @Override
                 protected LoginWrapper background(Void... params) throws Throwable {
-                    return api.registration(request);
+                    return registration(request);
                 }
 
                 @Override
@@ -166,7 +159,7 @@ public class RegistrationActivity extends FragmentActivity {
                     new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
                         @Override
                         protected LoginWrapper background(Void... params) throws Throwable {
-                            return api.vkRegister(new VkLoginRequest(token, mailStr, phoneStr));
+                            return vkRegistration(new VkLoginRequest(token, mailStr, phoneStr));
                         }
 
                         @Override

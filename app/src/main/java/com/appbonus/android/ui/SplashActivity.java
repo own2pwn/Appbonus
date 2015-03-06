@@ -1,6 +1,6 @@
 package com.appbonus.android.ui;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.activeandroid.sebbia.ActiveAndroid;
 import com.activeandroid.sebbia.query.Delete;
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.model.Question;
 import com.appbonus.android.model.api.QuestionsWrapper;
 import com.appbonus.android.storage.Config;
@@ -23,11 +21,10 @@ import com.dolphin.asynctask.ExceptionAsyncTask;
 
 import java.util.List;
 
-public class SplashActivity extends Activity implements View.OnClickListener {
+public class SplashActivity extends ApiActivity implements View.OnClickListener {
     public static final long MILLS_PER_SECOND = 1000;
     public static final long SPLASH_DELAY = MILLS_PER_SECOND * 1;
 
-    protected Api api;
     protected TextView loadingText;
     protected View progressBar;
     protected View rootView;
@@ -37,7 +34,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_layout);
-        api = new ApiImpl(this);
         loadingText = (TextView) findViewById(R.id.loading_text);
         progressBar = findViewById(R.id.progress_circular);
         rootView = findViewById(R.id.root_view);
@@ -59,7 +55,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
 
                 @Override
                 protected QuestionsWrapper background(Void... params) throws Throwable {
-                    return api.getFaq();
+                    return getFaq();
                 }
 
                 @Override
@@ -67,7 +63,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
                     super.onPostExecute(questionsWrapper);
                     if (isSuccess()) {
                         saveFaq(questionsWrapper);
-                        enter();
+                        enter(context);
                     } else {
                         showNetworkError();
                     }
@@ -103,13 +99,13 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void enter() {
+    private void enter(final Context context) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (TextUtils.isEmpty(Storage.<CharSequence>load(SplashActivity.this, Config.TOKEN))) {
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                } else startActivity(IntentHelper.openMain(SplashActivity.this));
+                if (TextUtils.isEmpty(Storage.<CharSequence>load(context, Config.TOKEN))) {
+                    startActivity(new Intent(context, LoginActivity.class));
+                } else startActivity(IntentHelper.openMain(context));
                 finish();
             }
         }, SPLASH_DELAY);

@@ -85,7 +85,7 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
                     withdrawalRequest.setRequestType(WithdrawalRequest.QIWI_REQUEST_TYPE);
                     break;
                 case R.id.withdrawal_phone:
-                    withdrawalRequest.setRequestType(WithdrawalRequest.QIWI_REQUEST_TYPE);
+                    withdrawalRequest.setRequestType(WithdrawalRequest.PHONE_REQUEST_TYPE);
                     break;
             }
             makeWithdrawal(withdrawalRequest);

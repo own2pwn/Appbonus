@@ -3,13 +3,10 @@ package com.appbonus.android.ui.login;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.appbonus.android.R;
-import com.appbonus.android.api.Api;
-import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
 import com.appbonus.android.api.model.VkLoginRequest;
@@ -19,11 +16,11 @@ import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
+import com.appbonus.android.ui.ApiActivity;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.push.GoogleCloudMessagingUtils;
-import com.dolphin.utils.KeyboardUtils;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
@@ -31,12 +28,11 @@ import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidat
 
 import java.lang.reflect.InvocationTargetException;
 
-public class LoginActivity extends FragmentActivity {
+public class LoginActivity extends ApiActivity {
     private static final int REGISTRATION_INTENT_CODE = 1;
     private static final int RESET_PASSWORD_INTENT_CODE = 2;
     private static final int LOGIN_VK_CODE = 3;
 
-    protected Api api;
     protected Form form;
     protected Form mailForm;
 
@@ -47,10 +43,8 @@ public class LoginActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        api = new ApiImpl(this);
         initUI();
         initValidators();
-        KeyboardUtils.setupTouchEvents(this, getWindow().getDecorView());
     }
 
     public void initUI() {
@@ -84,7 +78,7 @@ public class LoginActivity extends FragmentActivity {
 
                 @Override
                 protected LoginWrapper background(Void... params) throws Throwable {
-                    return api.login(loginRequest);
+                    return login(loginRequest);
                 }
 
                 @Override
@@ -145,7 +139,7 @@ public class LoginActivity extends FragmentActivity {
                     new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
                         @Override
                         protected LoginWrapper background(Void... params) throws Throwable {
-                            return api.vkLogin(new VkLoginRequest(token));
+                            return vkLogin(new VkLoginRequest(token));
                         }
 
                         @Override
@@ -190,7 +184,7 @@ public class LoginActivity extends FragmentActivity {
             new DialogExceptionalAsyncTask<Void, Void, SimpleResult>(this) {
                 @Override
                 protected SimpleResult background(Void... params) throws Throwable {
-                    return api.resetPassword(request);
+                    return resetPassword(request);
                 }
 
                 @Override

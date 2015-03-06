@@ -2,6 +2,8 @@ package com.appbonus.android.model.api;
 
 import android.text.TextUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,10 +21,7 @@ public class DataWrapper implements Serializable {
 
     @Override
     public String toString() {
-        if (!TextUtils.isEmpty(data)) {
-            return data;
-        }
-        return "";
+        return StringUtils.defaultString(data);
     }
 
     public boolean isSuccess() {

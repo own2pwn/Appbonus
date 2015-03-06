@@ -177,7 +177,6 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
                 openBaseFragment(FRIENDS_FRAGMENT);
                 return true;
             case R.id.exit:
-
                 exit();
                 return true;
         }
