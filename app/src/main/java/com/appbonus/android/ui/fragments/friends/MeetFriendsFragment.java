@@ -1,6 +1,6 @@
 package com.appbonus.android.ui.fragments.friends;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.appbonus.android.R;
 import com.appbonus.android.model.User;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
 import com.dolphin.ui.fragment.SimpleFragment;
 
@@ -26,10 +25,24 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
 
     protected User user;
 
+    protected MeetFriendsFragmentListener listener;
+
+    public interface MeetFriendsFragmentListener {
+        void sendInviteMessage();
+
+        User getUser();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener = (MeetFriendsFragmentListener) activity;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = SharedPreferencesStorage.getUser(getActivity());
+        user = listener.getUser();
     }
 
     @Override
@@ -88,14 +101,6 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
     }
 
     private void makeMeeting() {
-        String referrerLink = String.format(getString(R.string.referrer_app_link), SharedPreferencesStorage.getUserId(getActivity()));
-        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.meeting_subject));
-        intent.putExtra(Intent.EXTRA_TEXT, referrerLink);
-
-        startActivity(Intent.createChooser(intent, getString(R.string.share_chooser_text)));
+        listener.sendInviteMessage();
     }
 }

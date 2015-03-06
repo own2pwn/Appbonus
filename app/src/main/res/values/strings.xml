@@ -9,8 +9,8 @@
 
     <string name="vk_id">4739637</string>
     <string name="vk_secret">BDMI2dCGJltlLmOYTBMD</string>
-    <string name="referrer_app_link">http://appbonus.ru/?referrer_id=%s</string>
-    <string name="referrer_link">http://appbonus.ru/?referrer_id=%s</string>
+    <string name="referrer_app_link">http://appbonus.ru/?referrer_id=%1$s</string>
+    <string name="referrer_link">http://appbonus.ru/?referrer_id=%1$s</string>
     <string name="my_web_cab_link">http://appbonus.ru/my</string>
     <string name="app_bonus_mail">mail@appbonus.ru</string>
 
@@ -22,6 +22,9 @@
     </string>
 
     <string name="app_name">AppBonus</string>
+
+    <string name="promo_text">Качай игры и приложения из AppBonus - получай от 5 до 150 рублей! Установи по ссылке %1$s, введи промо-код: %2$s и получи %3$s рублей сразу после регистрации! Проверено, работает)</string>
+    <string name="promo_text_twitter">AppBonus платит за установку приложений! Качай по ссылке %1$s введи код %2$s и сразу получи %3$s рублей! Проверено, работает</string>
 
     <string name="login_caption">Ваш email</string>
     <string name="phone_caption">Ваш номер телефона</string>
@@ -121,11 +124,11 @@
     <string name="friends_info">Поделитесь промо-кодом с друзьями\nи они получат бонус при регистрации</string>
     <string name="meeting_subject">meeting_subject</string>
     <string name="share_chooser_text">Выберите приложение, чтобы поделиться</string>
-    <string name="human_count">%s чел.</string>
+    <string name="human_count">%1$s чел.</string>
     <string name="empty">Ничего нет</string>
     <string name="no_offers">Пока для вас\nнет активных приложений</string>
     <string name="balance_withdrawal_money">Вывод денег</string>
-    <string name="balance_profit">Бонус за %s</string>
+    <string name="balance_profit">Бонус за %1$s</string>
     <string name="in_progress">В процессе</string>
     <string name="failed">Не выполнено</string>
     <string name="success">Выполнено успешно</string>

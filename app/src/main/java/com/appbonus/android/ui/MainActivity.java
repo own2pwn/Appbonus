@@ -45,6 +45,7 @@ import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.BalanceBrowserFragment;
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.friends.FriendsFragment;
+import com.appbonus.android.ui.fragments.friends.MeetFriendsFragment;
 import com.appbonus.android.ui.fragments.navigation.NavigationDrawerFragment;
 import com.appbonus.android.ui.fragments.offer.OfferBrowserFragment;
 import com.appbonus.android.ui.fragments.offer.OfferListFragment;
@@ -55,6 +56,7 @@ import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.asynctask.ExceptionAsyncTask;
+import com.dolphin.helper.IntentHelper;
 import com.dolphin.net.methods.BaseHttpMethod;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
@@ -67,7 +69,8 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         FriendsFragment.FriendsFragmentListener, BalanceBrowserFragment.BalanceBrowserFragmentListener,
         WithdrawalFragment.WithdrawalFragmentListener,
         ProfileBrowserFragment.ProfileBrowserFragmentListener, ProfileEditorFragment.ProfileEditorFragmentListener,
-        ConfirmPhoneFragment.ConfirmPhoneFragmentListener, SettingsFragment.SettingsFragmentListener {
+        ConfirmPhoneFragment.ConfirmPhoneFragmentListener, SettingsFragment.SettingsFragmentListener,
+        MeetFriendsFragment.MeetFriendsFragmentListener {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
     public static final String BALANCE_FRAGMENT = BalanceBrowserFragment.class.getName();
@@ -346,5 +349,23 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
 
     protected String getToken() {
         return SharedPreferencesStorage.getToken(this);
+    }
+
+    @Override
+    public void sendInviteMessage() {
+        User user = getUser();
+        com.appbonus.android.model.Settings settings = SharedPreferencesStorage.getSettings(this);
+        String promoText = String.format(getString(R.string.promo_text),
+                "link", user.getInviteCode(), String.valueOf(Double.valueOf(settings.getPartnerSignUpBonus()).intValue()));
+        String twitterText = String.format(getString(R.string.promo_text_twitter),
+                "link", user.getInviteCode(), String.valueOf(Double.valueOf(settings.getPartnerSignUpBonus()).intValue()));
+
+
+        startActivity(Intent.createChooser(IntentHelper.createSharingIntent(this, promoText, twitterText), getString(R.string.share_chooser_text)));
+    }
+
+    @Override
+    public User getUser() {
+        return SharedPreferencesStorage.getUser(this);
     }
 }
