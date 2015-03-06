@@ -1,10 +1,9 @@
 package com.appbonus.android.api.model;
 
-public class ConfirmPhoneRequest extends SimpleRequest {
+public class ConfirmPhoneRequest {
     protected ConfirmPhoneRequest.User user;
 
-    public ConfirmPhoneRequest(String authToken, String phoneCode) {
-        super(authToken);
+    public ConfirmPhoneRequest(String phoneCode) {
         user = new ConfirmPhoneRequest.User();
         user.phoneCode = phoneCode;
     }

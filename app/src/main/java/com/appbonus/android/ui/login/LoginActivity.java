@@ -17,7 +17,8 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.push.BonusGCMUtils;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
@@ -173,7 +174,7 @@ public class LoginActivity extends FragmentActivity {
     private void saveLoginInformation(LoginWrapper loginObj, String password) {
         DataHelper.saveInfo(this, loginObj);
         if (password != null) {
-            SharedPreferencesStorage.savePassword(this, password);
+            Storage.save(this, Config.PASSWORD, password);
         }
 
         GoogleCloudMessagingUtils cloudMessagingUtils = new BonusGCMUtils();

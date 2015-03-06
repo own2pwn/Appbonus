@@ -8,7 +8,6 @@ import com.appbonus.android.api.model.OfferRequest;
 import com.appbonus.android.api.model.PagingRequest;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
-import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.api.model.WithdrawalRequest;
@@ -122,7 +121,7 @@ public interface Api {
             }
           }
      */
-    UserWrapper readProfile(SimpleRequest request) throws Throwable;
+    UserWrapper readProfile() throws Throwable;
 
     /*
      *  GET /api/v1/my/history
@@ -202,7 +201,7 @@ public interface Api {
             }
           }
      */
-    BalanceWrapper readBalance(SimpleRequest request) throws Throwable;
+    BalanceWrapper readBalance() throws Throwable;
 
     /*
      *  POST /api/v1/my/register_device
@@ -314,7 +313,7 @@ public interface Api {
             success: true
           }
      */
-    SimpleResult vkExit(SimpleRequest request) throws Throwable;
+    SimpleResult vkExit() throws Throwable;
 
     /*
      *  GET /api/v1/offers
@@ -415,7 +414,7 @@ public interface Api {
             }
           }
      */
-    ReferralsDetailsWrapper readReferralsDetails(SimpleRequest request) throws Throwable;
+    ReferralsDetailsWrapper readReferralsDetails() throws Throwable;
 
     /*
         my/request_confirmation
@@ -429,7 +428,7 @@ public interface Api {
             errors: errors //if fails
           }
      */
-    DataWrapper requestConfirmation(SimpleRequest request) throws Throwable;
+    DataWrapper requestConfirmation() throws Throwable;
 
     /*
     GET /api/v1/offers/done_ids
@@ -441,7 +440,7 @@ public interface Api {
         done_ids: [5, 10, ...]
       }
      */
-    DoneOffersWrapper readDoneIds(SimpleRequest request) throws Throwable;
+    DoneOffersWrapper readDoneIds() throws Throwable;
 
     /*
     GET /api/v1/settings
@@ -453,5 +452,5 @@ public interface Api {
         }
       }
      */
-    SettingsWrapper getSettings(SimpleRequest request) throws Throwable;
+    SettingsWrapper getSettings() throws Throwable;
 }

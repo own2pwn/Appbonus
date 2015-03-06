@@ -21,7 +21,8 @@ import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.model.enums.Sex;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.component.DatePickerDialog;
 import com.dolphin.ui.LoadingDialogHelper;
@@ -132,8 +133,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     public void changePassword() {
         if (passwordForm.validate()) {
             final String password = newPassword.getText();
-            final ChangePasswordRequest request = new ChangePasswordRequest(SharedPreferencesStorage.getToken(getActivity()),
-                    SharedPreferencesStorage.getPassword(getActivity()), password);
+            final ChangePasswordRequest request = new ChangePasswordRequest(Storage.<String>load(getActivity(), Config.PASSWORD), password);
             new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
                 @Override
                 protected FragmentManager getFragmentManager() {
@@ -149,7 +149,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
                 protected void onPostExecute(UserWrapper userWrapper) {
                     super.onPostExecute(userWrapper);
                     if (isSuccess()) {
-                        SharedPreferencesStorage.savePassword(context, password);
+                        Storage.save(context, Config.PASSWORD, password);
                         newPassword.clear();
                         confirmPassword.clear();
                         Toast.makeText(context, R.string.password_was_changed, Toast.LENGTH_LONG).show();

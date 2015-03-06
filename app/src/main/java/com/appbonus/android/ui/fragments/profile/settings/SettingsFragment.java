@@ -14,7 +14,8 @@ import android.widget.TextView;
 import com.appbonus.android.R;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.UserWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.profile.OnUserUpdateListener;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
 import com.dolphin.helper.IntentHelper;
@@ -52,7 +53,7 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         user = getArguments().getParcelable("user");
         if (user == null) {
-            user = SharedPreferencesStorage.getUser(getActivity());
+            user = Storage.load(getActivity(), Config.USER, User.class);
         }
     }
 

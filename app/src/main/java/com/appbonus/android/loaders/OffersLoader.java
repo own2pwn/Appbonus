@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.model.PagingRequest;
-import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.DoneOffersWrapper;
 import com.appbonus.android.model.api.OffersWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.loader.AbstractLoader;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -28,9 +26,8 @@ public class OffersLoader extends AbstractLoader<OffersWrapper> {
 
     @Override
     protected OffersWrapper backgroundLoading() throws Throwable {
-        String token = SharedPreferencesStorage.getToken(getContext());
-        DoneOffersWrapper doneOffers = api.readDoneIds(new SimpleRequest(token));
-        OffersWrapper offers = api.getOffers(new PagingRequest(token, page));
+        DoneOffersWrapper doneOffers = api.readDoneIds();
+        OffersWrapper offers = api.getOffers(new PagingRequest(page));
         return markCompletedOffers(offers, doneOffers);
     }
 

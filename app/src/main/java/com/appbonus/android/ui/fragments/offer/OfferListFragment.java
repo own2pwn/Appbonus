@@ -18,7 +18,8 @@ import com.appbonus.android.R;
 import com.appbonus.android.model.Meta;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OffersWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.friends.MeetFriendsFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
@@ -109,8 +110,9 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
         noOffersView = header.findViewById(R.id.no_offers_view);
 
         changeInputProfileView(getActivity());
-        balance.setText(RoubleHelper.convert(SharedPreferencesStorage.getBalance(getActivity())));
-        balance.setTypeface(typeFace);
+        Double balance = Storage.load(getActivity(), Config.BALANCE);
+        this.balance.setText(RoubleHelper.convert(balance != null ? balance : 0D));
+        this.balance.setTypeface(typeFace);
 
         inputProfile.setOnClickListener(this);
         meetFriends.setOnClickListener(this);

@@ -20,7 +20,8 @@ import com.appbonus.android.model.History;
 import com.appbonus.android.model.Meta;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.balance.autowithdrawal.AutowithdrawalFragment;
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.profile.ConfirmPhoneFragment;
@@ -135,7 +136,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
 
 
     private void setWithdrawalVisibility() {
-        boolean phoneConfirmed = SharedPreferencesStorage.isPhoneConfirmed(getActivity());
+        boolean phoneConfirmed = Storage.load(getActivity(), Config.PHONE_CONFIRMED);
         withdrawalMoney.setVisibility(phoneConfirmed ? View.VISIBLE : View.GONE);
         withdrawalIsNotAccessView.setVisibility(phoneConfirmed ? View.GONE : View.VISIBLE);
     }

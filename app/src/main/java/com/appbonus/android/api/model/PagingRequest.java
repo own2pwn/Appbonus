@@ -1,18 +1,9 @@
 package com.appbonus.android.api.model;
 
-public class PagingRequest extends SimpleRequest {
+public class PagingRequest {
     protected Long page;
 
-    public PagingRequest(String authToken, Long page) {
-        super(authToken);
-        this.page = page;
-    }
-
-    public Long getPage() {
-        return page;
-    }
-
-    public void setPage(Long page) {
+    public PagingRequest(Long page) {
         this.page = page;
     }
 }

@@ -15,7 +15,8 @@ import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.model.Question;
 import com.appbonus.android.model.api.QuestionsWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.ExceptionAsyncTask;
@@ -106,7 +107,7 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (TextUtils.isEmpty(SharedPreferencesStorage.getToken(SplashActivity.this))) {
+                if (TextUtils.isEmpty(Storage.<CharSequence>load(SplashActivity.this, Config.TOKEN))) {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 } else startActivity(IntentHelper.openMain(SplashActivity.this));
                 finish();

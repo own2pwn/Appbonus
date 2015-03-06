@@ -18,7 +18,6 @@ import com.appbonus.android.api.ApiImpl;
 import com.appbonus.android.api.model.ChangePasswordRequest;
 import com.appbonus.android.api.model.ConfirmPhoneRequest;
 import com.appbonus.android.api.model.DeviceRequest;
-import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.loaders.BalanceLoader;
 import com.appbonus.android.loaders.HistoryLoader;
@@ -41,7 +40,8 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SettingsWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.push.BonusGCMUtils;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.balance.BalanceBrowserFragment;
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.common.OnTechSupportCallListener;
@@ -208,7 +208,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     }
 
     private void cleanStorage() {
-        SharedPreferencesStorage.deleteToken(this);
+        Storage.delete(this, Config.TOKEN);
         BaseHttpMethod.resetCaches();
     }
 
@@ -299,8 +299,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
 
     @Override
     public DataWrapper makeWithdrawal(WithdrawalRequest request) throws Throwable {
-        return api.makeWithdrawal(new com.appbonus.android.api.model.WithdrawalRequest(
-                getToken(), request));
+        return api.makeWithdrawal(new com.appbonus.android.api.model.WithdrawalRequest(request));
     }
 
     @Override
@@ -314,50 +313,45 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     }
 
     public DataWrapper unregisterDevice() throws Throwable {
-        return api.unregisterDevice(new DeviceRequest(getToken(),
-                new BonusGCMUtils().getRegistrationId(this)));
+        return api.unregisterDevice(new DeviceRequest(new BonusGCMUtils().getRegistrationId(this)));
     }
 
     @Override
     public UserWrapper writeProfile(User user) throws Throwable {
-        return api.writeProfile(new UserRequest(getToken(), user));
+        return api.writeProfile(new UserRequest(user));
     }
 
     @Override
     public DataWrapper requestConfirmation() throws Throwable {
-        return api.requestConfirmation(new SimpleRequest(getToken()));
+        return api.requestConfirmation();
     }
 
     @Override
     public DataWrapper confirmPhone(String code) throws Throwable {
-        return api.confirmPhone(new ConfirmPhoneRequest(getToken(), code));
+        return api.confirmPhone(new ConfirmPhoneRequest(code));
     }
 
     protected void loadSettings() {
         new ExceptionAsyncTask<Void, Void, SettingsWrapper>(this) {
             @Override
             protected SettingsWrapper background(Void... params) throws Throwable {
-                return api.getSettings(new SimpleRequest(getToken()));
+                return api.getSettings();
             }
 
             @Override
             protected void onPostExecute(SettingsWrapper settingsWrapper) {
                 super.onPostExecute(settingsWrapper);
                 if (settingsWrapper != null && settingsWrapper.getSettings() != null) {
-                    SharedPreferencesStorage.saveSettings(context, settingsWrapper.getSettings());
+                    Storage.save(context, Config.SETTINGS, settingsWrapper.getSettings());
                 }
             }
         }.execute();
     }
 
-    protected String getToken() {
-        return SharedPreferencesStorage.getToken(this);
-    }
-
     @Override
     public void sendInviteMessage() {
         User user = getUser();
-        com.appbonus.android.model.Settings settings = SharedPreferencesStorage.getSettings(this);
+        com.appbonus.android.model.Settings settings = Storage.load(this, Config.SETTINGS, com.appbonus.android.model.Settings.class);
         String promoText = String.format(getString(R.string.promo_text),
                 "link", user.getInviteCode(), String.valueOf(Double.valueOf(settings.getPartnerSignUpBonus()).intValue()));
         String twitterText = String.format(getString(R.string.promo_text_twitter),
@@ -369,7 +363,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
 
     @Override
     public User getUser() {
-        return SharedPreferencesStorage.getUser(this);
+        return Storage.load(this, Config.USER, User.class);
     }
 
     @Override

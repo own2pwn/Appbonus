@@ -19,7 +19,8 @@ import android.widget.Toast;
 import com.appbonus.android.R;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OfferWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqAnswerFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.commonsware.cwac.anddown.AndDown;
@@ -161,7 +162,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     }
 
     private void share() {
-        String referrerLink = String.format(getString(R.string.referrer_app_link), SharedPreferencesStorage.getUserId(getActivity()));
+        String referrerLink = String.format(getString(R.string.referrer_app_link), Storage.load(getActivity(), Config.USER_ID));
         ClipboardUtils.copyToClipboard(getActivity(), referrerLink);
         Toast.makeText(getActivity(), R.string.referrer_link_was_copied, Toast.LENGTH_SHORT).show();
     }

@@ -3,9 +3,7 @@ package com.appbonus.android.loaders;
 import android.content.Context;
 
 import com.appbonus.android.api.Api;
-import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.model.api.BalanceWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.loader.AbstractLoader;
 
 public class BalanceLoader extends AbstractLoader<BalanceWrapper> {
@@ -18,6 +16,6 @@ public class BalanceLoader extends AbstractLoader<BalanceWrapper> {
 
     @Override
     protected BalanceWrapper backgroundLoading() throws Throwable {
-        return api.readBalance(new SimpleRequest(SharedPreferencesStorage.getToken(getContext())));
+        return api.readBalance();
     }
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.model.PagingRequest;
 import com.appbonus.android.model.api.ReferralsHistoryWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.dolphin.loader.AbstractLoader;
 
 public class ReferralsHistoryLoader extends AbstractLoader<ReferralsHistoryWrapper> {
@@ -20,6 +19,6 @@ public class ReferralsHistoryLoader extends AbstractLoader<ReferralsHistoryWrapp
 
     @Override
     protected ReferralsHistoryWrapper backgroundLoading() throws Throwable {
-        return api.readReferralsHistory(new PagingRequest(SharedPreferencesStorage.getToken(getContext()), page));
+        return api.readReferralsHistory(new PagingRequest(page));
     }
 }

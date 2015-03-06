@@ -1,18 +1,9 @@
 package com.appbonus.android.api.model;
 
-public class WithdrawalRequest extends SimpleRequest {
+public class WithdrawalRequest {
     protected com.appbonus.android.model.WithdrawalRequest withdrawalRequest;
 
-    public WithdrawalRequest(String authToken, com.appbonus.android.model.WithdrawalRequest withdrawalRequest) {
-        super(authToken);
-        this.withdrawalRequest = withdrawalRequest;
-    }
-
-    public com.appbonus.android.model.WithdrawalRequest getWithdrawalRequest() {
-        return withdrawalRequest;
-    }
-
-    public void setWithdrawalRequest(com.appbonus.android.model.WithdrawalRequest withdrawalRequest) {
+    public WithdrawalRequest(com.appbonus.android.model.WithdrawalRequest withdrawalRequest) {
         this.withdrawalRequest = withdrawalRequest;
     }
 }

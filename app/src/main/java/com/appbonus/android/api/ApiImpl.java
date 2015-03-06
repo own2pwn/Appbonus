@@ -1,6 +1,7 @@
 package com.appbonus.android.api;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.appbonus.android.R;
 import com.appbonus.android.api.model.ChangePasswordRequest;
@@ -11,7 +12,6 @@ import com.appbonus.android.api.model.OfferRequest;
 import com.appbonus.android.api.model.PagingRequest;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
-import com.appbonus.android.api.model.SimpleRequest;
 import com.appbonus.android.api.model.UserRequest;
 import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.api.model.WithdrawalRequest;
@@ -28,6 +28,8 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SettingsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.dolphin.api.CommonApi;
 import com.dolphin.json.JsonHandler;
 import com.dolphin.net.exception.FormException;
@@ -56,6 +58,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class ApiImpl extends CommonApi implements Api {
+    private static final String AUTH_TOKEN_HEADER = "Auth-Token";
     protected HttpMethod.ErrorHandler errorHandler;
 
     public ApiImpl(Context context) {
@@ -79,8 +82,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public UserWrapper readProfile(SimpleRequest request) throws Throwable {
-        return doGet(request, SimpleRequest.class, UserWrapper.class, SUFX_MY);
+    public UserWrapper readProfile() throws Throwable {
+        return doGet(null, null, UserWrapper.class, SUFX_MY);
     }
 
     @Override
@@ -94,8 +97,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public BalanceWrapper readBalance(SimpleRequest request) throws Throwable {
-        return doGet(request, SimpleRequest.class, BalanceWrapper.class, SUFX_MY, SUFX_BALANCE);
+    public BalanceWrapper readBalance() throws Throwable {
+        return doGet(null, null, BalanceWrapper.class, SUFX_MY, SUFX_BALANCE);
     }
 
     @Override
@@ -139,8 +142,8 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public SimpleResult vkExit(SimpleRequest request) throws Throwable {
-        return doDelete(request, SimpleRequest.class, SimpleResult.class, SUFX_VK_AUTH);
+    public SimpleResult vkExit() throws Throwable {
+        return doDelete(null, null, SimpleResult.class, SUFX_VK_AUTH);
     }
 
     @Override
@@ -159,23 +162,23 @@ public class ApiImpl extends CommonApi implements Api {
     }
 
     @Override
-    public ReferralsDetailsWrapper readReferralsDetails(SimpleRequest request) throws Throwable {
-        return doGet(request, SimpleRequest.class, ReferralsDetailsWrapper.class, SUFX_MY, SUFX_REFERRALS_DETAILS);
+    public ReferralsDetailsWrapper readReferralsDetails() throws Throwable {
+        return doGet(null, null, ReferralsDetailsWrapper.class, SUFX_MY, SUFX_REFERRALS_DETAILS);
     }
 
     @Override
-    public DataWrapper requestConfirmation(SimpleRequest request) throws Throwable {
-        return doPost(request, SimpleRequest.class, DataWrapper.class, SUFX_MY, SUFX_REQUEST_CONFIRMATION);
+    public DataWrapper requestConfirmation() throws Throwable {
+        return doPost(null, null, DataWrapper.class, SUFX_MY, SUFX_REQUEST_CONFIRMATION);
     }
 
     @Override
-    public DoneOffersWrapper readDoneIds(SimpleRequest request) throws Throwable {
-        return doGet(request, SimpleRequest.class, DoneOffersWrapper.class, SUFX_OFFERS, SUFX_DONE);
+    public DoneOffersWrapper readDoneIds() throws Throwable {
+        return doGet(null, null, DoneOffersWrapper.class, SUFX_OFFERS, SUFX_DONE);
     }
 
     @Override
-    public SettingsWrapper getSettings(SimpleRequest request) throws Throwable {
-        return doGet(request, SimpleRequest.class, SettingsWrapper.class, SUFX_SETTINGS);
+    public SettingsWrapper getSettings() throws Throwable {
+        return doGet(null, null, SettingsWrapper.class, SUFX_SETTINGS);
     }
 
     protected void preparation(HttpMethod httpMethod) {
@@ -189,6 +192,10 @@ public class ApiImpl extends CommonApi implements Api {
 
     private void addDefaultHeader(HttpMethod httpMethod) {
         httpMethod.addHeader(HttpHeaders.USER_AGENT, HEADER_USER_AGENT_VALUE);
+        String token = Storage.load(context, Config.TOKEN);
+        if (!TextUtils.isEmpty(token)) {
+            httpMethod.addHeader(AUTH_TOKEN_HEADER, token);
+        }
     }
 
     @Override

@@ -1,15 +1,13 @@
 package com.appbonus.android.api.model;
 
-public class ChangePasswordRequest extends SimpleRequest {
+public class ChangePasswordRequest {
     protected User user;
 
-    public ChangePasswordRequest(String authToken) {
-        super(authToken);
+    public ChangePasswordRequest() {
         user = new User();
     }
 
-    public ChangePasswordRequest(String authToken, String currentPassword, String password) {
-        this(authToken);
+    public ChangePasswordRequest(String currentPassword, String password) {
         user.setCurrentPassword(currentPassword);
         user.setPassword(password);
         user.setPasswordConfirmation(password);

@@ -23,24 +23,12 @@ public class VkLoginRequest {
         protected String email;
         protected String phone;
 
-        public String getVkToken() {
-            return vkToken;
-        }
-
         public void setVkToken(String vkToken) {
             this.vkToken = vkToken;
         }
 
-        public String getEmail() {
-            return email;
-        }
-
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public String getPhone() {
-            return phone;
         }
 
         public void setPhone(String phone) {

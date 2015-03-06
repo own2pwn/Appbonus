@@ -20,7 +20,8 @@ import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.model.enums.Sex;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
 import com.dolphin.ui.LoadingDialogHelper;
 import com.dolphin.ui.fragment.root.RootSimpleFragment;
@@ -157,8 +158,7 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
     @Override
     public void onUpdate(User user) {
-        SharedPreferencesStorage.saveUser(getActivity(), user);
-//        onLoadFinished(null, new UserWrapper(user));
+        Storage.save(getActivity(), Config.USER, user);
         this.user = user;
     }
 

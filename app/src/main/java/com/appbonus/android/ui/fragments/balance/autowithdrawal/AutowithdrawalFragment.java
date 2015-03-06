@@ -12,7 +12,8 @@ import android.widget.CompoundButton;
 
 import com.appbonus.android.R;
 import com.appbonus.android.component.FloatLabel;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.dolphin.ui.fragment.SimpleFragment;
 
 public class AutowithdrawalFragment extends SimpleFragment implements CompoundButton.OnCheckedChangeListener {
@@ -56,14 +57,14 @@ public class AutowithdrawalFragment extends SimpleFragment implements CompoundBu
     }
 
     private void setData(Context context) {
-        auto.setChecked(SharedPreferencesStorage.getAutoWithdrawal(context));
-        qiwi.setText(SharedPreferencesStorage.getQiwi(context));
-        mobile.setText(SharedPreferencesStorage.getMobile(context));
+        auto.setChecked(Storage.<Boolean>load(context, Config.AUTO_WITHDRAWAL));
+        qiwi.setText(Storage.<String>load(context, Config.QIWI));
+        mobile.setText(Storage.<String>load(context, Config.MOBILE));
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        SharedPreferencesStorage.setAutoWithdrawal(getActivity(), isChecked);
+        Storage.save(getActivity(), Config.AUTO_WITHDRAWAL, isChecked);
 
         if (isChecked) {
             qiwi.unlock();
@@ -78,10 +79,10 @@ public class AutowithdrawalFragment extends SimpleFragment implements CompoundBu
     public void onPause() {
         super.onPause();
         if (!qiwi.isLocked()) {
-            SharedPreferencesStorage.saveQiwi(getActivity(), qiwi.getText());
+            Storage.save(getActivity(), Config.QIWI, qiwi.getText());
         }
         if (!mobile.isLocked()) {
-            SharedPreferencesStorage.saveMobile(getActivity(), mobile.getText());
+            Storage.save(getActivity(), Config.MOBILE, mobile.getText());
         }
     }
 }

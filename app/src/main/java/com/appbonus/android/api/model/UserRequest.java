@@ -2,19 +2,10 @@ package com.appbonus.android.api.model;
 
 import com.appbonus.android.model.User;
 
-public class UserRequest extends SimpleRequest {
+public class UserRequest {
     protected User user;
 
-    public UserRequest(String authToken, User user) {
-        super(authToken);
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
+    public UserRequest(User user) {
         this.user = user;
     }
 }

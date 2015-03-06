@@ -15,7 +15,8 @@ import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.VkLoginRequest;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.LoginWrapper;
-import com.appbonus.android.storage.SharedPreferencesStorage;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.net.exception.FormException;
 import com.dolphin.utils.DeviceUtils;
@@ -117,7 +118,7 @@ public class RegistrationActivity extends FragmentActivity {
     }
 
     private void savePassword(String passwordStr) {
-        SharedPreferencesStorage.savePassword(this, passwordStr);
+        Storage.save(this, Config.PASSWORD, passwordStr);
     }
 
     private String getCountry() {

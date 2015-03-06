@@ -7,6 +7,8 @@ public class History implements Serializable {
     public static final String OPERATION_TYPE_WITHDRAWAL = "withdrawal";
     public static final String OPERATION_TYPE_PROFIT = "installation";
     public static final String OPERATION_TYPE_IN_PROGRESS = "in_progress";
+    public static final String OPERATION_TYPE_SIGN_UP = "partner_sign_up";
+    public static final String OPERATION_TYPE_REFERRAL_INSTALLATION = "referral_installation";
 
     protected Double amount;
     protected Date createdAt;
