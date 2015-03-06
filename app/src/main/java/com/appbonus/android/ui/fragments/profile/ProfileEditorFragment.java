@@ -237,7 +237,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     }
 
     private void initSexSpinner() {
-        sexAdapter = new SimpleAdapter(getActivity(), sexData(), R.layout.simple_item, new String[]{SEX_NAME_PARAMETER}, new int[]{android.R.id.text1});
+        sexAdapter = new SimpleAdapter(getActivity(), sexData(), R.layout.dropdown_view, new String[]{SEX_NAME_PARAMETER}, new int[]{android.R.id.text1});
         sexAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         sex.setAdapter(sexAdapter);
         sex.setOnItemSelectedListener(this);
