@@ -31,6 +31,7 @@ public interface Api {
     String API_VERSION = "v1";
 
     String HEADER_USER_AGENT_VALUE = "Appbonus Android App";
+    String HEADER_AUTH_TOKEN = "Auth-Token";
 
     String SUFX_SIGNIN = "signin";
     String SUFX_SIGNUP = "signup";

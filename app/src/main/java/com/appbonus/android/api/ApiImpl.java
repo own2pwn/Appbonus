@@ -58,7 +58,6 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class ApiImpl extends CommonApi implements Api {
-    private static final String AUTH_TOKEN_HEADER = "Auth-Token";
     protected HttpMethod.ErrorHandler errorHandler;
 
     public ApiImpl(Context context) {
@@ -194,7 +193,7 @@ public class ApiImpl extends CommonApi implements Api {
         httpMethod.addHeader(HttpHeaders.USER_AGENT, HEADER_USER_AGENT_VALUE);
         String token = Storage.load(context, Config.TOKEN);
         if (!TextUtils.isEmpty(token)) {
-            httpMethod.addHeader(AUTH_TOKEN_HEADER, token);
+            httpMethod.addHeader(HEADER_AUTH_TOKEN, token);
         }
     }
 
