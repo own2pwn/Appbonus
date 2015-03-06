@@ -3,7 +3,6 @@ package com.appbonus.android.ui.fragments.balance.withdrawal;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,7 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
     protected Form form;
 
     protected WithdrawalFragmentListener listener;
+    protected OnWithdrawalListener onWithdrawalListener;
 
     public interface WithdrawalFragmentListener {
         DataWrapper makeWithdrawal(WithdrawalRequest request) throws Throwable;
@@ -54,6 +54,7 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
         setTitle(R.string.withdrawal_title);
         setDrawerIndicatorEnabled(false);
+        onWithdrawalListener = (OnWithdrawalListener) getTargetFragment();
     }
 
     private void initUI(View view) {
@@ -115,9 +116,8 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
     }
 
     private void notifyObservers() {
-        Fragment fragment = getTargetFragment();
-        if (fragment instanceof OnWithdrawalListener) {
-            ((OnWithdrawalListener) fragment).onWithdrawal();
+        if (onWithdrawalListener != null) {
+            onWithdrawalListener.onWithdrawal();
         }
     }
 }

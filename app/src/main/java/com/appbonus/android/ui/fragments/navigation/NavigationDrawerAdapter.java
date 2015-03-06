@@ -12,28 +12,26 @@ import android.widget.TextView;
 import com.appbonus.android.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.List;
-
 
 public class NavigationDrawerAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Integer> objects;
+    private int mCount;
 
-    public NavigationDrawerAdapter(Context context, List<Integer> objects) {
+    public NavigationDrawerAdapter(Context context, int count) {
         super();
         this.context = context;
-        this.objects = objects;
+        this.mCount = count;
     }
 
     @Override
     public int getCount() {
-        return objects.size();
+        return mCount;
     }
 
     @Override
     public Object getItem(int position) {
-        return objects.get(position);
+        return position;
     }
 
     @Override

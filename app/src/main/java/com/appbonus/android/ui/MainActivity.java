@@ -44,6 +44,7 @@ import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.SharedPreferencesStorage;
 import com.appbonus.android.ui.fragments.balance.BalanceBrowserFragment;
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
+import com.appbonus.android.ui.fragments.common.OnTechSupportCallListener;
 import com.appbonus.android.ui.fragments.friends.FriendsFragment;
 import com.appbonus.android.ui.fragments.friends.MeetFriendsFragment;
 import com.appbonus.android.ui.fragments.navigation.NavigationDrawerFragment;
@@ -70,7 +71,8 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         WithdrawalFragment.WithdrawalFragmentListener,
         ProfileBrowserFragment.ProfileBrowserFragmentListener, ProfileEditorFragment.ProfileEditorFragmentListener,
         ConfirmPhoneFragment.ConfirmPhoneFragmentListener, SettingsFragment.SettingsFragmentListener,
-        MeetFriendsFragment.MeetFriendsFragmentListener {
+        MeetFriendsFragment.MeetFriendsFragmentListener,
+        OnTechSupportCallListener {
     public static final String OFFERS_FRAGMENT = OfferListFragment.class.getName();
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
     public static final String BALANCE_FRAGMENT = BalanceBrowserFragment.class.getName();
@@ -182,6 +184,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public void exit() {
         new DialogExceptionalAsyncTask<Void, Void, DataWrapper>(this) {
             @Override
@@ -367,5 +370,11 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     @Override
     public User getUser() {
         return SharedPreferencesStorage.getUser(this);
+    }
+
+    @Override
+    public void onTechSupportCall() {
+        startActivity(IntentHelper.sendTextEmail(null, getString(R.string.app_bonus_user_question),
+                new String[]{getString(R.string.app_bonus_mail)}));
     }
 }

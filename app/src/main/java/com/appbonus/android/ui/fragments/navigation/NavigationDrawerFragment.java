@@ -2,12 +2,10 @@ package com.appbonus.android.ui.fragments.navigation;
 
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,9 +19,6 @@ import com.appbonus.android.R;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.dolphin.ui.fragment.SimpleFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class NavigationDrawerFragment extends SimpleFragment implements NavigationDrawer {
 
@@ -36,7 +31,7 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
 
     public static final int ITEMS_COUNT = 4;
 
-    private NavigationDrawerCallbacks mListener;
+    private NavigationDrawerCallbacks navigationDrawerCallbacks;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -49,19 +44,13 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
 
     @Override
     public void onAttach(Activity activity) {
-
         super.onAttach(activity);
 
-        try {
-            mListener = (NavigationDrawerCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }
+        navigationDrawerCallbacks = (NavigationDrawerCallbacks) activity;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null)
@@ -72,9 +61,7 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View root = inflater.inflate(R.layout.navigation_drawer, container, false);
-        assert root != null;
 
         mListView = (ListView) root.findViewById(android.R.id.list);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -89,7 +76,6 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
         isInit = savedInstanceState != null;
         repaint();
@@ -110,7 +96,6 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
     }
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
-
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
@@ -132,7 +117,6 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
     }
 
     private void selectItem(int position) {
-
         if (position >= 0) {
             mSelectedPosition = position;
             if (mListView != null)
@@ -142,8 +126,8 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
         if (mDrawerLayout != null)
             mDrawerLayout.closeDrawer(mFragmentContainerView);
 
-        if (mListener != null)
-            mListener.onNavigationItemSelected(position);
+        if (navigationDrawerCallbacks != null)
+            navigationDrawerCallbacks.onNavigationItemSelected(position);
     }
 
     @Override
@@ -181,7 +165,7 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
     public void onDetach() {
 
         super.onDetach();
-        mListener = null;
+        navigationDrawerCallbacks = null;
     }
 
     /**
@@ -195,44 +179,23 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
         actionBar.setTitle(R.string.app_name);
     }
 
-    public Toolbar getToolbar() {
-        return toolbar;
-    }
+    private void populateList() {
+        if (getActivity() != null && mListView != null) {
+            mListView.setAdapter(new NavigationDrawerAdapter(getActivity(), ITEMS_COUNT));
 
-    private class PopulateListAsyncTask extends AsyncTask<Void, Void, List<Integer>> {
-
-        @Override
-        protected List<Integer> doInBackground(Void... params) {
-            List<Integer> list = new ArrayList<Integer>(ITEMS_COUNT);
-            for (int i = 0; i < ITEMS_COUNT; i++) {
-                list.add(i);
-            }
-            return list;
-        }
-
-        @Override
-        protected void onPostExecute(List<Integer> objects) {
-            if (getActivity() != null && mListView != null) {
-                mListView.setAdapter(new NavigationDrawerAdapter(getActivity(), objects));
-
-                if (!isInit) {
-                    selectItem(mSelectedPosition);
-                }
+            if (!isInit) {
+                selectItem(mSelectedPosition);
             }
         }
     }
 
     public void repaint() {
         isInit = true;
-        new PopulateListAsyncTask().execute();
+        populateList();
     }
 
     public void setDrawerIndicatorEnabled(boolean enable) {
         mDrawerToggle.setDrawerIndicatorEnabled(enable);
-    }
-
-    public boolean isDrawerIndicatorEnabled() {
-        return mDrawerToggle.isDrawerIndicatorEnabled();
     }
 
     public void lockNavigationDrawer() {
@@ -241,9 +204,5 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
 
     public void unlockNavigationDrawer() {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
-
-    public ActionBarDrawerToggle getDrawerToggle() {
-        return mDrawerToggle;
     }
 }

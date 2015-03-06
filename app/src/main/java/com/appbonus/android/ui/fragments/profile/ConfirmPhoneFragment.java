@@ -12,8 +12,8 @@ import android.widget.Button;
 import com.appbonus.android.R;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.api.DataWrapper;
+import com.appbonus.android.ui.fragments.common.OnTechSupportCallListener;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
-import com.dolphin.helper.IntentHelper;
 import com.dolphin.ui.fragment.SimpleFragment;
 
 public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClickListener {
@@ -23,6 +23,7 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
 
     protected ConfirmPhoneFragmentListener listener;
     protected OnPhoneConfirmListener onPhoneConfirmListener;
+    protected OnTechSupportCallListener onTechSupportCallListener;
 
     public interface ConfirmPhoneFragmentListener {
         DataWrapper confirmPhone(String code) throws Throwable;
@@ -36,6 +37,7 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         listener = (ConfirmPhoneFragmentListener) activity;
+        onTechSupportCallListener = (OnTechSupportCallListener) activity;
     }
 
     @Override
@@ -70,7 +72,7 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
                 confirm();
                 break;
             case R.id.tech_support:
-                startActivity(IntentHelper.sendTextEmail(null, null, new String[]{getString(R.string.app_bonus_mail)}));
+                onTechSupportCallListener.onTechSupportCall();
                 break;
         }
     }

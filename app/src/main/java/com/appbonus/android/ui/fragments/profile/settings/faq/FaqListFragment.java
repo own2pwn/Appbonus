@@ -1,5 +1,6 @@
 package com.appbonus.android.ui.fragments.profile.settings.faq;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -17,7 +18,7 @@ import android.widget.SimpleAdapter;
 import com.appbonus.android.R;
 import com.appbonus.android.loaders.FaqLoader;
 import com.appbonus.android.model.Question;
-import com.dolphin.helper.IntentHelper;
+import com.appbonus.android.ui.fragments.common.OnTechSupportCallListener;
 import com.dolphin.loader.AbstractLoader;
 import com.dolphin.ui.fragment.SimpleListFragment;
 
@@ -32,6 +33,14 @@ public class FaqListFragment extends SimpleListFragment<ListView, SimpleAdapter>
     public static final String QUESTION_PARAMETER = "question";
 
     protected List<Question> questions;
+
+    protected OnTechSupportCallListener onTechSupportCallListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onTechSupportCallListener = (OnTechSupportCallListener) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -116,7 +125,6 @@ public class FaqListFragment extends SimpleListFragment<ListView, SimpleAdapter>
     }
 
     private void makeQuestion() {
-        startActivity(IntentHelper.sendTextEmail(null, getString(R.string.app_bonus_user_question),
-                new String[]{getString(R.string.app_bonus_mail)}));
+        onTechSupportCallListener.onTechSupportCall();
     }
 }
