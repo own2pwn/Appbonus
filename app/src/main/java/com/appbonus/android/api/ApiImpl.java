@@ -97,7 +97,7 @@ public class ApiImpl extends CommonApi implements Api {
 
     @Override
     public BalanceWrapper readBalance() throws Throwable {
-        return doGet(null, null, BalanceWrapper.class, SUFX_MY, SUFX_BALANCE);
+        return doGet(BalanceWrapper.class, SUFX_MY, SUFX_BALANCE);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class ApiImpl extends CommonApi implements Api {
 
     @Override
     public SimpleResult vkExit() throws Throwable {
-        return doDelete(null, null, SimpleResult.class, SUFX_VK_AUTH);
+        return doDelete(SimpleResult.class, SUFX_VK_AUTH);
     }
 
     @Override
@@ -157,27 +157,27 @@ public class ApiImpl extends CommonApi implements Api {
 
     @Override
     public QuestionsWrapper getFaq() throws Throwable {
-        return doGet(null, null, QuestionsWrapper.class, SUFX_FAQ);
+        return doGet(QuestionsWrapper.class, SUFX_FAQ);
     }
 
     @Override
     public ReferralsDetailsWrapper readReferralsDetails() throws Throwable {
-        return doGet(null, null, ReferralsDetailsWrapper.class, SUFX_MY, SUFX_REFERRALS_DETAILS);
+        return doGet(ReferralsDetailsWrapper.class, SUFX_MY, SUFX_REFERRALS_DETAILS);
     }
 
     @Override
     public DataWrapper requestConfirmation() throws Throwable {
-        return doPost(null, null, DataWrapper.class, SUFX_MY, SUFX_REQUEST_CONFIRMATION);
+        return doPost(DataWrapper.class, SUFX_MY, SUFX_REQUEST_CONFIRMATION);
     }
 
     @Override
     public DoneOffersWrapper readDoneIds() throws Throwable {
-        return doGet(null, null, DoneOffersWrapper.class, SUFX_OFFERS, SUFX_DONE);
+        return doGet(DoneOffersWrapper.class, SUFX_OFFERS, SUFX_DONE);
     }
 
     @Override
     public SettingsWrapper getSettings() throws Throwable {
-        return doGet(null, null, SettingsWrapper.class, SUFX_SETTINGS);
+        return doGet(SettingsWrapper.class, SUFX_SETTINGS);
     }
 
     protected void preparation(HttpMethod httpMethod) {

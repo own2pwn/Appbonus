@@ -71,6 +71,10 @@ public abstract class CommonApi {
         return toObject(answer, responseType);
     }
 
+    protected <T> T doPost(Class<T> responseType, String... path) throws Throwable {
+        return doPost(null, null, responseType, path);
+    }
+
     protected <T, K> T doGet(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
         String[] array = collectParameters(path);
         HttpMethod method = new MethodGet(host(), toMap(request, requestType), array);
@@ -80,6 +84,10 @@ public abstract class CommonApi {
         String answer = method.perform(context);
         logger.end(Arrays.toString(path));
         return toObject(answer, responseType);
+    }
+
+    protected <T> T doGet(Class<T> responseType, String... path) throws Throwable {
+        return doGet(null, null, responseType, path);
     }
 
     protected <T, K> T doPut(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
@@ -113,6 +121,10 @@ public abstract class CommonApi {
         String answer = method.perform(context);
         logger.end(Arrays.toString(path));
         return toObject(answer, responseType);
+    }
+
+    protected <T, K> T doDelete(Class<T> responseType, String... path) throws Throwable {
+        return doDelete(null, null, responseType, path);
     }
 
     protected <T, K> T doUpload(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
