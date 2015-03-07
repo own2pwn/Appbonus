@@ -70,7 +70,8 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
+        if (getLoaderManager().getLoader(LOADER_ID) == null)
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
         setDrawerIndicatorEnabled(getTargetFragment() == null);
         KeyboardUtils.hideFragmentKeyboard(this);
     }
@@ -157,9 +158,11 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     }
 
     @Override
-    public void onUpdate(User user) {
+    public void onUpdate(User user, boolean reloadUI) {
         Storage.save(getActivity(), Config.USER, user);
         this.user = user;
+        if (reloadUI)
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override

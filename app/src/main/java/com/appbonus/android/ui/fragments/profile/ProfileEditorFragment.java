@@ -172,7 +172,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
                     super.onPostExecute(userWrapper);
                     if (isSuccess()) {
                         if (parentFragment instanceof OnUserUpdateListener)
-                            ((OnUserUpdateListener) parentFragment).onUpdate(userWrapper.getUser());
+                            ((OnUserUpdateListener) parentFragment).onUpdate(userWrapper.getUser(), true);
                         closeCurrentFragment();
                     } else showError(throwable.getMessage());
                 }

@@ -148,7 +148,7 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
                 }
             }
         }).start();
-        ((OnUserUpdateListener) getTargetFragment()).onUpdate(user);
+        ((OnUserUpdateListener) getTargetFragment()).onUpdate(user, false);
         super.onDestroyView();
     }
 }
