@@ -21,6 +21,11 @@ public class Storage {
         return (T) all.get(key);
     }
 
+    public static <T> T load(Context context, String key, T valueIfNull) {
+        T t = load(context, key);
+        return t == null ? valueIfNull : t;
+    }
+
     public static <T> T load(Context context, String key, Class<T> tClass) {
         String string = load(context, key);
         JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);

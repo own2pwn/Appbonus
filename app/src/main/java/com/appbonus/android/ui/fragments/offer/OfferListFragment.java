@@ -110,7 +110,7 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
         noOffersView = header.findViewById(R.id.no_offers_view);
 
         changeInputProfileView(getActivity());
-        Double balance = Storage.<Float>load(getActivity(), Config.BALANCE).doubleValue();
+        Double balance = Storage.<Float>load(getActivity(), Config.BALANCE, 0F).doubleValue();
         this.balance.setText(RoubleHelper.convert(balance != null ? balance : 0D));
         this.balance.setTypeface(typeFace);
 
