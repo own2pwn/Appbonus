@@ -301,10 +301,11 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     }
 
     public class HistoryAdapter extends PagingBaseAdapter<History> {
-        public static final int TYPE_COUNT = 3;
+        public static final int TYPE_COUNT = 4;
         public static final int OPERATION_TYPE_WITHDRAWAL = 0;
         public static final int OPERATION_TYPE_PROFIT = 1;
         public static final int OPERATION_TYPE_IN_PROGRESS = 2;
+        public static final int OPERATION_TYPE_SIGN_UP = 3;
 
         protected DisplayImageOptions options;
 
@@ -334,6 +335,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
                     case OPERATION_TYPE_IN_PROGRESS:
                         convertView = inflateView(R.layout.balance_withdrawal_in_progress);
                         break;
+                    //todo
                 }
                 if (convertView != null) {
                     viewHolder.amount = (TextView) convertView.findViewById(R.id.amount);
@@ -385,6 +387,8 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
                     return OPERATION_TYPE_PROFIT;
                 case History.OPERATION_TYPE_IN_PROGRESS:
                     return OPERATION_TYPE_IN_PROGRESS;
+                case History.OPERATION_TYPE_SIGN_UP:
+                    return OPERATION_TYPE_SIGN_UP;
             }
             return -1;
         }

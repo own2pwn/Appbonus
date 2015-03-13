@@ -171,6 +171,7 @@ public abstract class CommonApi {
     }
 
     protected <T> JSONObject toJson(T obj, Class<T> tClass) throws Throwable {
+        if (obj == null) return new JSONObject();
         JsonHandler<T> jsonHandler = createJsonHandler(tClass);
         return jsonHandler.toJsonObject(obj);
     }

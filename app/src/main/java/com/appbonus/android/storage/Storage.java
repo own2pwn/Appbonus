@@ -40,6 +40,8 @@ public class Storage {
             editor.putFloat(key, (Float) obj);
         } else if (obj instanceof Integer) {
             editor.putInt(key, (Integer) obj);
+        } else if (obj instanceof Double) {
+            editor.putFloat(key, ((Double) obj).floatValue());
         } else {
             Class<T> tClass = (Class<T>) obj.getClass();
             JsonHandler<T> jsonHandler = new JsonHandler<>(tClass);
