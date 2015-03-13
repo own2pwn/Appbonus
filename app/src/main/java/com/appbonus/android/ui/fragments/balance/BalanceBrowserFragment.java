@@ -157,13 +157,13 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
         if (adapter == null) {
             correlationHistoryWithBalance(data.getHistory(), balance);
             adapter = new HistoryAdapter(data.getHistory());
-            setListAdapter(adapter);
             setListSettings();
+            setListAdapter(adapter);
         } else {
             if (currentPage == meta.getCurrentPage()) {
                 setListAdapter(adapter);
                 setListSettings();
-            } else listView.onFinishLoading(false, data.getHistory());
+            } else listView.onFinishLoading(currentPage != meta.getTotalPages(), data.getHistory());
         }
     }
 
@@ -184,8 +184,9 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     }
 
     private void setListSettings() {
-        if (meta.getTotalPages() == 1) {
+        if (meta.getTotalPages() <= 1) {
             footer.setOnClickListener(null);
+            listView.setHasMoreItems(false);
             hideMoreFooter();
         } else {
             listView.setHasMoreItems(false);
@@ -265,9 +266,6 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
         public void onLoadFinished(Loader<HistoryWrapper> loader, HistoryWrapper data) {
             if (((AbstractLoader) loader).isSuccess()) {
                 meta = data.getMeta();
-                if (meta.getTotalCount() == 0 || meta.getCurrentPage().equals(meta.getTotalPages())) {
-                    hideMoreFooter();
-                }
                 setHistory(data);
                 currentPage = meta.getCurrentPage();
             }
@@ -279,6 +277,7 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     }
 
     private void hideMoreFooter() {
+        listView.removeFooterView(footer);
         listView.removeFooterView(footer);
         listView.addFooterView(emptyFooter, null, false);
         listView.onFinishLoading(false, null);
@@ -335,7 +334,9 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
                     case OPERATION_TYPE_IN_PROGRESS:
                         convertView = inflateView(R.layout.balance_withdrawal_in_progress);
                         break;
-                    //todo
+                    case OPERATION_TYPE_SIGN_UP:
+                        convertView = inflateView(R.layout.balance_promo);
+                        break;
                 }
                 if (convertView != null) {
                     viewHolder.amount = (TextView) convertView.findViewById(R.id.amount);
@@ -347,6 +348,9 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
             if (itemViewType == OPERATION_TYPE_PROFIT) {
                 viewHolder.description.setText(createDescription(item));
                 amountSign = "+";
+            } else if (itemViewType == OPERATION_TYPE_SIGN_UP) {
+                amountSign = "+";
+                viewHolder.description.setText(item.getReference());
             }
             viewHolder.amount.setTypeface(typeface);
             viewHolder.amount.setText(amountSign + createRouble(item.getAmount()));

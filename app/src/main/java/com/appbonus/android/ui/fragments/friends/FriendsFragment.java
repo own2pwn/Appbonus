@@ -181,9 +181,6 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
         public void onLoadFinished(Loader<ReferralsHistoryWrapper> loader, ReferralsHistoryWrapper data) {
             if (((AbstractLoader) loader).isSuccess()) {
                 meta = data.getMeta();
-                if (meta.getTotalCount() == 0 || meta.getCurrentPage().equals(meta.getTotalPages())) {
-                    hideMoreFooter();
-                }
                 setReferralsHistory(data);
                 currentPage = meta.getCurrentPage();
             }
@@ -195,6 +192,7 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
     }
 
     private void hideMoreFooter() {
+        footer.setVisibility(View.GONE);
         listView.removeFooterView(footer);
         listView.addFooterView(emptyFooter, null, false);
         listView.onFinishLoading(false, null);
@@ -203,19 +201,20 @@ public class FriendsFragment extends RootListFragment<PagingListView, FriendsFra
     private void setReferralsHistory(ReferralsHistoryWrapper data) {
         if (adapter == null) {
             adapter = new ReferralsHistoryAdapter(data.getReferralsHistory());
-            setListAdapter(adapter);
             setListSettings();
+            setListAdapter(adapter);
         } else {
             if (currentPage == meta.getCurrentPage()) {
                 setListAdapter(adapter);
                 setListSettings();
-            } else listView.onFinishLoading(false, data.getReferralsHistory());
+            } else listView.onFinishLoading(currentPage != meta.getTotalPages(), data.getReferralsHistory());
         }
     }
 
     private void setListSettings() {
-        if (meta.getTotalPages() == 1) {
+        if (meta.getTotalPages() <= 1) {
             footer.setOnClickListener(null);
+            listView.setHasMoreItems(false);
             hideMoreFooter();
         } else {
             listView.setHasMoreItems(false);
