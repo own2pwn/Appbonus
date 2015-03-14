@@ -150,5 +150,6 @@
     <string name="sex_caption">Ваш пол</string>
     <string name="sex_male">Мужской</string>
     <string name="sex_female">Женский</string>
+    <string name="you_has_rooted_device">Использование AppBonus с root-доступом запрещено</string>
 
 </resources>
