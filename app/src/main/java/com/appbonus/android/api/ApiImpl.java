@@ -152,7 +152,7 @@ public class ApiImpl extends CommonApi implements Api {
 
     @Override
     public OfferWrapper showOffer(OfferRequest request) throws Throwable {
-        return doGet(request, OfferRequest.class, OfferWrapper.class, SUFX_OFFERS, String.valueOf(request.getId()));
+        return doGet(null, null, OfferWrapper.class, SUFX_OFFERS, String.valueOf(request.getId()));
     }
 
     @Override
