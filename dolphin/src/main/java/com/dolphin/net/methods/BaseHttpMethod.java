@@ -8,6 +8,7 @@ import android.util.LruCache;
 import com.dolphin.net.ConnectionUtilsInsecure;
 import com.dolphin.net.NetUtils;
 import com.dolphin.net.exception.NetworkException;
+import com.dolphin.net.exception.UnauthorizedException;
 
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
@@ -124,8 +125,12 @@ public abstract class BaseHttpMethod implements HttpMethod {
         return readStream(connection.getInputStream());
     }
 
-    private String readError(HttpURLConnection connection) throws IOException {
-        return readStream(connection.getErrorStream());
+    private String readError(HttpURLConnection connection) {
+        try {
+            return readStream(connection.getErrorStream());
+        } catch (Exception e) {
+            return "Unknown error";
+        }
     }
 
     private String readStream(java.io.InputStream is) {
@@ -163,6 +168,10 @@ public abstract class BaseHttpMethod implements HttpMethod {
                 return response;
             } else if (responseCode == HttpStatus.SC_NOT_MODIFIED) {
                 return getResponse(eTag);
+            } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
+                UnauthorizedException exception = new UnauthorizedException();
+                handleError(exception.getMessage());
+                throw exception;
             }
             else return throwError();
         } finally {
@@ -177,10 +186,14 @@ public abstract class BaseHttpMethod implements HttpMethod {
 
     private String throwError() throws Throwable {
         String detailMessage = readError(connection);
+        handleError(detailMessage);
+        throw new Throwable(detailMessage);
+    }
+
+    private void handleError(String detailMessage) {
         if (errorHandler != null) {
             throw errorHandler.handle(detailMessage);
         }
-        throw new Throwable(detailMessage);
     }
 
     public void addHeader(String key, String value) {
