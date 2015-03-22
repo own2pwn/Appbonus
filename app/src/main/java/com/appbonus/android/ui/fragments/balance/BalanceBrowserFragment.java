@@ -41,7 +41,7 @@ import org.apache.commons.collections.CollectionUtils;
 import java.util.List;
 
 public class BalanceBrowserFragment extends RootListFragment<PagingListView, BalanceBrowserFragment.HistoryAdapter>
-        implements View.OnClickListener, OnWithdrawalListener {
+        implements View.OnClickListener, OnWithdrawalListener, ConfirmPhoneFragment.OnPhoneConfirmListener {
     public static final int BALANCE_LOADER_ID = 1;
     public static final int HISTORY_LOADER_ID = 2;
 
@@ -66,6 +66,11 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
     protected long currentPage = -1L;
 
     protected BalanceBrowserFragmentListener listener;
+
+    @Override
+    public void onPhoneConfirm() {
+        //nothing
+    }
 
     public interface BalanceBrowserFragmentListener extends LoadingDialogHelper {
         Loader<BalanceWrapper> createBalanceLoader();

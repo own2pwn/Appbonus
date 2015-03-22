@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class PhoneValidator extends AbstractValidator {
 
-    private static final Pattern PHONE_PATTERN = Patterns.PHONE;
+    private static Pattern PHONE_PATTERN = Patterns.PHONE;
     private static final int DEFAULT_ERROR_MESSAGE_RESOURCE = R.string.validator_phone;
 
     public PhoneValidator(Context c) {
@@ -24,7 +24,14 @@ public class PhoneValidator extends AbstractValidator {
     }
 
     public PhoneValidator(Context c, int errorMessageRes) {
+        this(c, errorMessageRes, null);
+    }
+
+    public PhoneValidator(Context c, int errorMessageRes, String customPattern) {
         super(c, errorMessageRes);
+        if (!TextUtils.isEmpty(customPattern)) {
+            PHONE_PATTERN = Pattern.compile(customPattern);
+        }
     }
 
     @Override

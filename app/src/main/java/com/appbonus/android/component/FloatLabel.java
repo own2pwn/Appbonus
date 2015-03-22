@@ -1,6 +1,7 @@
 package com.appbonus.android.component;
 
 import android.content.Context;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -66,5 +67,9 @@ public class FloatLabel extends com.iangclifton.android.floatlabel.FloatLabel {
     @Override
     public void setOnClickListener(OnClickListener l) {
         getEditText().setOnClickListener(l);
+    }
+
+    public void addTextChangedListener(TextWatcher watcher) {
+        getEditText().addTextChangedListener(watcher);
     }
 }

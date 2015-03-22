@@ -54,7 +54,7 @@ public class RegistrationActivity extends ApiActivity {
         mailValidate.addValidator(new NotEmptyValidator(this, R.string.input_mail));
 
         Validate phoneValidate = new Validate(phone.getEditText());
-        phoneValidate.addValidator(new PhoneValidator(this, R.string.wrong_phone));
+        phoneValidate.addValidator(new PhoneValidator(this, R.string.wrong_phone, "\\+7 [0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}"));
         phoneValidate.addValidator(new NotEmptyValidator(this, R.string.input_phone));
 
         Validate passwordValidate = new Validate(password.getEditText());
@@ -73,6 +73,8 @@ public class RegistrationActivity extends ApiActivity {
         phone = (FloatLabel) findViewById(R.id.phone);
         password = (FloatLabel) findViewById(R.id.password);
         promo = (FloatLabel) findViewById(R.id.promo);
+
+        phone.setText("9");
     }
 
     public void registerHandler(View view) {

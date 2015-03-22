@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@id/float_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textIsSelectable="true"
+        android:textColor="@android:color/white"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <com.appbonus.android.component.masked.MaskedEditText
+        android:id="@id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:background="@drawable/input_default"
+        android:padding="2dp"
+        android:textSize="18sp"
+        app:mask="+7 ### ### ## ##"/>
+</merge>

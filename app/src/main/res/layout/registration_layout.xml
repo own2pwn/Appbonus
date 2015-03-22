@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/phone_caption"
             android:inputType="phone"
-            android:layout="@layout/default_float_label_white_hint"/>
+            android:layout="@layout/default_float_label_phone_white_hint"/>
 
         <com.appbonus.android.component.FloatLabel
             android:id="@id/password"

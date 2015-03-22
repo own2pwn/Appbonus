@@ -33,6 +33,7 @@ import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validate.ConfirmValidate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
+import com.throrinstudio.android.common.libs.validator.validator.PhoneValidator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     protected User user;
     protected Form passwordForm;
     protected Form mailForm;
+    protected Form phoneForm;
 
     protected Fragment parentFragment;
 
@@ -160,7 +162,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     }
 
     public void save() {
-        if (mailForm.validate()) {
+        if (mailForm.validate() && phoneForm.validate()) {
             new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
                 @Override
                 protected UserWrapper background(Void... params) throws Throwable {
@@ -234,6 +236,11 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         Validate mailValidate = new Validate(mail.getEditText());
         mailValidate.addValidator(new EmailValidator(getActivity(), R.string.wrong_mail));
         mailForm.addValidates(mailValidate);
+
+        phoneForm = new Form();
+        Validate phoneValidate = new Validate(phone.getEditText());
+        phoneValidate.addValidator(new PhoneValidator(getActivity(), R.string.wrong_phone, "\\+7 [0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}"));
+        phoneForm.addValidates(phoneValidate);
     }
 
     private void initSexSpinner() {
