@@ -6,6 +6,7 @@
     android:headerDividersEnabled="false"
     android:footerDividersEnabled="false"
     android:divider="@null"
-    android:dividerHeight="0dip">
+    android:dividerHeight="0dip"
+    android:listSelector="@android:color/transparent">
 
 </com.paging.listview.PagingListView>
