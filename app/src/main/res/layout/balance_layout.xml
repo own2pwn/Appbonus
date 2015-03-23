@@ -10,7 +10,8 @@
         android:divider="@null"
         android:dividerHeight="0dip"
         android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false">
+        android:headerDividersEnabled="false"
+        android:listSelector="@android:color/transparent">
 
     </com.paging.listview.PagingListView>
 </LinearLayout>
