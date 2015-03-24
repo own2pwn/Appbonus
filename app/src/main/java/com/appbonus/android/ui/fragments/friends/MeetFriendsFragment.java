@@ -1,27 +1,33 @@
 package com.appbonus.android.ui.fragments.friends;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.appbonus.android.R;
+import com.appbonus.android.model.Settings;
 import com.appbonus.android.model.User;
-import com.appbonus.android.ui.fragments.profile.settings.faq.ReferralsInfoFragment;
+import com.appbonus.android.storage.Config;
+import com.appbonus.android.storage.Storage;
 import com.dolphin.ui.fragment.SimpleFragment;
 
 public class MeetFriendsFragment extends SimpleFragment implements View.OnClickListener {
-    protected View referralsInfo;
     protected View meet;
-    protected View promoView;
     protected TextView promo;
+    protected TextView meetFriendsPromo;
+    protected EditText promoLink;
 
     protected User user;
 
@@ -60,24 +66,36 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
     }
 
     private void initUI(View view) {
-        referralsInfo = view.findViewById(R.id.referrals_info);
-        referralsInfo.setOnClickListener(this);
+        promoLink = (EditText) view.findViewById(R.id.promo_link);
+        promo = (TextView) view.findViewById(R.id.promo);
+        meetFriendsPromo = (TextView) view.findViewById(R.id.meet_friends_promo);
+
         meet = view.findViewById(R.id.meet);
         meet.setOnClickListener(this);
-        promoView = view.findViewById(R.id.promo_view);
         if (!TextUtils.isEmpty(user.getInviteCode())) {
-            promo = (TextView) promoView.findViewById(R.id.promo);
             promo.setText(user.getInviteCode());
-        } else promoView.setVisibility(View.GONE);
+
+            promoLink.setText(String.format(getString(R.string.promo_link), user.getInviteCode()));
+        }
+
+        SpannableString spannableString = promoSum();
+        meetFriendsPromo.setText(spannableString);
+    }
+
+    private SpannableString promoSum() {
+        Settings settings = Storage.load(getActivity(), Config.SETTINGS, Settings.class);
+        String sum = String.valueOf(Double.valueOf(settings.getPartnerSignUpBonus()).intValue()) + " " + getString(R.string.roubles);
+        String format = String.format(getString(R.string.meet_friends_promo), sum);
+        SpannableString spannableString = new SpannableString(format);
+        int start = format.indexOf(sum);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), start, start + sum.length(), 0);
+        return spannableString;
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.referrals_info:
-                placeProperFragment(ReferralsInfoFragment.class.getName());
-                break;
             case R.id.meet:
                 makeMeeting();
                 break;

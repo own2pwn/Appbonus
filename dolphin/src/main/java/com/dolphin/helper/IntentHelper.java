@@ -31,7 +31,7 @@ public class IntentHelper {
         return intent;
     }
 
-    public static Intent createSharingIntent(Context context, String text, String twitterText) {
+    public static Intent[] createSharingIntent(Context context, String text, String twitterText) {
         List<Intent> targetedShareIntents = new ArrayList<>();
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -51,7 +51,7 @@ public class IntentHelper {
                 targetedShareIntent.setPackage(packageName);
                 targetedShareIntents.add(targetedShareIntent);
             }
-            return targetedShareIntents.remove(0);
+            return targetedShareIntents.toArray(new Intent[targetedShareIntents.size()]);
         }
         return null;
     }

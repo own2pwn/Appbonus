@@ -356,8 +356,12 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         String twitterText = String.format(getString(R.string.promo_text_twitter),
                 "link", user.getInviteCode(), String.valueOf(Double.valueOf(settings.getPartnerSignUpBonus()).intValue()));
 
-
-        startActivity(Intent.createChooser(IntentHelper.createSharingIntent(this, promoText, twitterText), getString(R.string.share_chooser_text)));
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, promoText);
+        Intent[] intents = IntentHelper.createSharingIntent(this, promoText, twitterText);
+        startActivity(Intent.createChooser(intent .putExtra(Intent.EXTRA_INITIAL_INTENTS, intents), getString(R.string.share_chooser_text)));
     }
 
     @Override

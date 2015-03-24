@@ -80,4 +80,6 @@
     <item name="name" type="id" />
     <item name="birthdate" type="id" />
     <item name="sex" type="id" />
+    <item name="meet_friends_promo" type="id" />
+    <item name="promo_link" type="id" />
 </resources>

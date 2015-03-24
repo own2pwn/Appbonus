@@ -11,6 +11,7 @@
     <string name="vk_secret">BDMI2dCGJltlLmOYTBMD</string>
     <string name="referrer_app_link">http://appbonus.ru/?referrer_id=%1$s</string>
     <string name="referrer_link">http://appbonus.ru/?referrer_id=%1$s</string>
+    <string name="promo_link">http://appbonus.ru/?promo_code=%1$s</string>
     <string name="my_web_cab_link">http://appbonus.ru/my</string>
     <string name="app_bonus_mail">mail@appbonus.ru</string>
 
@@ -151,5 +152,9 @@
     <string name="sex_male">Мужской</string>
     <string name="sex_female">Женский</string>
     <string name="you_has_rooted_device">Использование AppBonus с root-доступом запрещено</string>
+    <string name="meet_friends_title">Получай дополнительный доход\nот каждого выполненного\nдрузьями задания</string>
+    <string name="meet_friends_promo">Отправь промо-код другу,\nи он получит %1$s\nпри регистрации,\nа ты - дополнительный доход</string>
+    <string name="copy_that_link">Скопируй ссылку на приложение\nсо своим промо-кодом</string>
+    <string name="roubles">рублей</string>
 
 </resources>
