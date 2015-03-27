@@ -4,7 +4,15 @@
     android:layout_height="match_parent"
     android:background="@color/main_color">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/content"
+        android:src="@drawable/logo"
+        android:layout_marginBottom="16dip"/>
+
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -31,7 +39,7 @@
             style="@style/login_button"
             android:layout_marginTop="10dp"
             android:onClick="enterHandler"
-            android:text="@string/enter"/>
+            android:text="@string/enter" />
 
         <LinearLayout
             style="@style/vk_login_button"
@@ -42,17 +50,17 @@
                 android:id="@id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/vk_icon"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:src="@drawable/vk_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:text="@string/enter_vk"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="5dp" />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
