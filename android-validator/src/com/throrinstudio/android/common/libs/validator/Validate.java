@@ -9,6 +9,7 @@ public class Validate extends AbstractValidate {
 
     private List<AbstractValidator> mValidators = new ArrayList<AbstractValidator>();
     private TextView mSourceView;
+    private String errorMessage;
 
     public Validate(TextView sourceView) {
         mSourceView = sourceView;
@@ -27,7 +28,9 @@ public class Validate extends AbstractValidate {
         for (AbstractValidator validator : mValidators) {
             try {
                 if (!validator.isValid(mSourceView.getText().toString())) {
-                    mSourceView.setError(validator.getMessage());
+                    String message = validator.getMessage();
+                    mSourceView.setError(message);
+                    errorMessage = message;
                     return false;
                 }
             } catch (ValidatorException e) {
@@ -36,7 +39,7 @@ public class Validate extends AbstractValidate {
                 return false;
             }
         }
-//        mSourceView.setError(null);
+
         return true;
     }
 
@@ -44,4 +47,8 @@ public class Validate extends AbstractValidate {
         return mSourceView;
     }
 
+    @Override
+    public String errorMessage() {
+        return errorMessage;
+    }
 }

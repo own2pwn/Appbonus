@@ -1,6 +1,8 @@
 package com.throrinstudio.android.common.libs.validator;
 
+import android.content.Context;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +16,21 @@ import java.util.List;
  * @version 1.0
  */
 public class Form {
+    private Context context;
+
+    private boolean showFailValidateToast = false;
 
 	private List<AbstractValidate> mValidates = new ArrayList<AbstractValidate>();
 
-	/**
+    public Form() {
+    }
+
+    public Form(Context context) {
+        this();
+        this.context = context;
+    }
+
+    /**
 	 * Function adding Validates to our form
 	 * 
 	 * @param validate
@@ -49,9 +62,17 @@ public class Form {
 	 */
 	public boolean validate() {
 		boolean formValid = true;
+        AbstractValidate lastFailedValidate = null;
 		for (AbstractValidate validate : mValidates) {
-			formValid = formValid & validate.isValid();	// Use & in order to evaluate both side of the operation.
+            boolean valid = validate.isValid();
+            formValid = formValid & valid;	// Use & in order to evaluate both side of the operation.
+            if (!valid) {
+                lastFailedValidate = validate;
+            }
 		}
+        if (showFailValidateToast && lastFailedValidate != null) {
+            Toast.makeText(context, lastFailedValidate.errorMessage(), Toast.LENGTH_LONG).show();
+        }
 		return formValid;
 	}
 
@@ -81,4 +102,11 @@ public class Form {
 			v.getSource().setError(null);
 		}
 	}
+
+    /*
+     * if showFailValidateToast, then on failed validation user watches editText-error and toast-message
+     */
+    public void setShowFailValidateToast(boolean showFailValidateToast) {
+        this.showFailValidateToast = showFailValidateToast;
+    }
 }

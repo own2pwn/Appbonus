@@ -64,7 +64,8 @@ public class LoginActivity extends ApiActivity {
         form.addValidates(mailValidate);
         form.addValidates(passwordValidate);
 
-        mailForm = new Form();
+        mailForm = new Form(this);
+        mailForm.setShowFailValidateToast(true);
         mailForm.addValidates(mailValidate);
     }
 

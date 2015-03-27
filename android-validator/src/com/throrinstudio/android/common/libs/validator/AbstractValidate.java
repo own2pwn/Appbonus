@@ -8,4 +8,6 @@ public abstract class AbstractValidate {
      * @return true if all validators are valid, otherwise false
      */
     public abstract boolean isValid();
+
+    public abstract String errorMessage();
 }

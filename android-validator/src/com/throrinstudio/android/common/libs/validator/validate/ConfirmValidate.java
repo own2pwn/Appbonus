@@ -45,6 +45,11 @@ public class ConfirmValidate extends AbstractValidate {
         }
     }
 
+    @Override
+    public String errorMessage() {
+        return mContext.getString(mErrorMessage);
+    }
+
     private boolean isNotEmpty(String text) {
         return !TextUtils.isEmpty(text);
     }

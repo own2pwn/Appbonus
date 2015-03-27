@@ -52,6 +52,11 @@ public class OrTwoRequiredValidate extends AbstractValidate {
         }
     }
 
+    @Override
+    public String errorMessage() {
+        return mContext.getString(errorMessage);
+    }
+
     private NotEmptyValidator createNotEmptyValidator() {
         if (errorMessage == -1) {
             return new NotEmptyValidator(mContext);
