@@ -18,6 +18,7 @@ import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.ExceptionAsyncTask;
+import com.dolphin.utils.EmulatorUtils;
 import com.dolphin.utils.RootUtils;
 
 import java.util.List;
@@ -105,7 +106,9 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
             @Override
             public void run() {
                 if (RootUtils.isDeviceRooted()) {
-                    startActivity(new Intent(context, RootedDeviceActivity.class));
+                    startActivity(new Intent(context, BannedDeviceActivity.class).putExtra("message", R.string.you_has_rooted_device));
+                } else if (EmulatorUtils.isEmulator(context)) {
+                    startActivity(new Intent(context, BannedDeviceActivity.class).putExtra("message", R.string.you_has_unreal_device));
                 } else if (TextUtils.isEmpty(Storage.<CharSequence>load(context, Config.TOKEN))) {
                     startActivity(new Intent(context, LoginActivity.class));
                 } else startActivity(IntentHelper.openMain(context));
