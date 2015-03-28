@@ -21,6 +21,7 @@ import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.push.GoogleCloudMessagingUtils;
+import com.dynamixsoftware.ErrorAgent;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
@@ -101,6 +102,7 @@ public class LoginActivity extends ApiActivity {
     }
 
     private void showError(Throwable throwable) {
+        ErrorAgent.reportError(throwable, "Login vk exception");
         showError(throwable instanceof InvocationTargetException ?
                 throwable.getCause().getMessage() : throwable.getMessage());
     }
