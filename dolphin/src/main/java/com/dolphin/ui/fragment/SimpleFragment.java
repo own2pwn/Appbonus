@@ -135,11 +135,15 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
     }
 
     protected void showError(String message) {
-        uiHandler.obtainMessage(0, message);
+        Message msg = new Message();
+        msg.obj = message;
+        uiHandler.sendMessage(msg);
     }
 
     protected void showError(int message) {
-        uiHandler.obtainMessage(0, message);
+        Message msg = new Message();
+        msg.obj = message;
+        uiHandler.sendMessage(msg);
     }
 
     public ComponentName getComponentName() {
