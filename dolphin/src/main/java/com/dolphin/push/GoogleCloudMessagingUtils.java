@@ -69,7 +69,7 @@ public abstract class GoogleCloudMessagingUtils {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                callOnRegisterListenerIfExists();
+                callOnRegisterListenerIfExists(regId);
             }
         }.execute();
     }
@@ -126,7 +126,7 @@ public abstract class GoogleCloudMessagingUtils {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                callOnRegisterListenerIfExists();
+                callOnRegisterListenerIfExists(regId);
             }
         }.execute(context);
     }
@@ -142,9 +142,9 @@ public abstract class GoogleCloudMessagingUtils {
         editor.apply();
     }
 
-    private void callOnRegisterListenerIfExists() {
+    private void callOnRegisterListenerIfExists(String gcmId) {
         if (onRegisterListener != null) {
-            onRegisterListener.onRegister();
+            onRegisterListener.onRegister(gcmId);
         }
     }
 }
