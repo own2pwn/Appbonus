@@ -29,6 +29,11 @@ public abstract class GoogleCloudMessagingUtils {
 
     protected GoogleCloudMessaging gcm;
     protected String regId;
+    protected OnRegisterListener onRegisterListener;
+
+    public void setOnRegisterListener(OnRegisterListener onRegisterListener) {
+        this.onRegisterListener = onRegisterListener;
+    }
 
     public boolean checkPlayServices(Activity context) {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
@@ -59,6 +64,12 @@ public abstract class GoogleCloudMessagingUtils {
                     Log.e(GoogleCloudMessagingUtils.class.getName(), throwable.getMessage(), throwable);
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                callOnRegisterListenerIfExists();
             }
         }.execute();
     }
@@ -111,6 +122,12 @@ public abstract class GoogleCloudMessagingUtils {
                 }
                 return msg;
             }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                callOnRegisterListenerIfExists();
+            }
         }.execute(context);
     }
 
@@ -123,5 +140,11 @@ public abstract class GoogleCloudMessagingUtils {
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.apply();
+    }
+
+    private void callOnRegisterListenerIfExists() {
+        if (onRegisterListener != null) {
+            onRegisterListener.onRegister();
+        }
     }
 }
