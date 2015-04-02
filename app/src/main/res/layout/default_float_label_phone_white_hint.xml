@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@id/float_label"
         android:layout_width="match_parent"
@@ -10,7 +9,7 @@
         android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <com.appbonus.android.component.masked.MaskedEditText
+    <EditText
         android:id="@id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,5 +17,5 @@
         android:background="@drawable/input_default"
         android:padding="2dp"
         android:textSize="18sp"
-        app:mask="+7 ### ### ## ##"/>
+        android:inputType="phone" />
 </merge>

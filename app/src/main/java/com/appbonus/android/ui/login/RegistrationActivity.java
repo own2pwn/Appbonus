@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 
 import com.appbonus.android.R;
@@ -54,7 +55,7 @@ public class RegistrationActivity extends ApiActivity {
         mailValidate.addValidator(new NotEmptyValidator(this, R.string.input_mail));
 
         Validate phoneValidate = new Validate(phone.getEditText());
-        phoneValidate.addValidator(new PhoneValidator(this, R.string.wrong_phone, "\\+7 [0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}"));
+        phoneValidate.addValidator(new PhoneValidator(this, R.string.wrong_phone));
         phoneValidate.addValidator(new NotEmptyValidator(this, R.string.input_phone));
 
         Validate passwordValidate = new Validate(password.getEditText());
@@ -74,7 +75,7 @@ public class RegistrationActivity extends ApiActivity {
         password = (FloatLabel) findViewById(R.id.password);
         promo = (FloatLabel) findViewById(R.id.promo);
 
-        phone.setText("9");
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
 
     public void registerHandler(View view) {

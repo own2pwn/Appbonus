@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -205,6 +206,8 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         sex = (Spinner) view.findViewById(R.id.sex);
         initSexSpinner();
 
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
         newPassword = (FloatLabel) view.findViewById(R.id.new_password);
         confirmPassword = (FloatLabel) view.findViewById(R.id.confirm_password);
         saveBtn = (Button) view.findViewById(R.id.save);
@@ -239,7 +242,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
         phoneForm = new Form();
         Validate phoneValidate = new Validate(phone.getEditText());
-        phoneValidate.addValidator(new PhoneValidator(getActivity(), R.string.wrong_phone, "\\+7 [0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}"));
+        phoneValidate.addValidator(new PhoneValidator(getActivity(), R.string.wrong_phone));
         phoneForm.addValidates(phoneValidate);
     }
 
