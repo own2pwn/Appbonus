@@ -50,6 +50,7 @@
             android:layout_marginTop="10dp"/>
 
         <LinearLayout
+            android:id="@id/vkontakte"
             style="@style/vk_login_button"
             android:layout_marginTop="10dp"
             android:onClick="registerVkHandler">

@@ -7,10 +7,11 @@ public class VkLoginRequest {
         user = new User();
     }
 
-    public VkLoginRequest(String vkToken, String email, String phone) {
+    public VkLoginRequest(String vkToken, String email, String phone, String promo) {
         this(vkToken);
         user.setEmail(email);
         user.setPhone(phone);
+        user.setPromoCode(promo);
     }
 
     public VkLoginRequest(String vkToken) {
@@ -22,6 +23,7 @@ public class VkLoginRequest {
         protected String vkToken;
         protected String email;
         protected String phone;
+        protected String promoCode;
 
         public void setVkToken(String vkToken) {
             this.vkToken = vkToken;
@@ -33,6 +35,10 @@ public class VkLoginRequest {
 
         public void setPhone(String phone) {
             this.phone = phone;
+        }
+
+        public void setPromoCode(String promoCode) {
+            this.promoCode = promoCode;
         }
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.appbonus.android.R;
@@ -34,13 +35,17 @@ public class RegistrationActivity extends ApiActivity {
     protected FloatLabel phone;
     protected FloatLabel password;
     protected FloatLabel promo;
+    protected View vkontakteView;
 
     protected Form form;
     protected Form vkForm;
 
+    protected String vkToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        vkToken = getIntent().getExtras().getString(Config.VKONTAKTE_ID);
         setContentView(R.layout.registration_layout);
         initUI();
         initValidators();
@@ -74,6 +79,8 @@ public class RegistrationActivity extends ApiActivity {
         phone = (FloatLabel) findViewById(R.id.phone);
         password = (FloatLabel) findViewById(R.id.password);
         promo = (FloatLabel) findViewById(R.id.promo);
+        vkontakteView = findViewById(R.id.vkontakte);
+        vkontakteView.setVisibility(TextUtils.isEmpty(vkToken) ? View.VISIBLE : View.GONE);
 
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
@@ -84,33 +91,40 @@ public class RegistrationActivity extends ApiActivity {
             String mailStr = mail.getText();
             String phoneStr = phone.getText();
             String promoStr = promo.getText();
-            final String passwordStr = password.getText();
-            final RegisterRequest request = new RegisterRequest(mailStr, passwordStr, getCountry(),
-                    phoneStr, DeviceUtils.getUniqueCode(this), promoStr);
+            String passwordStr = password.getText();
 
-            new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
-
-                @Override
-                protected LoginWrapper background(Void... params) throws Throwable {
-                    return registration(request);
-                }
-
-                @Override
-                protected void onPostExecute(LoginWrapper loginWrapper) {
-                    super.onPostExecute(loginWrapper);
-                    if (isSuccess()) {
-                        savePassword(passwordStr);
-                        setResult(RESULT_OK, new Intent().putExtra("login_info", ((Parcelable) loginWrapper)));
-                        finish();
-                    } else showError(throwable);
-                }
-
-                @Override
-                protected FragmentManager getFragmentManager() {
-                    return getSupportFragmentManager();
-                }
-            }.execute();
+            if (TextUtils.isEmpty(vkToken))
+                emailRegister(mailStr, phoneStr, promoStr, passwordStr);
+            else vkRegister(vkToken, mailStr, phoneStr, promoStr);
         }
+    }
+
+    protected void emailRegister(String mailStr, String phoneStr, String promoStr, final String passwordStr) {
+        final RegisterRequest request = new RegisterRequest(mailStr, passwordStr, getCountry(),
+                phoneStr, DeviceUtils.getUniqueCode(this), promoStr);
+
+        new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
+
+            @Override
+            protected LoginWrapper background(Void... params) throws Throwable {
+                return registration(request);
+            }
+
+            @Override
+            protected void onPostExecute(LoginWrapper loginWrapper) {
+                super.onPostExecute(loginWrapper);
+                if (isSuccess()) {
+                    savePassword(passwordStr);
+                    setResult(RESULT_OK, new Intent().putExtra("login_info", ((Parcelable) loginWrapper)));
+                    finish();
+                } else showError(throwable);
+            }
+
+            @Override
+            protected FragmentManager getFragmentManager() {
+                return getSupportFragmentManager();
+            }
+        }.execute();
     }
 
     private void savePassword(String passwordStr) {
@@ -156,32 +170,37 @@ public class RegistrationActivity extends ApiActivity {
         switch (requestCode) {
             case LOGIN_VK_CODE:
                 if (resultCode == RESULT_OK) {
-                    final String token = data.getStringExtra("token");
-                    final String mailStr = mail.getText();
-                    final String phoneStr = phone.getText();
-                    new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
-                        @Override
-                        protected LoginWrapper background(Void... params) throws Throwable {
-                            return vkRegistration(new VkLoginRequest(token, mailStr, phoneStr));
-                        }
-
-                        @Override
-                        protected void onPostExecute(LoginWrapper loginWrapper) {
-                            super.onPostExecute(loginWrapper);
-                            if (isSuccess()) {
-                                setResult(RESULT_OK, new Intent().putExtra("login_info", ((Parcelable) loginWrapper)));
-                                finish();
-                            } else showError(throwable);
-                        }
-
-                        @Override
-                        protected FragmentManager getFragmentManager() {
-                            return getSupportFragmentManager();
-                        }
-                    }.execute();
+                    String token = data.getStringExtra("token");
+                    String mailStr = mail.getText();
+                    String phoneStr = phone.getText();
+                    String promoStr = promo.getText();
+                    vkRegister(token, mailStr, phoneStr, promoStr);
                 }
                 break;
         }
+    }
+
+    private void vkRegister(final String token, final String mailStr, final String phoneStr, final String promoStr) {
+        new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
+            @Override
+            protected LoginWrapper background(Void... params) throws Throwable {
+                return vkRegistration(new VkLoginRequest(token, mailStr, phoneStr, promoStr));
+            }
+
+            @Override
+            protected void onPostExecute(LoginWrapper loginWrapper) {
+                super.onPostExecute(loginWrapper);
+                if (isSuccess()) {
+                    setResult(RESULT_OK, new Intent().putExtra("login_info", ((Parcelable) loginWrapper)));
+                    finish();
+                } else showError(throwable);
+            }
+
+            @Override
+            protected FragmentManager getFragmentManager() {
+                return getSupportFragmentManager();
+            }
+        }.execute();
     }
 
     public void closeErrors() {

@@ -115,7 +115,7 @@ public class LoginActivity extends ApiActivity {
     }
 
     public void registerHandler(View view) {
-        startActivityForResult(new Intent(this, RegistrationActivity.class), REGISTRATION_INTENT_CODE);
+        openRegisterActivity(null);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class LoginActivity extends ApiActivity {
                                 saveLoginInformation(loginWrapper);
                                 startActivity(IntentHelper.openMain(context));
                                 finish();
-                            } else showError(throwable);
+                            } else openRegisterActivity(token);
                         }
 
                         @Override
@@ -162,6 +162,10 @@ public class LoginActivity extends ApiActivity {
                     }.execute();
                 }
         }
+    }
+
+    private void openRegisterActivity(String vkToken) {
+        startActivityForResult(new Intent(this, RegistrationActivity.class).putExtra(Config.VKONTAKTE_ID, vkToken), REGISTRATION_INTENT_CODE);
     }
 
     private void saveLoginInformation(LoginWrapper loginObj) {

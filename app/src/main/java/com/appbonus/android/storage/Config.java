@@ -11,4 +11,6 @@ public abstract class Config {
     public static final String USER = "user";
     public static final String PASSWORD = "password";
     public static final String SETTINGS = "settings";
+
+    public static final String VKONTAKTE_ID = "vkontakte_id";
 }
