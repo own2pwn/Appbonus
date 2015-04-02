@@ -251,6 +251,7 @@ public class ApiImpl extends CommonApi implements Api {
                     } else exception.message =  api.getString(R.string.success);
                 }
             } catch (JSONException ignored) {
+                exception.message = ignored.toString();
             }
             return exception;
         }
