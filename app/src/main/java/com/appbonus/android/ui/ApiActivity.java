@@ -1,7 +1,6 @@
 package com.appbonus.android.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
@@ -14,7 +13,7 @@ import com.appbonus.android.model.api.QuestionsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.dolphin.utils.KeyboardUtils;
 
-public abstract class ApiActivity extends FragmentActivity {
+public abstract class ApiActivity extends VkMusicActivity {
     private Api api;
 
     @Override

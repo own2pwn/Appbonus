@@ -17,6 +17,7 @@ import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.ApiActivity;
+import com.appbonus.android.ui.VkMusicActivity;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
@@ -26,6 +27,12 @@ import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
+import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.dialogs.VKCaptchaDialog;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -44,9 +51,41 @@ public class LoginActivity extends ApiActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+        VKSdk.initialize(sdkListener, getString(R.string.vk_id));
         initUI();
         initValidators();
     }
+
+    private VKSdkListener sdkListener = new VKSdkListener() {
+        @Override
+        public void onCaptchaError(VKError captchaError) {
+            new VKCaptchaDialog(captchaError).show();
+        }
+
+        @Override
+        public void onTokenExpired(VKAccessToken expiredToken) {
+            VKSdk.authorize(sMyScope);
+        }
+
+        @Override
+        public void onAccessDenied(final VKError authorizationError) {
+            new AlertDialog.Builder(VKUIHelper.getTopActivity())
+                    .setMessage(authorizationError.toString())
+                    .show();
+        }
+
+        @Override
+        public void onReceiveNewToken(VKAccessToken newToken) {
+//            startMainActivity();
+            vkLoginAttempt(newToken.accessToken);
+        }
+
+        @Override
+        public void onAcceptUserToken(VKAccessToken token) {
+//            startMainActivity();
+            vkLoginAttempt(token.accessToken);
+        }
+    };
 
     public void initUI() {
         mail = (FloatLabel) findViewById(R.id.login);
@@ -138,30 +177,33 @@ public class LoginActivity extends ApiActivity {
                 break;
             case LOGIN_VK_CODE:
                 if (resultCode == RESULT_OK) {
-                    final String token = data.getStringExtra("token");
-                    new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
-                        @Override
-                        protected LoginWrapper background(Void... params) throws Throwable {
-                            return vkLogin(new VkLoginRequest(token));
-                        }
-
-                        @Override
-                        protected void onPostExecute(LoginWrapper loginWrapper) {
-                            super.onPostExecute(loginWrapper);
-                            if (isSuccess()) {
-                                saveLoginInformation(loginWrapper);
-                                startActivity(IntentHelper.openMain(context));
-                                finish();
-                            } else openRegisterActivity(token);
-                        }
-
-                        @Override
-                        protected FragmentManager getFragmentManager() {
-                            return getSupportFragmentManager();
-                        }
-                    }.execute();
+                    vkLoginAttempt(data.getStringExtra("token"));
                 }
         }
+    }
+
+    private void vkLoginAttempt(final String token) {
+        new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
+            @Override
+            protected LoginWrapper background(Void... params) throws Throwable {
+                return vkLogin(new VkLoginRequest(token));
+            }
+
+            @Override
+            protected void onPostExecute(LoginWrapper loginWrapper) {
+                super.onPostExecute(loginWrapper);
+                if (isSuccess()) {
+                    saveLoginInformation(loginWrapper);
+                    startActivity(IntentHelper.openMain(context));
+                    finish();
+                } else openRegisterActivity(token);
+            }
+
+            @Override
+            protected FragmentManager getFragmentManager() {
+                return getSupportFragmentManager();
+            }
+        }.execute();
     }
 
     private void openRegisterActivity(String vkToken) {
@@ -212,6 +254,7 @@ public class LoginActivity extends ApiActivity {
     }
 
     public void enterVkHandler(View view) {
-        startActivityForResult(new Intent(this, LoginVkActivity.class), LOGIN_VK_CODE);
+//        startActivityForResult(new Intent(this, LoginVkActivity.class), LOGIN_VK_CODE);
+        VKSdk.authorize(VkMusicActivity.sMyScope, true, false);
     }
 }

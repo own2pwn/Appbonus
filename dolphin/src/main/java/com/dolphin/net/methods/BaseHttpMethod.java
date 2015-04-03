@@ -161,7 +161,7 @@ public abstract class BaseHttpMethod implements HttpMethod {
         try {
 
             String eTag = connection.getHeaderField(HttpHeaders.ETAG);
-            if (responseCode == HttpStatus.SC_OK) {
+            if (responseCode == HttpStatus.SC_OK || responseCode == HttpStatus.SC_CREATED) {
                 saveRequest(connectionHash(), eTag);
                 String response = readResponse(connection);
                 saveResponse(eTag, response);

@@ -144,7 +144,8 @@ public class RegistrationActivity extends ApiActivity {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(throwable.getMessage());
+        builder.setTitle(R.string.error);
+        builder.setMessage(throwable.getMessage());
         builder.show();
 
     }
@@ -154,7 +155,7 @@ public class RegistrationActivity extends ApiActivity {
             mail.setError(e.message);
         } else if (StringUtils.equalsIgnoreCase(e.form, "phone")) {
             phone.setError(e.message);
-        }
+        } else showError(new Throwable(e.message));
     }
 
     public void registerVkHandler(View view) {
