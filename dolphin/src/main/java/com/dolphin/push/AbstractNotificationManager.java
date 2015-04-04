@@ -17,7 +17,7 @@ public abstract class AbstractNotificationManager {
     protected PowerManager powerManager;
     protected NotificationManager notificationManager;
 
-    private int numMessages = 0;
+    protected int numMessages = 0;
 
     public AbstractNotificationManager(Context context) {
         this.context = context;
@@ -40,15 +40,7 @@ public abstract class AbstractNotificationManager {
         // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(notificationIntent);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(icon()) //иконка уведомления
-                .setAutoCancel(true) //уведомление закроется по клику на него
-                .setTicker(notification.message()) //текст, который отобразится вверху статус-бара при создании уведомления
-                .setContentText(notification.message()) // Основной текст уведомления
-                .setWhen(System.currentTimeMillis()) //отображаемое время уведомления
-                .setContentTitle(context.getString(appName())) //заголовок уведомления
-                .setDefaults(Notification.DEFAULT_ALL) // звук, вибро и диодный индикатор выставляются по умолчанию
-                .setNumber(++numMessages);
+        NotificationCompat.Builder builder = notificationBuilder(notification);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder.setContentIntent(resultPendingIntent);
@@ -56,6 +48,18 @@ public abstract class AbstractNotificationManager {
         notificationManager.notify(0, builder.build());
 
         screenLock.acquire();
+    }
+
+    protected NotificationCompat.Builder notificationBuilder(com.dolphin.push.Notification notification) {
+        return new NotificationCompat.Builder(context)
+                    .setSmallIcon(icon()) //иконка уведомления
+                    .setAutoCancel(true) //уведомление закроется по клику на него
+                    .setTicker(notification.message()) //текст, который отобразится вверху статус-бара при создании уведомления
+                    .setContentText(notification.message()) // Основной текст уведомления
+                    .setWhen(System.currentTimeMillis()) //отображаемое время уведомления
+                    .setContentTitle(context.getString(appName())) //заголовок уведомления
+                    .setDefaults(Notification.DEFAULT_ALL) // звук, вибро и диодный индикатор выставляются по умолчанию
+                    .setNumber(++numMessages);
     }
 
     protected abstract int icon();
