@@ -5,9 +5,17 @@ import android.os.Parcelable;
 
 public class DoneOffersWrapper implements Parcelable {
     protected int[] doneIds;
+    protected int[] installedIds;
 
     public int[] getDoneIds() {
         return doneIds;
+    }
+
+    public int[] getInstalledIds() {
+        return installedIds;
+    }
+
+    public DoneOffersWrapper() {
     }
 
     @Override
@@ -18,16 +26,15 @@ public class DoneOffersWrapper implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeIntArray(this.doneIds);
-    }
-
-    public DoneOffersWrapper() {
+        dest.writeIntArray(this.installedIds);
     }
 
     private DoneOffersWrapper(Parcel in) {
-        in.readIntArray(this.doneIds);
+        this.doneIds = in.createIntArray();
+        this.installedIds = in.createIntArray();
     }
 
-    public static final Parcelable.Creator<DoneOffersWrapper> CREATOR = new Parcelable.Creator<DoneOffersWrapper>() {
+    public static final Creator<DoneOffersWrapper> CREATOR = new Creator<DoneOffersWrapper>() {
         public DoneOffersWrapper createFromParcel(Parcel source) {
             return new DoneOffersWrapper(source);
         }

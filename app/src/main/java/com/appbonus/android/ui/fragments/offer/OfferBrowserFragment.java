@@ -19,8 +19,6 @@ import android.widget.Toast;
 import com.appbonus.android.R;
 import com.appbonus.android.model.Offer;
 import com.appbonus.android.model.api.OfferWrapper;
-import com.appbonus.android.storage.Config;
-import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqAnswerFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.commonsware.cwac.anddown.AndDown;
@@ -95,7 +93,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
         title.setText(offer.getTitle());
         cost.setText("+" + RoubleHelper.convert(offer.getReward()));
         description.setText(offer.getDescription());
-        if (offer.isCompleted()) {
+        if (offer.isInstalled()) {
             downloadBtn.setEnabled(false);
         }
         if (StringUtils.isNotBlank(offer.getNote()))
@@ -146,13 +144,14 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
                 placeProperFragment(FaqAnswerFragment.class.getName());
                 break;
             case R.id.download:
-                if (!offer.isCompleted()) {
+                if (!offer.isInstalled()) {
                     String link = offer.getDownloadLink();
                     download(link);
                 }
                 break;
             case R.id.share:
-                share();
+                if (offer.isSharingEnable())
+                    share();
                 break;
         }
     }
@@ -162,7 +161,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     }
 
     private void share() {
-        String referrerLink = String.format(getString(R.string.referrer_app_link), Storage.load(getActivity(), Config.USER_ID));
+        String referrerLink = /*String.format(getString(R.string.referrer_app_link), Storage.load(getActivity(), Config.USER_ID))*/offer.getDownloadLink();
         ClipboardUtils.copyToClipboard(getActivity(), referrerLink);
         Toast.makeText(getActivity(), R.string.referrer_link_was_copied, Toast.LENGTH_SHORT).show();
     }

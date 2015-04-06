@@ -233,7 +233,7 @@ public class OfferListFragment extends RootListFragment<PagingListView, OfferLis
         @Override
         public int getItemViewType(int position) {
             Offer offer = (Offer) getItem(position);
-            return offer.isCompleted() ? DONE_OFFER : SIMPLE_OFFER;
+            return offer.isInstalled() ? DONE_OFFER : SIMPLE_OFFER;
         }
 
         @Override

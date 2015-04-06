@@ -12,7 +12,8 @@ public class Offer implements Serializable, Parcelable {
     protected Double reward;
     protected String title;
     protected String downloadLink;
-    protected boolean completed = false;
+    protected boolean installed = false;
+    protected boolean sharingEnable = false;
     protected String note;
 
     public String getDescription() {
@@ -39,12 +40,20 @@ public class Offer implements Serializable, Parcelable {
         return downloadLink;
     }
 
-    public boolean isCompleted() {
-        return completed;
+    public boolean isInstalled() {
+        return installed;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setInstalled(boolean installed) {
+        this.installed = installed;
+    }
+
+    public boolean isSharingEnable() {
+        return sharingEnable;
+    }
+
+    public void setSharingEnable(boolean sharingEnable) {
+        this.sharingEnable = sharingEnable;
     }
 
     public String getNote() {
@@ -67,7 +76,7 @@ public class Offer implements Serializable, Parcelable {
         dest.writeValue(this.reward);
         dest.writeString(this.title);
         dest.writeString(this.downloadLink);
-        dest.writeByte(completed ? (byte) 1 : (byte) 0);
+        dest.writeByte(installed ? (byte) 1 : (byte) 0);
         dest.writeString(this.note);
     }
 
@@ -78,7 +87,7 @@ public class Offer implements Serializable, Parcelable {
         this.reward = (Double) in.readValue(Double.class.getClassLoader());
         this.title = in.readString();
         this.downloadLink = in.readString();
-        this.completed = in.readByte() != 0;
+        this.installed = in.readByte() != 0;
         this.note = in.readString();
     }
 

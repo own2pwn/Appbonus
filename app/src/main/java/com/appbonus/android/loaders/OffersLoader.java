@@ -33,12 +33,12 @@ public class OffersLoader extends AbstractLoader<OffersWrapper> {
 
     private OffersWrapper markCompletedOffers(OffersWrapper offersWrapper, DoneOffersWrapper doneOffersWrapper) {
         List<Offer> offers = offersWrapper.getOffers();
-        int[] doneIds = doneOffersWrapper.getDoneIds();
         if (CollectionUtils.isNotEmpty(offers)) {
-            if (ArrayUtils.isNotEmpty(doneIds)) {
-                for (Offer offer : offers) {
-                    offer.setCompleted(ArrayUtils.contains(doneIds, offer.getId().intValue()));
-                }
+            for (Offer offer : offers) {
+                boolean done = ArrayUtils.contains(doneOffersWrapper.getDoneIds(), offer.getId().intValue());
+                boolean installed = ArrayUtils.contains(doneOffersWrapper.getInstalledIds(), offer.getId().intValue());
+                offer.setInstalled(installed);
+                offer.setSharingEnable(!done);
             }
         }
         return offersWrapper;
