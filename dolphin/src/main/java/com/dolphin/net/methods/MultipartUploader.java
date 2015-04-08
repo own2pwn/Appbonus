@@ -19,8 +19,8 @@ public class MultipartUploader extends BaseHttpMethod {
     private Map<String, File> files;
     private HttpEntity mHttpEntity;
 
-    public MultipartUploader(String hostUri, Map<String, File> files, String... apiPath) {
-        super(hostUri, "", apiPath);
+    public MultipartUploader(String hostUri, Map<String, String> params, Map<String, File> files, String... apiPath) {
+        super(hostUri, params, apiPath);
         this.requestMethod = REQUEST_METHOD;
         this.files = files;
     }

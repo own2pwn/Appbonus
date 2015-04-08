@@ -129,7 +129,7 @@ public abstract class CommonApi {
 
     protected <T, K> T doUpload(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
         String[] array = collectParameters(path);
-        HttpMethod method = new MultipartUploader(host(), toUploadMap(request, requestType), array);
+        HttpMethod method = new MultipartUploader(host(), toMap(request, requestType), toUploadMap(request, requestType), array);
         preparation(method);
         ApiLogger logger = new ApiLogger();
         logger.start();
@@ -140,7 +140,7 @@ public abstract class CommonApi {
 
     protected <T, K> T doPostUpload(K request, Class<K> requestType, Class<T> responseType, String... path) throws Throwable {
         String[] array = collectParameters(path);
-        HttpMethod method = new MethodPostFile(host(), toUploadMap(request, requestType), array);
+        HttpMethod method = new MethodPostFile(host(), toMap(request, requestType), toUploadMap(request, requestType), array);
         preparation(method);
         ApiLogger logger = new ApiLogger();
         logger.start();
