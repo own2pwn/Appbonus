@@ -5,6 +5,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,12 +18,14 @@ public class MultipartUploader extends BaseHttpMethod {
     private static final String REQUEST_METHOD = "PUT";
 
     private Map<String, File> files;
+    private Map<String, String> uploaderParams;
     private HttpEntity mHttpEntity;
 
     public MultipartUploader(String hostUri, Map<String, String> params, Map<String, File> files, String... apiPath) {
-        super(hostUri, params, apiPath);
+        super(hostUri, "", apiPath);
         this.requestMethod = REQUEST_METHOD;
         this.files = files;
+        this.uploaderParams = params;
     }
 
     @Override
@@ -36,6 +39,9 @@ public class MultipartUploader extends BaseHttpMethod {
                     ContentType.create(URLConnection.guessContentTypeFromName(entry.getValue().getName())),
                     entry.getValue().getName()
             ));
+        }
+        for (Map.Entry<String, String> entry : uploaderParams.entrySet()) {
+            builder.addPart(entry.getKey(), new StringBody(entry.getValue(), ContentType.DEFAULT_TEXT));
         }
 
         mHttpEntity = builder.build();
