@@ -26,7 +26,7 @@ import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
 
 public interface Api {
-    String HOST_URI = "https://appbonus.ru/";
+    String HOST_URI = "https://www.appbonus.ru/";
     String API_SUFX = "api";
     String API_VERSION = "v1";
 

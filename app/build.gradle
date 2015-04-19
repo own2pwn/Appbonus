@@ -18,7 +18,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0.0-20150403"
+        versionName "1.0.0-tester-150419"
     }
     buildTypes {
         release {
@@ -42,6 +42,16 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name
+                            .replace(".apk", "-${variant.versionName}.apk")
+                            .replace("app", "${variant.applicationId}"))
+        }
     }
 }
 
