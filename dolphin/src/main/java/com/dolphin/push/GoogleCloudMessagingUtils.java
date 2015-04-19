@@ -53,7 +53,7 @@ public abstract class GoogleCloudMessagingUtils {
 
         if (TextUtils.isEmpty(regId)) {
             registerInBackground(context);
-        }
+        } else callOnRegisterListenerIfExists(regId);
 
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -64,12 +64,6 @@ public abstract class GoogleCloudMessagingUtils {
                     Log.e(GoogleCloudMessagingUtils.class.getName(), throwable.getMessage(), throwable);
                 }
                 return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                callOnRegisterListenerIfExists(regId);
             }
         }.execute();
     }
