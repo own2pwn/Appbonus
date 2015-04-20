@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appbonus.android.R;
 import com.appbonus.android.model.Balance;
 import com.appbonus.android.model.History;
 import com.appbonus.android.model.Meta;
+import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.BalanceWrapper;
 import com.appbonus.android.model.api.HistoryWrapper;
 import com.appbonus.android.storage.Config;
@@ -25,9 +29,11 @@ import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.balance.autowithdrawal.AutowithdrawalFragment;
 import com.appbonus.android.ui.fragments.balance.withdrawal.WithdrawalFragment;
 import com.appbonus.android.ui.fragments.profile.ConfirmPhoneFragment;
+import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.helper.RoubleHelper;
 import com.dolphin.loader.AbstractLoader;
 import com.dolphin.ui.LoadingDialogHelper;
+import com.dolphin.ui.fragment.root.RootFragment;
 import com.dolphin.ui.fragment.root.RootListFragment;
 import com.dolphin.utils.KeyboardUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -216,9 +222,20 @@ public class BalanceBrowserFragment extends RootListFragment<PagingListView, Bal
                 placeProperFragment(AutowithdrawalFragment.class.getName());
                 break;
             case R.id.withdrawal_is_not_access_view:
-                placeProperFragment(ConfirmPhoneFragment.class.getName());
+                if (!phoneIsIndicated()) {
+                    Fragment fragment = placeProperFragment(ProfileBrowserFragment.class.getName());
+                    if (fragment instanceof RootFragment) {
+                        ((RootFragment) fragment).notMortalClose();
+                    }
+                    Toast.makeText(getActivity(), R.string.indicate_phone_number, Toast.LENGTH_LONG).show();
+                } else placeProperFragment(ConfirmPhoneFragment.class.getName());
                 break;
         }
+    }
+
+    private boolean phoneIsIndicated() {
+        User user = Storage.load(getActivity(), Config.USER, User.class);
+        return !TextUtils.isEmpty(user.getPhone());
     }
 
     @Override

@@ -159,20 +159,18 @@ public abstract class SimpleFragment extends Fragment implements StandardFragmen
         return false;
     }
 
-    public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
-        SimpleActivity simpleActivity = getSimpleActivity();
-        if (simpleActivity != null) {
-            simpleActivity.placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment, false);
-        }
-    }
-
-    public void placeProperFragment(String fragmentTag) {
-        placeProperFragment(fragmentTag, null, true, this);
+    public Fragment placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
+        return getSimpleActivity().placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment, false);
     }
 
     @Override
-    public void placeProperFragment(String fragmentTag, Bundle args) {
-        placeProperFragment(fragmentTag, args, true, this);
+    public Fragment placeProperFragment(String fragmentTag) {
+        return placeProperFragment(fragmentTag, null, true, this);
+    }
+
+    @Override
+    public Fragment placeProperFragment(String fragmentTag, Bundle args) {
+        return placeProperFragment(fragmentTag, args, true, this);
     }
 
     @Override

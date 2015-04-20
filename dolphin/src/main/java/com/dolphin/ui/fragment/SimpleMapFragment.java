@@ -9,15 +9,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 public abstract class SimpleMapFragment extends SupportMapFragment implements StandardFragment {
     @Override
-    public void placeProperFragment(String fragmentTag) {
-        placeProperFragment(fragmentTag, null, true, this);
+    public Fragment placeProperFragment(String fragmentTag) {
+        return placeProperFragment(fragmentTag, null, true, this);
     }
 
     @Override
-    public void placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
-        if (getActivity() != null) {
-            ((SimpleActivity) getActivity()).placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment, false);
-        }
+    public Fragment placeProperFragment(String fragmentTag, Bundle args, boolean addToBackStackCustom, Fragment targetFragment) {
+        return ((SimpleActivity) getActivity()).placeProperFragment(fragmentTag, args, addToBackStackCustom, targetFragment, false);
     }
 
     @Override
@@ -29,8 +27,8 @@ public abstract class SimpleMapFragment extends SupportMapFragment implements St
     }
 
     @Override
-    public void placeProperFragment(String fragmentTag, Bundle args) {
-        placeProperFragment(fragmentTag, args, true, this);
+    public Fragment placeProperFragment(String fragmentTag, Bundle args) {
+        return placeProperFragment(fragmentTag, args, true, this);
     }
 
     public void setTitle(int resId) {
@@ -45,7 +43,7 @@ public abstract class SimpleMapFragment extends SupportMapFragment implements St
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId) {
-            case android.R.id.home :
+            case android.R.id.home:
                 return closeCurrentFragment();
             default:
                 return super.onOptionsItemSelected(item);

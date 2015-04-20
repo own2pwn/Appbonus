@@ -157,5 +157,6 @@
     <string name="meet_friends_promo">Отправь промо-код другу,\nи он получит %1$s\nпри регистрации,\nа ты - дополнительный доход</string>
     <string name="copy_that_link">Скопируй ссылку на приложение\nсо своим промо-кодом</string>
     <string name="roubles">рублей</string>
+    <string name="indicate_phone_number">Укажите номер телефона</string>
 
 </resources>
