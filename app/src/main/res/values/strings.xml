@@ -156,5 +156,7 @@
     <string name="copy_that_link">Скопируй ссылку на приложение\nсо своим промо-кодом</string>
     <string name="roubles">рублей</string>
     <string name="indicate_phone_number">Укажите номер телефона</string>
+    <string name="current_password_caption">Текущий пароль</string>
+    <string name="current_password_inputed_wrongly">Текущий пароль введен неверно</string>
 
 </resources>

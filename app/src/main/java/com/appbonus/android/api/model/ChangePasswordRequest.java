@@ -8,6 +8,7 @@ public class ChangePasswordRequest {
     }
 
     public ChangePasswordRequest(String currentPassword, String password) {
+        this();
         user.setCurrentPassword(currentPassword);
         user.setPassword(password);
         user.setPasswordConfirmation(password);

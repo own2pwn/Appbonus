@@ -83,4 +83,5 @@
     <item name="meet_friends_promo" type="id" />
     <item name="promo_link" type="id" />
     <item name="vkontakte" type="id" />
+    <item name="current_password" type="id" />
 </resources>

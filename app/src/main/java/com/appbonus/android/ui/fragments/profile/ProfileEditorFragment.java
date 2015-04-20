@@ -52,6 +52,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     protected Spinner sex;
     protected SimpleAdapter sexAdapter;
 
+    protected FloatLabel currentPassword;
     protected FloatLabel newPassword;
     protected FloatLabel confirmPassword;
 
@@ -132,7 +133,17 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     public void changePassword() {
         if (passwordForm.validate()) {
             final String password = newPassword.getText();
-            final ChangePasswordRequest request = new ChangePasswordRequest(Storage.<String>load(getActivity(), Config.PASSWORD), password);
+
+            String currentPassStr = currentPassword.getText();
+            String current = Storage.load(getActivity(), Config.PASSWORD);
+            if (!current.equals(currentPassStr)) {
+                String errorMsg = getString(R.string.current_password_inputed_wrongly);
+                currentPassword.setError(errorMsg);
+                Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            final ChangePasswordRequest request = new ChangePasswordRequest(current, password);
             new DialogExceptionalAsyncTask<Void, Void, UserWrapper>(getActivity()) {
                 @Override
                 protected FragmentManager getFragmentManager() {
@@ -149,6 +160,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
                     super.onPostExecute(userWrapper);
                     if (isSuccess()) {
                         Storage.save(context, Config.PASSWORD, password);
+                        currentPassword.clear();
                         newPassword.clear();
                         confirmPassword.clear();
                         Toast.makeText(context, R.string.password_was_changed, Toast.LENGTH_LONG).show();
@@ -204,6 +216,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
 
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
+        currentPassword = (FloatLabel) view.findViewById(R.id.current_password);
         newPassword = (FloatLabel) view.findViewById(R.id.new_password);
         confirmPassword = (FloatLabel) view.findViewById(R.id.confirm_password);
         saveBtn = (Button) view.findViewById(R.id.save);
@@ -214,6 +227,10 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         confirmPhoneLabel = view.findViewById(R.id.confirm_phone_label);
 
         passwordForm = new Form();
+
+        NotEmptyValidator currentPasswordValidator = new NotEmptyValidator(getActivity(), R.string.input_password);
+        Validate currentPasswordValidate = new Validate(currentPassword.getEditText());
+        currentPasswordValidate.addValidator(currentPasswordValidator);
 
         NotEmptyValidator newPasswordValidator = new NotEmptyValidator(getActivity(), R.string.input_password);
         Validate newPasswordValidate = new Validate(newPassword.getEditText());
