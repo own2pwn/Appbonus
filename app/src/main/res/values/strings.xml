@@ -158,5 +158,6 @@
     <string name="indicate_phone_number">Укажите номер телефона</string>
     <string name="current_password_caption">Текущий пароль</string>
     <string name="current_password_inputed_wrongly">Текущий пароль введен неверно</string>
+    <string name="sharing_does_not_available">Этим приложением нельзя поделиться</string>
 
 </resources>

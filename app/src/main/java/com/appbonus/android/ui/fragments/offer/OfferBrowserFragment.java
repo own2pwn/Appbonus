@@ -126,9 +126,16 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     }
 
     private void setData(OfferWrapper data) {
-        offer = data.getOffer();
-        if (StringUtils.isNotBlank(offer.getNote()))
-            note.setText(Html.fromHtml(new AndDown().markdownToHtml(offer.getNote())));
+        mergeOfferInfo(data);
+        if (StringUtils.isNotBlank(this.offer.getNote()))
+            note.setText(Html.fromHtml(new AndDown().markdownToHtml(this.offer.getNote())));
+    }
+
+    private void mergeOfferInfo(OfferWrapper data) {
+        Offer newOffer = data.getOffer();
+        newOffer.setSharingEnable(offer.isSharingEnable());
+        newOffer.setInstalled(offer.isInstalled());
+        offer = newOffer;
     }
 
     @Override
@@ -152,6 +159,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
             case R.id.share:
                 if (offer.isSharingEnable())
                     share();
+                else Toast.makeText(getActivity(), R.string.sharing_does_not_available, Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -161,7 +169,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     }
 
     private void share() {
-        String referrerLink = /*String.format(getString(R.string.referrer_app_link), Storage.load(getActivity(), Config.USER_ID))*/offer.getDownloadLink();
+        String referrerLink = offer.getDownloadLink();
         ClipboardUtils.copyToClipboard(getActivity(), referrerLink);
         Toast.makeText(getActivity(), R.string.referrer_link_was_copied, Toast.LENGTH_SHORT).show();
     }
