@@ -16,7 +16,6 @@ import com.appbonus.android.model.User;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
-import com.appbonus.android.ui.fragments.profile.OnUserUpdateListener;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.ui.fragment.SimpleFragment;
@@ -148,7 +147,7 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
                 }
             }
         }).start();
-        ((OnUserUpdateListener) getTargetFragment()).onUpdate(user, false);
+        Storage.save(getActivity(), Config.USER, user);
         super.onDestroyView();
     }
 }
