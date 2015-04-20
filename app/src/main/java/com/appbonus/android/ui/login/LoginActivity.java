@@ -68,22 +68,22 @@ public class LoginActivity extends ApiActivity {
         }
 
         @Override
-        public void onAccessDenied(final VKError authorizationError) {
-            new AlertDialog.Builder(VKUIHelper.getTopActivity())
-                    .setMessage(authorizationError.toString())
-                    .show();
+        public void onAccessDenied(VKError authorizationError) {
+            if (authorizationError.errorCode != VKError.VK_CANCELED) {
+                new AlertDialog.Builder(VKUIHelper.getTopActivity())
+                        .setMessage(authorizationError.toString())
+                        .show();
+            }
         }
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
-//            startMainActivity();
-            vkLoginAttempt(newToken.accessToken);
+            onTokenReceive(newToken.accessToken);
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-//            startMainActivity();
-            vkLoginAttempt(token.accessToken);
+            onTokenReceive(token.accessToken);
         }
     };
 
@@ -177,12 +177,12 @@ public class LoginActivity extends ApiActivity {
                 break;
             case LOGIN_VK_CODE:
                 if (resultCode == RESULT_OK) {
-                    vkLoginAttempt(data.getStringExtra("token"));
+                    onTokenReceive(data.getStringExtra("token"));
                 }
         }
     }
 
-    private void vkLoginAttempt(final String token) {
+    private void onTokenReceive(final String token) {
         new DialogExceptionalAsyncTask<Void, Void, LoginWrapper>(this) {
             @Override
             protected LoginWrapper background(Void... params) throws Throwable {
@@ -254,7 +254,6 @@ public class LoginActivity extends ApiActivity {
     }
 
     public void enterVkHandler(View view) {
-//        startActivityForResult(new Intent(this, LoginVkActivity.class), LOGIN_VK_CODE);
         VKSdk.authorize(VkMusicActivity.sMyScope, true, false);
     }
 }
