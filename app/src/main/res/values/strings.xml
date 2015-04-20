@@ -15,8 +15,6 @@
     <string name="my_web_cab_link">http://appbonus.ru/my</string>
     <string name="app_bonus_mail">mail@appbonus.ru</string>
 
-    <string name="profile_date_format">dd MMM yyyy</string>
-
     <string name="name_db">app_bonus.db</string>
     <string name="models">
         com.appbonus.android.model.Question

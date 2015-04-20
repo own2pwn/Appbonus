@@ -38,14 +38,14 @@
                 android:inputType="phone"
                 android:layout="@layout/not_editable_float_label" />
 
-            <!--<TextView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/confirm_phone"
                 android:gravity="center"
                 android:textColor="@color/main_color"
                 android:id="@id/confirm_phone_button"
-                android:visibility="gone"/>-->
+                android:visibility="gone"/>
 
             <com.appbonus.android.component.FloatLabel
                 android:id="@id/login"

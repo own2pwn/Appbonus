@@ -3,6 +3,7 @@ package com.appbonus.android.ui.fragments.profile;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -18,16 +19,18 @@ import android.widget.Toast;
 import com.appbonus.android.R;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
+import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.model.enums.Sex;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
+import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.ui.LoadingDialogHelper;
 import com.dolphin.ui.fragment.root.RootSimpleFragment;
 import com.dolphin.utils.KeyboardUtils;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 public class ProfileBrowserFragment extends RootSimpleFragment implements LoaderManager.LoaderCallbacks<UserWrapper>,
         OnUserUpdateListener, View.OnClickListener {
@@ -45,6 +48,7 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     protected Button editBtn;
 
     protected View confirmPhoneLabel;
+    protected View confirmPhoneButton;
 
     protected User user;
 
@@ -52,6 +56,8 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
     public interface ProfileBrowserFragmentListener extends LoadingDialogHelper {
         Loader<UserWrapper> createUserLoader();
+
+        DataWrapper requestConfirmation() throws Throwable;
     }
 
     @Override
@@ -91,6 +97,8 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
         editBtn = (Button) view.findViewById(R.id.edit);
 
         confirmPhoneLabel = view.findViewById(R.id.confirm_phone_label);
+        confirmPhoneButton = view.findViewById(R.id.confirm_phone_button);
+        confirmPhoneButton.setOnClickListener(this);
 
         editBtn.setOnClickListener(this);
     }
@@ -100,7 +108,7 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
         phone.setText(user.getPhone());
         name.setText(user.getName());
         if (user.getBirthDate() != null) {
-            birthDate.setText(new SimpleDateFormat(getString(R.string.profile_date_format)).format(user.getBirthDate()));
+            birthDate.setText(DateFormat.getDateInstance().format(user.getBirthDate()));
         }
         if (user.getGender() == Sex.MALE) {
             sex.setText(R.string.sex_male);
@@ -111,6 +119,11 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
         if (!user.isPhoneConfirmed()) {
             confirmPhoneLabel.setVisibility(View.VISIBLE);
+            confirmPhoneButton.setVisibility(View.VISIBLE);
+        } else {
+            confirmPhoneLabel.setVisibility(View.GONE);
+            confirmPhoneButton.setVisibility(View.GONE);
+            phone.lock();
         }
     }
 
@@ -167,9 +180,40 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
 
     @Override
     public void onClick(View v) {
-        if (user != null) {
-            placeProperFragment(ProfileEditorFragment.class.getName(), getUserBundle());
-        } else Toast.makeText(getActivity(), R.string.re_enter, Toast.LENGTH_LONG).show();
+        int id = v.getId();
+        switch (id) {
+            case R.id.confirm_phone_button:
+                confirmPhone();
+                break;
+            case R.id.edit:
+                if (user != null) {
+                    placeProperFragment(ProfileEditorFragment.class.getName(), getUserBundle());
+                } else Toast.makeText(getActivity(), R.string.re_enter, Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    private void confirmPhone() {
+        new DialogExceptionalAsyncTask<Void, Void, DataWrapper>(getActivity()) {
+            @Override
+            protected FragmentManager getFragmentManager() {
+                return getActivity().getSupportFragmentManager();
+            }
+
+            @Override
+            protected DataWrapper background(Void... params) throws Throwable {
+                return listener.requestConfirmation();
+            }
+
+            @Override
+            protected void onPostExecute(DataWrapper dataWrapper) {
+                super.onPostExecute(dataWrapper);
+                if (isSuccess()) {
+                    Toast.makeText(context, dataWrapper.toString(), Toast.LENGTH_LONG).show();
+                    placeProperFragment(ConfirmPhoneFragment.class.getName());
+                } else showToast(throwable.getMessage());
+            }
+        }.execute();
     }
 
     private Bundle getUserBundle() {

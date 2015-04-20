@@ -19,7 +19,6 @@ import com.appbonus.android.R;
 import com.appbonus.android.api.model.ChangePasswordRequest;
 import com.appbonus.android.component.FloatLabel;
 import com.appbonus.android.model.User;
-import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.UserWrapper;
 import com.appbonus.android.model.enums.Sex;
 import com.appbonus.android.storage.Config;
@@ -36,7 +35,7 @@ import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
 import com.throrinstudio.android.common.libs.validator.validator.PhoneValidator;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -60,7 +59,6 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     protected Button changePasswordBtn;
 
     protected View confirmPhoneLabel;
-    protected View confirmPhoneButton;
 
     protected User user;
     protected Form passwordForm;
@@ -101,8 +99,6 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         UserWrapper changePassword(ChangePasswordRequest request) throws Throwable;
 
         UserWrapper writeProfile(User request) throws Throwable;
-
-        DataWrapper requestConfirmation() throws Throwable;
     }
 
     @Override
@@ -216,8 +212,6 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         changePasswordBtn.setOnClickListener(this);
 
         confirmPhoneLabel = view.findViewById(R.id.confirm_phone_label);
-        confirmPhoneButton = view.findViewById(R.id.confirm_phone_button);
-        confirmPhoneButton.setOnClickListener(this);
 
         passwordForm = new Form();
 
@@ -266,7 +260,7 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
         phone.setText(user.getPhone());
         name.setText(user.getName());
         if (user.getBirthDate() != null) {
-            birthDate.setText(new SimpleDateFormat(getString(R.string.profile_date_format)).format(user.getBirthDate()));
+            birthDate.setText(DateFormat.getDateInstance().format(user.getBirthDate()));
         }
         if (user.getGender() != null)
             sex.setSelection(user.getGender().ordinal());
@@ -277,10 +271,8 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
     private void setPhoneSetting(User user) {
         if (!user.isPhoneConfirmed()) {
             confirmPhoneLabel.setVisibility(View.VISIBLE);
-            confirmPhoneButton.setVisibility(View.VISIBLE);
         } else {
             confirmPhoneLabel.setVisibility(View.GONE);
-            confirmPhoneButton.setVisibility(View.GONE);
             phone.lock();
         }
     }
@@ -295,9 +287,6 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
             case R.id.change_password:
                 changePassword();
                 break;
-            case R.id.confirm_phone_button:
-                confirmPhone();
-                break;
             case R.id.edit_text:
                 openBirthDateDialog();
                 break;
@@ -309,32 +298,9 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
             @Override
             public void onDateSet(Date date) {
                 user.setBirthDate(date);
-                birthDate.setText(new SimpleDateFormat(getString(R.string.profile_date_format)).format(user.getBirthDate()));
+                birthDate.setText(DateFormat.getDateInstance().format(user.getBirthDate()));
             }
         }).show(getFragmentManager(), "birth_date_dialog");
-    }
-
-    private void confirmPhone() {
-        new DialogExceptionalAsyncTask<Void, Void, DataWrapper>(getActivity()) {
-            @Override
-            protected FragmentManager getFragmentManager() {
-                return getActivity().getSupportFragmentManager();
-            }
-
-            @Override
-            protected DataWrapper background(Void... params) throws Throwable {
-                return listener.requestConfirmation();
-            }
-
-            @Override
-            protected void onPostExecute(DataWrapper dataWrapper) {
-                super.onPostExecute(dataWrapper);
-                if (isSuccess()) {
-                    Toast.makeText(context, dataWrapper.toString(), Toast.LENGTH_LONG).show();
-                    placeProperFragment(ConfirmPhoneFragment.class.getName());
-                }
-            }
-        }.execute();
     }
 
 
