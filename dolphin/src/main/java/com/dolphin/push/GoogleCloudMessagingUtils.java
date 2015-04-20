@@ -30,17 +30,21 @@ public abstract class GoogleCloudMessagingUtils {
     protected GoogleCloudMessaging gcm;
     protected String regId;
     protected OnRegisterListener onRegisterListener;
+    protected OnGooglePlayServicesUnavailableListener onGooglePlayServicesUnavailableListener;
 
     public void setOnRegisterListener(OnRegisterListener onRegisterListener) {
         this.onRegisterListener = onRegisterListener;
+    }
+
+    public void setOnGooglePlayServicesUnavailableListener(OnGooglePlayServicesUnavailableListener listener) {
+        this.onGooglePlayServicesUnavailableListener = listener;
     }
 
     public boolean checkPlayServices(Activity context) {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, context,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                onGooglePlayServicesUnavailableListener.onGooglePlayServicesUnavailable(resultCode);
             }
             return false;
         }

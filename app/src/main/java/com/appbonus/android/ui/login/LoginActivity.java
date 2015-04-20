@@ -22,6 +22,7 @@ import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.push.GoogleCloudMessagingUtils;
+import com.dolphin.push.OnGooglePlayServicesUnavailableListener;
 import com.dynamixsoftware.ErrorAgent;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
@@ -36,7 +37,7 @@ import com.vk.sdk.dialogs.VKCaptchaDialog;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class LoginActivity extends ApiActivity {
+public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUnavailableListener {
     private static final int REGISTRATION_INTENT_CODE = 1;
     private static final int RESET_PASSWORD_INTENT_CODE = 2;
     private static final int LOGIN_VK_CODE = 3;
@@ -221,6 +222,7 @@ public class LoginActivity extends ApiActivity {
         }
 
         GoogleCloudMessagingUtils cloudMessagingUtils = new BonusGCMUtils();
+        cloudMessagingUtils.setOnGooglePlayServicesUnavailableListener(this);
         if (cloudMessagingUtils.checkPlayServices(this)) {
             cloudMessagingUtils.register(this);
         }
@@ -255,5 +257,10 @@ public class LoginActivity extends ApiActivity {
 
     public void enterVkHandler(View view) {
         VKSdk.authorize(VkMusicActivity.sMyScope, true, false);
+    }
+
+    @Override
+    public void onGooglePlayServicesUnavailable(int resultCode) {
+        Storage.save(this, Config.GOOGLE_SERVICES_RESULT_CODE, resultCode);
     }
 }

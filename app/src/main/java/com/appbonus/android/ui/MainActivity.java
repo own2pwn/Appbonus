@@ -59,10 +59,13 @@ import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.asynctask.ExceptionAsyncTask;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.net.methods.BaseHttpMethod;
+import com.dolphin.push.GoogleCloudMessagingUtils;
 import com.dolphin.ui.SimpleActivity;
 import com.dolphin.ui.fragment.NavigationDrawer;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.mobileapptracker.MobileAppTracker;
 
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks,
@@ -116,6 +119,17 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         initMobileAppTracker();
         initLoadingDialog(getString(R.string.loading));
         loadSettings();
+        showGoogleServicesMessageIfShould();
+    }
+
+    private void showGoogleServicesMessageIfShould() {
+        int googleServicesResultCode = Storage.load(this, Config.GOOGLE_SERVICES_RESULT_CODE, ConnectionResult.SUCCESS);
+        boolean googleServicesMessageShown = Storage.load(this, Config.GOOGLE_SERVICES_UNAVAILABLE_MESSAGE_SHOWN, false);
+        if (googleServicesResultCode != ConnectionResult.SUCCESS && !googleServicesMessageShown) {
+            GooglePlayServicesUtil.getErrorDialog(googleServicesResultCode, this,
+                    GoogleCloudMessagingUtils.PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            Storage.save(this, Config.GOOGLE_SERVICES_UNAVAILABLE_MESSAGE_SHOWN, true);
+        }
     }
 
     private void openNotificationFragment(Notification notification) {

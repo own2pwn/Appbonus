@@ -13,4 +13,7 @@ public abstract class Config {
     public static final String SETTINGS = "settings";
 
     public static final String VKONTAKTE_ID = "vkontakte_id";
+
+    public static final String GOOGLE_SERVICES_RESULT_CODE = "google_services_result_code";
+    public static final String GOOGLE_SERVICES_UNAVAILABLE_MESSAGE_SHOWN = "google_services_unavailable_message_shown";
 }
