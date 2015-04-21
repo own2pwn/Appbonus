@@ -33,7 +33,7 @@ import com.dolphin.utils.KeyboardUtils;
 import java.text.DateFormat;
 
 public class ProfileBrowserFragment extends RootSimpleFragment implements LoaderManager.LoaderCallbacks<UserWrapper>,
-        OnUserUpdateListener, View.OnClickListener {
+        OnUserUpdateListener, View.OnClickListener, ConfirmPhoneFragment.OnPhoneConfirmListener {
     public static final int LOADER_ID = 1;
 
     protected FloatLabel mail;
@@ -53,6 +53,11 @@ public class ProfileBrowserFragment extends RootSimpleFragment implements Loader
     protected User user;
 
     protected ProfileBrowserFragmentListener listener;
+
+    @Override
+    public void onPhoneConfirm() {
+        user.setPhoneConfirmed(true);
+    }
 
     public interface ProfileBrowserFragmentListener extends LoadingDialogHelper {
         Loader<UserWrapper> createUserLoader();

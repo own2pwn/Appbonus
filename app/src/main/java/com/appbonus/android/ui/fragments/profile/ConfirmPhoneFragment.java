@@ -52,7 +52,8 @@ public class ConfirmPhoneFragment extends SimpleFragment implements View.OnClick
         super.onViewCreated(view, savedInstanceState);
         setDrawerIndicatorEnabled(false);
         setTitle(R.string.confirm_title);
-        onPhoneConfirmListener = (OnPhoneConfirmListener) getTargetFragment();
+        if (getTargetFragment() instanceof OnPhoneConfirmListener)
+            onPhoneConfirmListener = (OnPhoneConfirmListener) getTargetFragment();
     }
 
     private void initUI(View view) {
