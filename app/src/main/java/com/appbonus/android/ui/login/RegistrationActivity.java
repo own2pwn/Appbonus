@@ -17,6 +17,8 @@ import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.ApiActivity;
+import com.appbonus.android.ui.BonusVkSdkListener;
+import com.appbonus.android.ui.VkActivity;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.net.exception.FormException;
 import com.dolphin.utils.DeviceUtils;
@@ -25,6 +27,8 @@ import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
 import com.throrinstudio.android.common.libs.validator.validator.PhoneValidator;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -46,9 +50,24 @@ public class RegistrationActivity extends ApiActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         vkToken = getIntent().getExtras().getString(Config.VKONTAKTE_ID);
+        VKSdk.initialize(sdkListener, getString(R.string.vk_id));
         setContentView(R.layout.registration_layout);
         initUI();
         initValidators();
+    }
+
+    private VKSdkListener sdkListener = new BonusVkSdkListener() {
+        @Override
+        protected void onToken(String token) {
+            onTokenReceive(token);
+        }
+    };
+
+    private void onTokenReceive(String token) {
+        String mailStr = mail.getText();
+        String phoneStr = phone.getText();
+        String promoStr = promo.getText();
+        vkRegister(token, mailStr, phoneStr, promoStr);
     }
 
     public void initValidators() {
@@ -147,7 +166,6 @@ public class RegistrationActivity extends ApiActivity {
         builder.setTitle(R.string.error);
         builder.setMessage(throwable.getMessage());
         builder.show();
-
     }
 
     private void showFormException(FormException e) {
@@ -161,23 +179,7 @@ public class RegistrationActivity extends ApiActivity {
     public void registerVkHandler(View view) {
         closeErrors();
         if (vkForm.validate()) {
-            startActivityForResult(new Intent(this, LoginVkActivity.class), LOGIN_VK_CODE);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case LOGIN_VK_CODE:
-                if (resultCode == RESULT_OK) {
-                    String token = data.getStringExtra("token");
-                    String mailStr = mail.getText();
-                    String phoneStr = phone.getText();
-                    String promoStr = promo.getText();
-                    vkRegister(token, mailStr, phoneStr, promoStr);
-                }
-                break;
+            VKSdk.authorize(VkActivity.scope, true, false);
         }
     }
 

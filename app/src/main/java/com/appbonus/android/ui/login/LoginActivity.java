@@ -17,7 +17,8 @@ import com.appbonus.android.push.BonusGCMUtils;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.ApiActivity;
-import com.appbonus.android.ui.VkMusicActivity;
+import com.appbonus.android.ui.BonusVkSdkListener;
+import com.appbonus.android.ui.VkActivity;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
@@ -29,12 +30,8 @@ import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
 import com.throrinstudio.android.common.libs.validator.validator.EmailValidator;
 import com.throrinstudio.android.common.libs.validator.validator.NotEmptyValidator;
-import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
-import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.dialogs.VKCaptchaDialog;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -58,34 +55,10 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
         initValidators();
     }
 
-    private VKSdkListener sdkListener = new VKSdkListener() {
+    private VKSdkListener sdkListener = new BonusVkSdkListener() {
         @Override
-        public void onCaptchaError(VKError captchaError) {
-            new VKCaptchaDialog(captchaError).show();
-        }
-
-        @Override
-        public void onTokenExpired(VKAccessToken expiredToken) {
-            VKSdk.authorize(sMyScope);
-        }
-
-        @Override
-        public void onAccessDenied(VKError authorizationError) {
-            if (authorizationError.errorCode != VKError.VK_CANCELED) {
-                new AlertDialog.Builder(VKUIHelper.getTopActivity())
-                        .setMessage(authorizationError.toString())
-                        .show();
-            }
-        }
-
-        @Override
-        public void onReceiveNewToken(VKAccessToken newToken) {
-            onTokenReceive(newToken.accessToken);
-        }
-
-        @Override
-        public void onAcceptUserToken(VKAccessToken token) {
-            onTokenReceive(token.accessToken);
+        protected void onToken(String token) {
+            onTokenReceive(token);
         }
     };
 
@@ -261,7 +234,7 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
     }
 
     public void enterVkHandler(View view) {
-        VKSdk.authorize(VkMusicActivity.sMyScope, true, false);
+        VKSdk.authorize(VkActivity.scope, true, false);
     }
 
     @Override

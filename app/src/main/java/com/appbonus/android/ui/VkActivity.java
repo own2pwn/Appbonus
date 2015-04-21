@@ -6,9 +6,8 @@ import android.support.v4.app.FragmentActivity;
 
 import com.vk.sdk.VKUIHelper;
 
-public abstract class VkMusicActivity extends FragmentActivity {
-    public static final String[] sMyScope = new String[]{
-    };
+public abstract class VkActivity extends FragmentActivity {
+    public static final String[] scope = new String[]{};
 
     @Override
     protected void onResume() {

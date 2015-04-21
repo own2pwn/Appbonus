@@ -13,7 +13,7 @@ import com.appbonus.android.model.api.QuestionsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.dolphin.utils.KeyboardUtils;
 
-public abstract class ApiActivity extends VkMusicActivity {
+public abstract class ApiActivity extends VkActivity {
     private Api api;
 
     @Override
@@ -29,6 +29,11 @@ public abstract class ApiActivity extends VkMusicActivity {
 
     protected LoginWrapper vkLogin(VkLoginRequest request) throws Throwable {
         return api.vkLogin(request);
+    }
+
+    @SuppressWarnings("unused")
+    protected void vkExit() throws Throwable {
+        api.vkExit();
     }
 
     protected LoginWrapper vkRegistration(VkLoginRequest request) throws Throwable {
