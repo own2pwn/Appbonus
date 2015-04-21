@@ -170,10 +170,10 @@ public abstract class BaseHttpMethod implements HttpMethod {
                 return getResponse(eTag);
             } else if (responseCode == HttpStatus.SC_UNAUTHORIZED) {
                 UnauthorizedException exception = new UnauthorizedException();
-                handleError(exception.getMessage());
+                handleError(responseCode, exception.getMessage());
                 throw exception;
             }
-            else return throwError();
+            else return throwError(responseCode);
         } finally {
             disconnectQuietly();
         }
@@ -184,15 +184,15 @@ public abstract class BaseHttpMethod implements HttpMethod {
         return url.hashCode() + (entity != null ? entity.hashCode() : 0);
     }
 
-    private String throwError() throws Throwable {
+    private String throwError(int code) throws Throwable {
         String detailMessage = readError(connection);
-        handleError(detailMessage);
+        handleError(code, detailMessage);
         throw new Throwable(detailMessage);
     }
 
-    private void handleError(String detailMessage) {
+    private void handleError(int code, String detailMessage) {
         if (errorHandler != null) {
-            throw errorHandler.handle(detailMessage);
+            throw errorHandler.handle(code, detailMessage);
         }
     }
 

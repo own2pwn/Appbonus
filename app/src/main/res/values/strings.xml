@@ -160,5 +160,6 @@
     <string name="current_password_inputed_wrongly">Текущий пароль введен неверно</string>
     <string name="sharing_does_not_available">Этим приложением нельзя поделиться</string>
     <string name="wrong_login_or_password">Неверный логин или пароль</string>
+    <string name="wrong_login">Пользователя с таким логином не существует</string>
 
 </resources>

@@ -12,7 +12,7 @@ public interface HttpMethod {
     void addHeader(String key, String value);
 
     static interface ErrorHandler {
-        RuntimeException handle(String error);
+        RuntimeException handle(int code, String error);
     }
 
     public void setErrorHandler(ErrorHandler errorHandler);

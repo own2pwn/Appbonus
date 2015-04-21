@@ -47,6 +47,7 @@ import com.google.gson.JsonSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -225,7 +226,7 @@ public class ApiImpl extends CommonApi implements Api {
         }
 
         @Override
-        public FormException handle(String error) {
+        public FormException handle(int code, String error) {
             FormException exception = new FormException();
             try {
                 JSONObject object = new JSONObject(error);
@@ -247,7 +248,9 @@ public class ApiImpl extends CommonApi implements Api {
                 } else if (object.has(SUCCESS_PARAMETER)) {
                     boolean aBoolean = object.getBoolean(SUCCESS_PARAMETER);
                     if (!aBoolean) {
-                        exception.message =  api.getString(R.string.failed);
+                        if (code == HttpStatus.SC_NOT_FOUND) {
+                            exception.message = api.getString(R.string.wrong_login);
+                        } else exception.message = api.getString(R.string.failed);
                     } else exception.message =  api.getString(R.string.success);
                 } else exception.message = error;
             } catch (JSONException ignored) {
