@@ -88,6 +88,9 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
                 ActiveAndroid.beginTransaction();
                 try {
                     for (Question question : questions) {
+                        //todo нужно исправлять на сервере
+                        question.text = question.text.replace('\u2028', '\u0000');
+                        question.answer = question.answer.replace('\u2028', '\n');
                         question.save();
                     }
                     ActiveAndroid.setTransactionSuccessful();
