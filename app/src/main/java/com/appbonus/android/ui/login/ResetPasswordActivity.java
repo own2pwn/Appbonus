@@ -12,6 +12,7 @@ import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.ui.ApiActivity;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
+import com.dolphin.net.exception.UnauthorizedException;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -62,9 +63,17 @@ public class ResetPasswordActivity extends ApiActivity {
      * 404 - мыло не зарегистрировано
      */
     private void showError(Throwable throwable) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(throwable instanceof InvocationTargetException ?
+        if (UnauthorizedException.MESSAGE.equals(throwable.getMessage())) {
+            showError(getString(R.string.wrong_login_or_password));
+            return;
+        }
+        showError(throwable instanceof InvocationTargetException ?
                 throwable.getCause().getMessage() : throwable.getMessage());
+    }
+
+    private void showError(String s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(s);
         builder.show();
     }
 }

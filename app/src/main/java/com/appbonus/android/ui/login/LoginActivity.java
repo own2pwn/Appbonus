@@ -21,6 +21,7 @@ import com.appbonus.android.ui.VkMusicActivity;
 import com.appbonus.android.ui.helper.DataHelper;
 import com.appbonus.android.ui.helper.IntentHelper;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
+import com.dolphin.net.exception.UnauthorizedException;
 import com.dolphin.push.GoogleCloudMessagingUtils;
 import com.dolphin.push.OnGooglePlayServicesUnavailableListener;
 import com.dynamixsoftware.ErrorAgent;
@@ -142,6 +143,10 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
     }
 
     private void showError(Throwable throwable) {
+        if (UnauthorizedException.MESSAGE.equals(throwable.getMessage())) {
+            showError(getString(R.string.wrong_login_or_password));
+            return;
+        }
         ErrorAgent.reportError(throwable, "Login vk exception");
         showError(throwable instanceof InvocationTargetException ?
                 throwable.getCause().getMessage() : throwable.getMessage());
