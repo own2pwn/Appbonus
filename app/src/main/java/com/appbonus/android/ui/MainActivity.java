@@ -176,6 +176,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        closeDrawerIfOpened();
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.offers:
@@ -195,6 +196,12 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void closeDrawerIfOpened() {
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
+            mNavigationDrawerFragment.toggle();
+        }
     }
 
     @Override
