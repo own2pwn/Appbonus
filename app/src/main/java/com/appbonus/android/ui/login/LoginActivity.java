@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+import android.widget.Toast;
 
 import com.appbonus.android.R;
 import com.appbonus.android.api.model.LoginRequest;
@@ -220,8 +221,9 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
                 protected void onPostExecute(SimpleResult simpleResult) {
                     super.onPostExecute(simpleResult);
                     if (isSuccess() && simpleResult.isSuccess()) {
-                        startActivityForResult(new Intent(context, ResetPasswordActivity.class).putExtra("mail", mailStr),
-                                RESET_PASSWORD_INTENT_CODE);
+                        /*startActivityForResult(new Intent(context, ResetPasswordActivity.class).putExtra("mail", mailStr),
+                                RESET_PASSWORD_INTENT_CODE);*/
+                        Toast.makeText(context, R.string.password_repair_letter_was_sent, Toast.LENGTH_LONG).show();
                     } else showError(throwable);
                 }
 

@@ -161,5 +161,6 @@
     <string name="sharing_does_not_available">Этим приложением нельзя поделиться</string>
     <string name="wrong_login_or_password">Неверный логин или пароль</string>
     <string name="wrong_login">Пользователя с таким логином не существует</string>
+    <string name="password_repair_letter_was_sent">На вашу почту было выслано письмо с инструкцией по восстановлению пароля</string>
 
 </resources>

@@ -355,7 +355,6 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         new ExceptionAsyncTask<Void, Void, SettingsWrapper>(this) {
             @Override
             protected SettingsWrapper background(Void... params) throws Throwable {
-                api.vkExit();
                 return api.getSettings();
             }
 
