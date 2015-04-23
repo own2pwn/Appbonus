@@ -80,6 +80,7 @@ public class WithdrawalFragment extends SimpleFragment implements View.OnClickLi
             int id = v.getId();
             WithdrawalRequest withdrawalRequest = new WithdrawalRequest();
             withdrawalRequest.setAmount(Double.parseDouble(amount.getText()));
+            withdrawalRequest.setPhone(mobileNumber.getText());
             switch (id) {
                 case R.id.withdrawal_qiwi:
                     withdrawalRequest.setRequestType(WithdrawalRequest.QIWI_REQUEST_TYPE);

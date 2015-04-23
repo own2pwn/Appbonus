@@ -25,7 +25,7 @@ public class FloatLabel extends com.iangclifton.android.floatlabel.FloatLabel {
     }
 
     public String getText() {
-        return getEditText().getText().toString();
+        return getEditText().getText().toString().trim();
     }
 
     public void setInputType(int type) {

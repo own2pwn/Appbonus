@@ -8,10 +8,7 @@ public class WithdrawalRequest implements Serializable {
 
     protected String requestType;
     protected Double amount;
-
-    public String getRequestType() {
-        return requestType;
-    }
+    protected String phone;
 
     public void setRequestType(String requestType) {
         this.requestType = requestType;
@@ -23,5 +20,9 @@ public class WithdrawalRequest implements Serializable {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

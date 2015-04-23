@@ -1,0 +1,12 @@
+.gradle
+.idea
+
+/build
+/app/build
+/android-validator/build
+/dolphin/build
+
+*.iml
+*.class
+
+local.properties
