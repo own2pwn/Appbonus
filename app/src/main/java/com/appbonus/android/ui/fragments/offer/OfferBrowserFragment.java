@@ -169,7 +169,7 @@ public class OfferBrowserFragment extends SimpleFragment implements LoaderManage
     }
 
     private void share() {
-        String referrerLink = offer.getDownloadLink();
+        String referrerLink = offer.getOfferUrl();
         ClipboardUtils.copyToClipboard(getActivity(), referrerLink);
         Toast.makeText(getActivity(), R.string.referrer_link_was_copied, Toast.LENGTH_SHORT).show();
     }

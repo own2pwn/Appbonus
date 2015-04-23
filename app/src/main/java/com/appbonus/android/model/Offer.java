@@ -15,6 +15,7 @@ public class Offer implements Serializable, Parcelable {
     protected boolean installed = false;
     protected boolean sharingEnable = false;
     protected String note;
+    protected String offerUrl;
 
     public String getDescription() {
         return description;
@@ -58,6 +59,10 @@ public class Offer implements Serializable, Parcelable {
 
     public String getNote() {
         return note;
+    }
+
+    public String getOfferUrl() {
+        return offerUrl;
     }
 
     public Offer() {
