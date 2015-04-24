@@ -4,10 +4,12 @@ import android.os.Bundle;
 
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
+import com.appbonus.android.api.model.DeviceRequest;
 import com.appbonus.android.api.model.LoginRequest;
 import com.appbonus.android.api.model.RegisterRequest;
 import com.appbonus.android.api.model.ResetPasswordRequest;
 import com.appbonus.android.api.model.VkLoginRequest;
+import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.model.api.QuestionsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
@@ -50,5 +52,9 @@ public abstract class ApiActivity extends VkActivity {
 
     protected QuestionsWrapper getFaq() throws Throwable {
         return api.getFaq();
+    }
+
+    protected DataWrapper registerDevice(String gcm) throws Throwable{
+        return api.registerDevice(new DeviceRequest(gcm));
     }
 }

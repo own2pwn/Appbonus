@@ -26,6 +26,7 @@ import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.net.exception.UnauthorizedException;
 import com.dolphin.push.GoogleCloudMessagingUtils;
 import com.dolphin.push.OnGooglePlayServicesUnavailableListener;
+import com.dolphin.push.OnRegisterListener;
 import com.dynamixsoftware.ErrorAgent;
 import com.throrinstudio.android.common.libs.validator.Form;
 import com.throrinstudio.android.common.libs.validator.Validate;
@@ -36,7 +37,7 @@ import com.vk.sdk.VKSdkListener;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUnavailableListener {
+public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUnavailableListener, OnRegisterListener {
     private static final int REGISTRATION_INTENT_CODE = 1;
     private static final int RESET_PASSWORD_INTENT_CODE = 2;
     private static final int LOGIN_VK_CODE = 3;
@@ -202,6 +203,7 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
 
         GoogleCloudMessagingUtils cloudMessagingUtils = new BonusGCMUtils();
         cloudMessagingUtils.setOnGooglePlayServicesUnavailableListener(this);
+        cloudMessagingUtils.setOnRegisterListener(this);
         if (cloudMessagingUtils.checkPlayServices(this)) {
             cloudMessagingUtils.register(this);
         }
@@ -242,5 +244,18 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
     @Override
     public void onGooglePlayServicesUnavailable(int resultCode) {
         Storage.save(this, Config.GOOGLE_SERVICES_RESULT_CODE, resultCode);
+    }
+
+    @Override
+    public void onRegister(final String gcmId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    registerDevice(gcmId);
+                } catch (Throwable ignored) {
+                }
+            }
+        }).start();
     }
 }
