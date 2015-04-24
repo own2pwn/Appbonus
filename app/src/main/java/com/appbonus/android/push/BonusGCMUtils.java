@@ -2,6 +2,7 @@ package com.appbonus.android.push;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.appbonus.android.api.Api;
 import com.appbonus.android.api.ApiImpl;
@@ -17,7 +18,9 @@ public class BonusGCMUtils extends GoogleCloudMessagingUtils {
 
     @Override
     protected void sendRegistrationIdToBackend(Context context) throws Throwable {
-        Api api = new ApiImpl(context);
-        api.registerDevice(new DeviceRequest(regId));
+        if (!TextUtils.isEmpty(regId)) {
+            Api api = new ApiImpl(context);
+            api.registerDevice(new DeviceRequest(regId));
+        }
     }
 }
