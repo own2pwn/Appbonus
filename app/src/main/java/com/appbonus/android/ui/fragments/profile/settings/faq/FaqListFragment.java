@@ -20,14 +20,14 @@ import com.appbonus.android.loaders.FaqLoader;
 import com.appbonus.android.model.Question;
 import com.appbonus.android.ui.fragments.common.OnTechSupportCallListener;
 import com.dolphin.loader.AbstractLoader;
-import com.dolphin.ui.fragment.SimpleListFragment;
+import com.dolphin.ui.fragment.root.RootListFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FaqListFragment extends SimpleListFragment<ListView, SimpleAdapter>
+public class FaqListFragment extends RootListFragment<ListView, SimpleAdapter>
         implements LoaderManager.LoaderCallbacks<List<Question>>, AdapterView.OnItemClickListener, View.OnClickListener {
     public static final int LOADER_ID = 1;
     public static final String QUESTION_PARAMETER = "question";
@@ -60,7 +60,7 @@ public class FaqListFragment extends SimpleListFragment<ListView, SimpleAdapter>
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setTitle(R.string.faq);
-        setDrawerIndicatorEnabled(false);
+        setDrawerIndicatorEnabled(getTargetFragment() == null);
         if (getLoaderManager().getLoader(LOADER_ID) == null) {
             Loader loader = getLoaderManager().initLoader(LOADER_ID, null, this);
             loader.forceLoad();

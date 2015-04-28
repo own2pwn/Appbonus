@@ -3,6 +3,7 @@ package com.appbonus.android.ui.fragments.profile.settings;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
 import com.dolphin.helper.IntentHelper;
 import com.dolphin.ui.fragment.SimpleFragment;
+import com.dolphin.ui.fragment.root.RootFragment;
 
 public class SettingsFragment extends SimpleFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     protected CheckBox showPush;
@@ -108,7 +110,9 @@ public class SettingsFragment extends SimpleFragment implements View.OnClickList
                 startActivity(IntentHelper.openLink(getString(R.string.my_web_cab_link)));
                 break;
             case R.id.faq:
-                placeProperFragment(FaqListFragment.class.getName());
+                Fragment fragment = placeProperFragment(FaqListFragment.class.getName());
+                if (fragment instanceof RootFragment)
+                    ((RootFragment) fragment).notMortalClose();
                 break;
             case R.id.license:
                 openLicense();

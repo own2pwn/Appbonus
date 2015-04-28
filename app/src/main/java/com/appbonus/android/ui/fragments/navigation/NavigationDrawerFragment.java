@@ -28,8 +28,9 @@ public class NavigationDrawerFragment extends SimpleFragment implements Navigati
     public static final int NAV_BALANCE = 1;
     public static final int NAV_FRIENDS = 2;
     public static final int NAV_PROFILE = 3;
+    public static final int NAV_FAQ = 4;
 
-    public static final int ITEMS_COUNT = 4;
+    public static final int ITEMS_COUNT = 5;
 
     private NavigationDrawerCallbacks navigationDrawerCallbacks;
 

@@ -67,6 +67,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
                 viewHolder.title.setText(R.string.profile);
                 ImageLoader.getInstance().displayImage("drawable://" + R.drawable.profile_icon, viewHolder.icon);
                 break;
+            case 4 :
+                viewHolder.title.setText(R.string.faq);
+                ImageLoader.getInstance().displayImage("drawable://" + R.drawable.ic_faq, viewHolder.icon);
         }
         return convertView;
     }

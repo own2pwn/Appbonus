@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appbonus.android.R;
 import com.appbonus.android.model.Settings;
@@ -22,6 +23,7 @@ import com.appbonus.android.model.User;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
 import com.dolphin.ui.fragment.SimpleFragment;
+import com.dolphin.utils.ClipboardUtils;
 
 public class MeetFriendsFragment extends SimpleFragment implements View.OnClickListener {
     protected View meet;
@@ -76,6 +78,7 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
             promo.setText(user.getInviteCode());
 
             promoLink.setText(String.format(getString(R.string.promo_link), user.getInviteCode()));
+            promoLink.setOnClickListener(this);
         }
 
         SpannableString spannableString = promoSum();
@@ -99,6 +102,9 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
             case R.id.meet:
                 makeMeeting();
                 break;
+            case R.id.promo_link:
+                share(promoLink.getText().toString());
+                break;
         }
     }
 
@@ -120,5 +126,10 @@ public class MeetFriendsFragment extends SimpleFragment implements View.OnClickL
 
     private void makeMeeting() {
         listener.sendInviteMessage();
+    }
+
+    private void share(String s) {
+        ClipboardUtils.copyToClipboard(getActivity(), s);
+        Toast.makeText(getActivity(), R.string.referrer_link_was_copied, Toast.LENGTH_SHORT).show();
     }
 }

@@ -54,6 +54,7 @@ import com.appbonus.android.ui.fragments.profile.ConfirmPhoneFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileBrowserFragment;
 import com.appbonus.android.ui.fragments.profile.ProfileEditorFragment;
 import com.appbonus.android.ui.fragments.profile.settings.SettingsFragment;
+import com.appbonus.android.ui.fragments.profile.settings.faq.FaqListFragment;
 import com.appbonus.android.ui.login.LoginActivity;
 import com.dolphin.asynctask.DialogExceptionalAsyncTask;
 import com.dolphin.asynctask.ExceptionAsyncTask;
@@ -80,6 +81,7 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
     public static final String PROFILE_FRAGMENT = ProfileBrowserFragment.class.getName();
     public static final String BALANCE_FRAGMENT = BalanceBrowserFragment.class.getName();
     public static final String FRIENDS_FRAGMENT = FriendsFragment.class.getName();
+    public static final String FAQ_FRAGMENT = FaqListFragment.class.getName();
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private Api api;
@@ -191,6 +193,9 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
             case R.id.friends:
                 openBaseFragment(FRIENDS_FRAGMENT);
                 return true;
+            case R.id.faq:
+                openBaseFragment(FAQ_FRAGMENT);
+                return true;
             case R.id.exit:
                 exit();
                 return true;
@@ -246,6 +251,9 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
                 break;
             case NavigationDrawerFragment.NAV_FRIENDS:
                 openBaseFragment(FRIENDS_FRAGMENT);
+                break;
+            case NavigationDrawerFragment.NAV_FAQ:
+                openBaseFragment(FAQ_FRAGMENT);
                 break;
         }
     }
