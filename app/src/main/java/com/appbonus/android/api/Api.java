@@ -24,6 +24,7 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SettingsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
+import com.appbonus.android.model.api.VersionWrapper;
 
 public interface Api {
     String HOST_URI = "https://www.appbonus.ru/";
@@ -56,6 +57,8 @@ public interface Api {
     String SUFX_FAQ = "faq";
 
     String SUFX_SETTINGS = "settings";
+
+    String SUFX_VERSION = "version";
 
     /*
      *  POST /api/v1/signup
@@ -454,4 +457,6 @@ public interface Api {
       }
      */
     SettingsWrapper getSettings() throws Throwable;
+
+    VersionWrapper getVersion() throws Throwable;
 }

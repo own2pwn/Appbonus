@@ -13,6 +13,7 @@ import com.appbonus.android.model.api.DataWrapper;
 import com.appbonus.android.model.api.LoginWrapper;
 import com.appbonus.android.model.api.QuestionsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
+import com.appbonus.android.model.api.VersionWrapper;
 import com.dolphin.utils.KeyboardUtils;
 
 public abstract class ApiActivity extends VkActivity {
@@ -46,7 +47,7 @@ public abstract class ApiActivity extends VkActivity {
         return api.registration(request);
     }
 
-    protected SimpleResult resetPassword(ResetPasswordRequest request) throws Throwable{
+    protected SimpleResult resetPassword(ResetPasswordRequest request) throws Throwable {
         return api.resetPassword(request);
     }
 
@@ -54,7 +55,11 @@ public abstract class ApiActivity extends VkActivity {
         return api.getFaq();
     }
 
-    protected DataWrapper registerDevice(String gcm) throws Throwable{
+    protected DataWrapper registerDevice(String gcm) throws Throwable {
         return api.registerDevice(new DeviceRequest(gcm));
+    }
+
+    protected VersionWrapper getVersion() throws Throwable {
+        return api.getVersion();
     }
 }

@@ -13,6 +13,7 @@ import com.activeandroid.sebbia.query.Delete;
 import com.appbonus.android.R;
 import com.appbonus.android.model.Question;
 import com.appbonus.android.model.api.QuestionsWrapper;
+import com.appbonus.android.model.api.VersionWrapper;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
 import com.appbonus.android.ui.helper.IntentHelper;
@@ -45,6 +46,8 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
     private void loading() {
         if (!loadingIsExecuted) {
             new ExceptionAsyncTask<Void, Void, QuestionsWrapper>(this) {
+                VersionWrapper version;
+
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
@@ -55,6 +58,7 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
 
                 @Override
                 protected QuestionsWrapper background(Void... params) throws Throwable {
+                    version = getVersion();
                     return getFaq();
                 }
 
@@ -63,6 +67,7 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
                     super.onPostExecute(questionsWrapper);
                     if (isSuccess()) {
                         saveFaq(questionsWrapper);
+                        saveVersion(version);
                         enter(context);
                     } else {
                         showNetworkError();
@@ -71,6 +76,11 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
             }.execute();
             loadingIsExecuted = true;
         }
+    }
+
+    private void saveVersion(VersionWrapper version) {
+        Storage.save(this, Config.VERSION_CODE, version.getVersion());
+        Storage.save(this, Config.APP_URL, version.getUrl());
     }
 
     private void showNetworkError() {
@@ -88,7 +98,6 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
                 ActiveAndroid.beginTransaction();
                 try {
                     for (Question question : questions) {
-                        //todo нужно исправлять на сервере
                         question.text = question.text.replace('\u2028', '\u0000');
                         question.answer = question.answer.replace('\u2028', '\n');
                         question.save();

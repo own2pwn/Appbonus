@@ -1,16 +1,24 @@
 package com.appbonus.android.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.appbonus.android.R;
 import com.appbonus.android.api.Api;
@@ -69,6 +77,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.mobileapptracker.MobileAppTracker;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class MainActivity extends SimpleActivity implements NavigationDrawer.NavigationDrawerCallbacks,
         OfferListFragment.OffersListFragmentListener, OfferBrowserFragment.OfferBrowserFragmentListener,
         FriendsFragment.FriendsFragmentListener, BalanceBrowserFragment.BalanceBrowserFragmentListener,
@@ -122,6 +137,72 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         initLoadingDialog(getString(R.string.loading));
         loadSettings();
         showGoogleServicesMessageIfShould();
+        showUpdateAppMessageIfShould();
+    }
+
+    private void showUpdateAppMessageIfShould() {
+        PackageInfo info;
+        try {
+            info = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            return;
+        }
+        int versionCode = info.versionCode;
+        Integer serverVersionCode = Storage.load(this, Config.VERSION_CODE);
+        final String appUrl = Storage.load(this, Config.APP_URL);
+        if (serverVersionCode != null && serverVersionCode != 0
+                && serverVersionCode > versionCode && !TextUtils.isEmpty(appUrl)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.your_app_is_too_old)
+                    .setNegativeButton(R.string.menu_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setPositiveButton(R.string.menu_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            downloadNewVersionAndInstall(appUrl);
+                        }
+                    }).show();
+        }
+    }
+
+    private void downloadNewVersionAndInstall(String appUrl) {
+        try {
+            String apkFileName = "update.apk";
+
+            URL url = new URL(appUrl);
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            c.setRequestMethod("GET");
+            c.setDoOutput(true);
+            c.connect();
+
+            String path = getFileStreamPath(Environment.DIRECTORY_DOWNLOADS).getPath();
+            File file = new File(path);
+            file.mkdirs();
+            File outputFile = new File(file, apkFileName);
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            InputStream is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, read);
+            }
+            fos.close();
+            is.close();
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(path + apkFileName)), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+        } catch (IOException e) {
+            Toast.makeText(this, R.string.update_error, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void showGoogleServicesMessageIfShould() {

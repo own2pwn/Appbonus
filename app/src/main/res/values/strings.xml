@@ -162,5 +162,9 @@
     <string name="wrong_login_or_password">Неверный логин или пароль</string>
     <string name="wrong_login">Пользователя с таким логином не существует</string>
     <string name="password_repair_letter_was_sent">В течение нескольких минут вы получите письмо с инструкциями по восстановлению вашего пароля.</string>
+    <string name="your_app_is_too_old">Используемая вами версия приложения устарела. Для получения возможности использования новых функций советуем обновить</string>
+    <string name="menu_cancel">Нет, спасибо</string>
+    <string name="menu_ok">Наконец-то</string>
+    <string name="update_error">При обновлении что-то пошло не так</string>
 
 </resources>

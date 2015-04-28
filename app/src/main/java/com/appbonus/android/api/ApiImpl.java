@@ -28,6 +28,7 @@ import com.appbonus.android.model.api.ReferralsHistoryWrapper;
 import com.appbonus.android.model.api.SettingsWrapper;
 import com.appbonus.android.model.api.SimpleResult;
 import com.appbonus.android.model.api.UserWrapper;
+import com.appbonus.android.model.api.VersionWrapper;
 import com.appbonus.android.storage.Config;
 import com.appbonus.android.storage.Storage;
 import com.dolphin.api.CommonApi;
@@ -179,6 +180,11 @@ public class ApiImpl extends CommonApi implements Api {
     @Override
     public SettingsWrapper getSettings() throws Throwable {
         return doGet(SettingsWrapper.class, SUFX_SETTINGS);
+    }
+
+    @Override
+    public VersionWrapper getVersion() throws Throwable {
+        return doGet(VersionWrapper.class, SUFX_VERSION);
     }
 
     protected void preparation(HttpMethod httpMethod) {
