@@ -133,7 +133,6 @@ public class ProfileEditorFragment extends SimpleFragment implements View.OnClic
             if (!current.equals(currentPassStr)) {
                 String errorMsg = getString(R.string.current_password_inputed_wrongly);
                 currentPassword.setError(errorMsg);
-                Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();
                 return;
             }
 
