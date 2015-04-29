@@ -3,11 +3,11 @@ package com.appbonus.android.model.api;
 import java.io.Serializable;
 
 public class VersionWrapper implements Serializable {
-    protected String url;
+    protected String fileUrl;
     protected int version;
 
     public String getUrl() {
-        return url;
+        return fileUrl;
     }
 
     public int getVersion() {

@@ -58,7 +58,9 @@ public interface Api {
 
     String SUFX_SETTINGS = "settings";
 
-    String SUFX_VERSION = "version";
+    String SUFX_MOBILE_APPS = "mobile_apps";
+    String SUFX_ANDROID = "android";
+    String SUFX_LAST = "last";
 
     /*
      *  POST /api/v1/signup

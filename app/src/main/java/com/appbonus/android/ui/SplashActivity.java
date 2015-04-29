@@ -58,7 +58,9 @@ public class SplashActivity extends ApiActivity implements View.OnClickListener 
 
                 @Override
                 protected QuestionsWrapper background(Void... params) throws Throwable {
-                    version = getVersion();
+                    try {
+                        version = getVersion();
+                    } catch (Throwable e) {}
                     return getFaq();
                 }
 

@@ -184,7 +184,7 @@ public class ApiImpl extends CommonApi implements Api {
 
     @Override
     public VersionWrapper getVersion() throws Throwable {
-        return doGet(VersionWrapper.class, SUFX_VERSION);
+        return doGet(VersionWrapper.class, SUFX_MOBILE_APPS, SUFX_ANDROID, SUFX_LAST);
     }
 
     protected void preparation(HttpMethod httpMethod) {
