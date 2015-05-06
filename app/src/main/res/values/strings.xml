@@ -22,7 +22,11 @@
 
     <string name="app_name">AppBonus</string>
 
-    <string name="promo_text">Качай игры и приложения из AppBonus - получай от 5 до 150 рублей! Установи по ссылке %1$s, введи промо-код: %2$s и получи %3$s рублей сразу после регистрации! Проверено, работает)</string>
+    <string name="promo_text">Качай игры и приложения из AppBonus - получай от 5 до 150 рублей! Установи по ссылке %1$s, введи промо-код: %2$s и получи %3$s сразу после регистрации! Проверено, работает)</string>
+    <string name="rouble_1">рубль</string>
+    <string name="rouble_2">рубля</string>
+    <string name="rouble_3">рублей</string>
+
     <string name="promo_text_twitter">AppBonus платит за установку приложений! Качай по ссылке %1$s введи код %2$s и сразу получи %3$s рублей! Проверено, работает</string>
 
     <string name="login_caption">Ваш email</string>

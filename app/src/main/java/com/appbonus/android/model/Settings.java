@@ -10,7 +10,6 @@ public class Settings implements Parcelable {
         return partnerSignUpBonus;
     }
 
-
     @Override
     public int describeContents() {
         return 0;

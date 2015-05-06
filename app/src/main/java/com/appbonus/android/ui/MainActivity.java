@@ -463,7 +463,9 @@ public class MainActivity extends SimpleActivity implements NavigationDrawer.Nav
         com.appbonus.android.model.Settings settings = Storage.load(this, Config.SETTINGS, com.appbonus.android.model.Settings.class);
         String inviteCode = user.getInviteCode();
         String link = String.format(getString(R.string.promo_link), inviteCode);
-        String partnerSignBonus = String.valueOf(Double.valueOf(settings.getPartnerSignUpBonus()).intValue());
+
+        int value = Double.valueOf(settings.getPartnerSignUpBonus()).intValue();
+        String partnerSignBonus = String.valueOf(value) + " " + getString(value == 1 ? R.string.rouble_1 : value < 5 ? R.string.rouble_2 : R.string.rouble_3);
         String promoText = String.format(getString(R.string.promo_text), link, inviteCode, partnerSignBonus);
         String twitterText = String.format(getString(R.string.promo_text_twitter),
                 link, inviteCode, partnerSignBonus);
