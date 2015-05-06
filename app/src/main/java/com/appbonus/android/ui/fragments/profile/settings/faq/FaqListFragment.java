@@ -120,6 +120,11 @@ public class FaqListFragment extends RootListFragment<ListView, SimpleAdapter>
             case R.id.action_question:
                 makeQuestion();
                 return true;
+            case android.R.id.home:
+                if (getTargetFragment() == null) {
+                    toggleDrawer();
+                    return true;
+                }
         }
         return super.onOptionsItemSelected(item);
     }
