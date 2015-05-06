@@ -50,7 +50,6 @@ public class RegistrationActivity extends ApiActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         vkToken = getIntent().getExtras().getString(Config.VKONTAKTE_ID);
-        VKSdk.initialize(sdkListener, getString(R.string.vk_id));
         setContentView(R.layout.registration_layout);
         initUI();
         initValidators();
@@ -59,9 +58,16 @@ public class RegistrationActivity extends ApiActivity {
     private VKSdkListener sdkListener = new BonusVkSdkListener() {
         @Override
         protected void onToken(String token) {
-            onTokenReceive(token);
+            if (!isFinishing())
+                onTokenReceive(token);
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        VKSdk.initialize(sdkListener, getString(R.string.vk_id));
+    }
 
     private void onTokenReceive(String token) {
         String mailStr = mail.getText();

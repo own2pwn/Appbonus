@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 
 public abstract class DialogExceptionalAsyncTask<Params, Progress, Result> extends ExceptionAsyncTask<Params, Progress, Result> {
@@ -19,7 +20,13 @@ public abstract class DialogExceptionalAsyncTask<Params, Progress, Result> exten
 
         dialogFragment = AsyncTaskDialogFragment.newInstance(context);
         dialogFragment.setArguments(createArguments());
-        dialogFragment.show(getFragmentManager(), "dialogFragment");
+        openDialog();
+    }
+
+    private void openDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(dialogFragment, "dialogFragment");
+        ft.commitAllowingStateLoss();
     }
 
     @Override

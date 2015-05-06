@@ -53,7 +53,6 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        VKSdk.initialize(sdkListener, getString(R.string.vk_id));
         initUI();
         initValidators();
     }
@@ -61,9 +60,16 @@ public class LoginActivity extends ApiActivity implements OnGooglePlayServicesUn
     private VKSdkListener sdkListener = new BonusVkSdkListener() {
         @Override
         protected void onToken(String token) {
-            onTokenReceive(token);
+            if (!isFinishing())
+                onTokenReceive(token);
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        VKSdk.initialize(sdkListener, getString(R.string.vk_id));
+    }
 
     public void initUI() {
         mail = (FloatLabel) findViewById(R.id.login);
